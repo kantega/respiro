@@ -23,6 +23,35 @@
     <artifactId>respiro</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Respiro</name>
+    <description>Modular, developer-friendly integration platform</description>
+
+    <url>https://github.com/kantega/respiro/</url>
+
+
+    <developers>
+        <developer>
+            <name>Eirik Bjorsnos</name>
+            <email>eirbjo at gmail dot com</email>
+            <organization>Kantega AS</organization>
+            <organizationUrl>http://kantega.no</organizationUrl>
+            <timezone>GMT+1</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>Apache License Version 2.0</name>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/kantega/respiro</url>
+        <connection>scm:git:git@github.com:kantega/respiro.git</connection>
+        <tag>HEAD</tag>
+    </scm>
+
     <packaging>pom</packaging>
 
     <modules>
@@ -71,7 +100,50 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.2</version>
+                    <configuration>
+                        <remoteTagging>true</remoteTagging>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
+
     </build>
+
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.0-alpha-4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <passphrase>${gpg.passphrase}</passphrase>
+                                    <useAgent>true</useAgent>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
