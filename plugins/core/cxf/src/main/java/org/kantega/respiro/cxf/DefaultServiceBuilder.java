@@ -1,0 +1,157 @@
+/*
+ * Copyright 2015 Kantega AS
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.kantega.respiro.cxf;
+
+import org.kantega.respiro.api.ServiceBuilder;
+import org.kantega.respiro.cxf.api.ServiceCustomizer;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
+
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
+import javax.xml.ws.WebServiceClient;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Map;
+
+/**
+ * Created by helaar on 16.10.2015.
+ */
+class DefaultServiceBuilder implements ServiceBuilder {
+
+
+
+    private final Collection<ServiceCustomizer> serviceCustomizers;
+
+    public DefaultServiceBuilder(Collection<ServiceCustomizer> serviceCustomizers) {
+
+
+        this.serviceCustomizers = serviceCustomizers;
+    }
+
+    @Override
+    public <P> ServiceBuilder.Build<P> service(Class<? extends Service> service, Class<P> port) {
+        return new Build<P>(service, port);
+    }
+
+    private class Build<P> implements ServiceBuilder.Build<P> {
+        private Class<? extends Service> serviceClass;
+        private Class<P> portClass;
+        private String username;
+        private String password;
+        private String endpointAddress;
+        private long connectionTimeoutMs = 15_000;
+        private long receiveTimeoutMs = 60_000;
+
+
+
+        public Build(Class<? extends Service> service, Class<P> port) {
+            this.serviceClass = service;
+            this.portClass = port;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> endpointAddress(String endpointAddress) {
+            this.endpointAddress = endpointAddress;
+            return this;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> receiveTimeoutMs(long timeoutMs) {
+            this.receiveTimeoutMs = timeoutMs;
+            return this;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> connectTimeoutMs(long timeoutMs) {
+            this.connectionTimeoutMs = timeoutMs;
+            return this;
+        }
+
+        @Override
+        public P build() {
+
+            ClassLoader current = Thread.currentThread().getContextClassLoader();
+            try {
+                Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+                String wsdlLocation = findWsdlLocation(serviceClass);
+                URL wsdlURL = serviceClass.getClassLoader().getResource(wsdlLocation);
+                Service srv = serviceClass.getConstructor(URL.class).newInstance(wsdlURL);
+                P port = srv.getPort(portClass);
+
+                BindingProvider prov = (BindingProvider) port;
+                Map<String, Object> rc = prov.getRequestContext();
+
+                configureAuthentication(rc);
+                configureEndpointAddress(rc);
+                configureTimeouts(port);
+
+                applyPluginConfiguration(prov);
+                return port;
+
+            } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } finally {
+                Thread.currentThread().setContextClassLoader(current);
+            }
+        }
+
+        private void applyPluginConfiguration(BindingProvider port) {
+            for (ServiceCustomizer customizer : serviceCustomizers) {
+                customizer.customizeService(port);
+            }
+        }
+
+        private void configureEndpointAddress(Map<String, Object> rc) {
+            rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+        }
+
+        private void configureAuthentication(Map<String, Object> rc) {
+            rc.put(BindingProvider.USERNAME_PROPERTY, username);
+            rc.put(BindingProvider.PASSWORD_PROPERTY, password);
+        }
+
+        private void configureTimeouts(P port) {
+            Client client = ClientProxy.getClient(port);
+            HTTPConduit conduit = (HTTPConduit) client.getConduit();
+
+            HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+            httpClientPolicy .setConnectionTimeout(connectionTimeoutMs);
+            httpClientPolicy .setReceiveTimeout(receiveTimeoutMs);
+            conduit.setClient(httpClientPolicy);
+        }
+
+        private String findWsdlLocation(Class<? extends Service> serviceClass) {
+            return serviceClass.getAnnotation(WebServiceClient.class).wsdlLocation();
+        }
+    }
+}

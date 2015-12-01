@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2015 Kantega AS
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://hello.respiro.kantega.org/ws/greet-1.0"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+                  name="GreetingService" targetNamespace="http://hello.respiro.kantega.org/ws/greet-1.0">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://hello.respiro.kantega.org/ws/greet-1.0"
+                   elementFormDefault="qualified" targetNamespace="http://hello.respiro.kantega.org/ws/greet-1.0"
+                   version="1.0">
+
+            <xs:element name="greet" type="tns:greet"/>
+
+            <xs:element name="greetResponse" type="tns:greetResponse"/>
+
+            <xs:complexType name="greet">
+                <xs:sequence>
+                    <xs:element minOccurs="1"  name="lang" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="greetResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="messageResult" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="greet">
+        <wsdl:part element="tns:greet" name="greetRequest"/>
+    </wsdl:message>
+    <wsdl:message name="greetResponse">
+        <wsdl:part element="tns:greetResponse" name="greetResponse"/>
+    </wsdl:message>
+
+    <wsdl:portType name="Greeting">
+        <wsdl:operation name="greet">
+            <wsdl:input message="tns:greet" />
+            <wsdl:output message="tns:greetResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="GreetingServiceSoapBinding" type="tns:Greeting">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="greet">
+            <soap:operation soapAction="greet" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="greetRequest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="greetResponse"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="GreetingService">
+        <wsdl:port binding="tns:GreetingServiceSoapBinding" name="GreetingPort">
+            <soap:address location="http://localhost:8080/ws/greet-1.0"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

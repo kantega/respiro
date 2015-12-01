@@ -1,0 +1,2 @@
+org.kantega.respiro.cxf.ContextClassLoaderResourceResolver
+org.kantega.respiro.cxf.WSDLManagerDefinitionCacheCleaner
