@@ -21,35 +21,39 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 
-/**
- * Created by helaar on 17.11.2015.
- */
+import static java.lang.System.currentTimeMillis;
+import static java.lang.Thread.sleep;
+import static java.net.URLDecoder.decode;
+import static java.nio.file.Files.readAllBytes;
+
 public class Utils {
 
     public static File getBasedir() {
-        return new File(URLDecoder.decode(Utils.class.getResource("/").getFile())).getParentFile().getParentFile();
+        return new File(decode(Utils.class.getResource("/").getFile())).getParentFile().getParentFile();
     }
+
     public static String getReststopPort() {
         return getPort("/reststopPort.txt");
     }
+
     public static String getH2Port() {
         return getPort("/h2Port.txt");
     }
 
     private static String getPort(String path) {
         try {
-            return new String(Files.readAllBytes(new File(URLDecoder.decode(Utils.class.getResource(path).getFile())).toPath()));
+            return new String(readAllBytes(new File(decode(Utils.class.getResource(path).getFile())).toPath()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void waitForFile(String path, long timeoutMsec) {
-        long timeout = System.currentTimeMillis()+timeoutMsec;
-        File waitFor = new File(getBasedir(),path);
-        while(System.currentTimeMillis() < timeout && !waitFor.exists())
+        long timeout = currentTimeMillis() + timeoutMsec;
+        File waitFor = new File(getBasedir(), path);
+        while (currentTimeMillis() < timeout && !waitFor.exists())
             try {
-                Thread.sleep(10);
+                sleep(10);
             } catch (InterruptedException e) {
                 //
             }

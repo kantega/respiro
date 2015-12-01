@@ -28,10 +28,9 @@ import javax.mail.util.ByteArrayDataSource;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by helaar on 20.11.2015.
- */
-public class SMTPMailSender implements MailSender{
+import static java.lang.Thread.currentThread;
+
+public class SMTPMailSender implements MailSender {
     private final ServerConfig config;
 
     public SMTPMailSender(ServerConfig config) {
@@ -42,7 +41,7 @@ public class SMTPMailSender implements MailSender{
     public String send(Message msg) {
 
         // See: http://stackoverflow.com/questions/21856211/javax-activation-unsupporteddatatypeexception-no-object-dch-for-mime-type-multi
-        Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
+        currentThread().setContextClassLoader(getClass().getClassLoader());
 
         MultiPartEmail mail = config.newMail();
 
@@ -62,7 +61,7 @@ public class SMTPMailSender implements MailSender{
     private static void addAttachments(MultiPartEmail mail, Message msg) {
         for (Attachment attachment : msg.getAttachments()) {
             try {
-                mail.attach(new ByteArrayDataSource(attachment.getContent(), attachment.getMimeType()),attachment.getFileName(), "");
+                mail.attach(new ByteArrayDataSource(attachment.getContent(), attachment.getMimeType()), attachment.getFileName(), "");
             } catch (EmailException e) {
                 throw new RuntimeException(e);
             }

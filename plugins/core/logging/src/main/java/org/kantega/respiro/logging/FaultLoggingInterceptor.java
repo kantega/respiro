@@ -26,24 +26,26 @@ import org.apache.cxf.phase.Phase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by helaar on 27.10.2015.
- */
+import static org.apache.cxf.interceptor.MessageSenderInterceptor.MessageSenderEndingInterceptor;
+import static org.apache.cxf.phase.Phase.PREPARE_SEND_ENDING;
+import static org.kantega.respiro.collector.ExchangeInfo.EXCHANGE_INFO;
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class FaultLoggingInterceptor extends AbstractPhaseInterceptor<Message> {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(FaultLoggingInterceptor.class);
+    private final Logger LOGGER = getLogger(FaultLoggingInterceptor.class);
 
 
     public FaultLoggingInterceptor() {
-        super(Phase.PREPARE_SEND_ENDING);
-        addAfter(MessageSenderInterceptor.MessageSenderEndingInterceptor.class.getName());
+        super(PREPARE_SEND_ENDING);
+        addAfter(MessageSenderEndingInterceptor.class.getName());
     }
 
     @Override
     public void handleMessage(Message message) throws Fault {
 
         Fault fault = (Fault) message.getContent(Exception.class);
-        ExchangeInfo exchangeInfo = (ExchangeInfo) message.getExchange().get(ExchangeInfo.EXCHANGE_INFO);
+        ExchangeInfo exchangeInfo = (ExchangeInfo) message.getExchange().get(EXCHANGE_INFO);
         LOGGER.error(buildErrorContext(exchangeInfo, fault), fault);
     }
 

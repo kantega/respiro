@@ -23,9 +23,6 @@ import org.kantega.reststop.api.Plugin;
 
 import java.util.Collection;
 
-/**
- * Created by helaar on 19.10.2015.
- */
 @Plugin
 public class JdbcPlugin {
 

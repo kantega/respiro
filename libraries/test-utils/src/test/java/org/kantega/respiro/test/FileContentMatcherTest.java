@@ -23,9 +23,6 @@ import java.io.File;
 import static org.kantega.respiro.test.FileContentMatcher.hasSameContentAs;
 import static org.junit.Assert.assertThat;
 
-/**
- * Created by helaar on 26.11.2015.
- */
 public class FileContentMatcherTest {
     @Test
     public void shouldAssertThatSameFileIsEqual() {

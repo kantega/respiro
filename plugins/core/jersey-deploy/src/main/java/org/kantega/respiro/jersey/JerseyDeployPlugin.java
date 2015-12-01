@@ -21,11 +21,8 @@ import org.kantega.reststop.api.Plugin;
 import javax.ws.rs.core.Application;
 import java.util.Collection;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 @Plugin
-public class JerseyDeployPlugin  {
+public class JerseyDeployPlugin {
 
 
     public JerseyDeployPlugin(Collection<Application> applications, ApplicationDeployer deployer) {

@@ -87,7 +87,7 @@ public class CxfPlugin  {
 
         ServiceContractResolverRegistry reg = new ServiceContractResolverRegistryImpl(bus);
 
-        reg.register(new NettyServiceContractResolver());
+        reg.register(new RespiroServiceContractResolver());
 
         CXFNonSpringServlet cxfNonSpringServlet = new CXFNonSpringServlet();
         cxfNonSpringServlet.setBus(bus);
@@ -169,7 +169,7 @@ public class CxfPlugin  {
         EndpointImpl e = (EndpointImpl) endpoint;
 
         // log incoming requests
-        SecureAnnotationsInterceptor sai = new NettySecureAnnotationsInterceptor();
+        SecureAnnotationsInterceptor sai = new RespiroSecureAnnotationsInterceptor();
         sai.setSecuredObject(config.getImplementor());
         e.getServer().getEndpoint().getInInterceptors().add(sai);
 

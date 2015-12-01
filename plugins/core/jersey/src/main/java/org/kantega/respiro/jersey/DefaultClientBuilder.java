@@ -25,9 +25,11 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Feature;
 import java.util.Collection;
 
-/**
- * Created by helaar on 20.10.2015.
- */
+import static java.lang.Thread.currentThread;
+import static javax.ws.rs.client.ClientBuilder.newClient;
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.basic;
+import static org.kantega.respiro.api.RestClientBuilder.Build;
+
 public class DefaultClientBuilder implements RestClientBuilder {
     private final Collection<ClientCustomizer> clientCustomizers;
 
@@ -41,13 +43,13 @@ public class DefaultClientBuilder implements RestClientBuilder {
         return new Build();
     }
 
-    class Build implements RestClientBuilder.Build{
+    class Build implements RestClientBuilder.Build {
 
         private Feature basicAuth;
 
         @Override
-        public RestClientBuilder.Build basicAuth(String username, String password) {
-            this.basicAuth = HttpAuthenticationFeature.basic(username, password);
+        public Build basicAuth(String username, String password) {
+            this.basicAuth = basic(username, password);
             return this;
         }
 
@@ -55,18 +57,18 @@ public class DefaultClientBuilder implements RestClientBuilder {
         public Client build() {
             ClientConfig cc = new ClientConfig();
 
-            if( basicAuth != null )
+            if (basicAuth != null)
                 cc.register(basicAuth);
 
             for (ClientCustomizer clientCustomizer : clientCustomizers) {
                 clientCustomizer.customize(cc);
             }
-            ClassLoader contextClassloader = Thread.currentThread().getContextClassLoader();
+            ClassLoader contextClassloader = currentThread().getContextClassLoader();
             try {
-                Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-                return ClientBuilder.newClient(cc);
+                currentThread().setContextClassLoader(getClass().getClassLoader());
+                return newClient(cc);
             } finally {
-                Thread.currentThread().setContextClassLoader(contextClassloader);
+                currentThread().setContextClassLoader(contextClassloader);
 
             }
         }

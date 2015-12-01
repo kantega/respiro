@@ -18,16 +18,15 @@ package org.kantega.respiro.api;
 
 import javax.ws.rs.core.Application;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 public interface ApplicationBuilder {
 
     public Build application();
 
     interface Build {
         Build singleton(Object resource);
+
         Build resource(Class resClass);
+
         Build property(String name, Object value);
 
         Application build();

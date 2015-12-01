@@ -18,9 +18,6 @@ package org.kantega.respiro.api;
 
 import javax.ws.rs.client.Client;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 public interface RestClientBuilder {
 
     Build client();

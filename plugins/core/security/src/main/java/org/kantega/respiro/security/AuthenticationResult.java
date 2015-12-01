@@ -18,9 +18,6 @@ package org.kantega.respiro.security;
 
 import java.util.Set;
 
-/**
- * Created by helaar on 26.10.2015.
- */
 public class AuthenticationResult {
     private final boolean authenticated;
     private final String username;

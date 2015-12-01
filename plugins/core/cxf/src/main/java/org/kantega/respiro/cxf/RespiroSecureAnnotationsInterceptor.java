@@ -23,10 +23,9 @@ import org.apache.cxf.message.Message;
 
 import java.util.logging.Logger;
 
+import static java.util.logging.Logger.getGlobal;
 
-/**
- * Created by helaar on 26.10.2015.
- */
+
 class RespiroSecureAnnotationsInterceptor extends SecureAnnotationsInterceptor {
 
     @Override
@@ -36,7 +35,7 @@ class RespiroSecureAnnotationsInterceptor extends SecureAnnotationsInterceptor {
             super.handleMessage(message);
         } catch (AccessDeniedException fault) {
 
-            Fault unauthorized = new Fault("Unauthorized", Logger.getGlobal());
+            Fault unauthorized = new Fault("Unauthorized", getGlobal());
             unauthorized.setStatusCode(403);
             throw unauthorized;
 

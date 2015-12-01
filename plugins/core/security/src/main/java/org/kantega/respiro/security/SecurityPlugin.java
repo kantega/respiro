@@ -21,25 +21,25 @@ import org.kantega.reststop.api.*;
 import javax.servlet.Filter;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static org.kantega.reststop.api.FilterPhase.AUTHENTICATION;
 
-/**
- * Created by helaar on 15.10.2015.
- */
+
 @Plugin
-public class SecurityPlugin  {
+public class SecurityPlugin {
 
     @Export
     private final Filter basicAuthFilter;
 
 
-    public SecurityPlugin(@Config(defaultValue = "NTE-Netty") String securityRealm,
+    public SecurityPlugin(@Config(defaultValue = "Respiro") String securityRealm,
                           @Config(defaultValue = "5") int passwordCacheValidityMinutes,
                           ServletBuilder servletBuilder,
                           PasswordChecker passwordChecker) {
 
-        if( passwordCacheValidityMinutes > 0)
-            passwordChecker = new CachingPasswordChecker(passwordChecker, passwordCacheValidityMinutes, TimeUnit.MINUTES);
+        if (passwordCacheValidityMinutes > 0)
+            passwordChecker = new CachingPasswordChecker(passwordChecker, passwordCacheValidityMinutes, MINUTES);
 
-        basicAuthFilter = servletBuilder.filter(new BasicAuthenticationFilter(securityRealm, passwordChecker), "/*", FilterPhase.AUTHENTICATION);
+        basicAuthFilter = servletBuilder.filter(new BasicAuthenticationFilter(securityRealm, passwordChecker), "/*", AUTHENTICATION);
     }
 }

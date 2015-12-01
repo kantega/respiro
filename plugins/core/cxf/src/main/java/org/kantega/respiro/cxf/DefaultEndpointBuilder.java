@@ -27,9 +27,8 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.Map;
 
-/**
- * Created by helaar on 16.10.2015.
- */
+import static javax.wsdl.factory.WSDLFactory.newInstance;
+
 class DefaultEndpointBuilder implements EndpointBuilder {
 
     @Override
@@ -121,7 +120,7 @@ class DefaultEndpointBuilder implements EndpointBuilder {
 
             if (wsdlPort == null) {
                 Map<QName, Service> services = getDefinition().getServices();
-                Service object =  services.values().iterator().next();
+                Service object = services.values().iterator().next();
 
                 wsdlPort = (String) object.getPorts().keySet().iterator().next();
             }
@@ -165,9 +164,9 @@ class DefaultEndpointBuilder implements EndpointBuilder {
             };
         }
 
-        private Definition getDefinition()  {
+        private Definition getDefinition() {
             try {
-                return this.definition == null ? definition = WSDLFactory.newInstance().newWSDLReader().readWSDL(wsdl.toExternalForm()) : definition;
+                return this.definition == null ? definition = newInstance().newWSDLReader().readWSDL(wsdl.toExternalForm()) : definition;
             } catch (WSDLException e) {
                 throw new RuntimeException(e);
             }

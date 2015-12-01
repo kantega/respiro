@@ -33,9 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by helaar on 20.10.2015.
- */
+import static java.lang.Integer.parseInt;
+import static java.nio.file.Files.copy;
+import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
+
 public class DummiesServlet extends HttpServlet {
 
     private List<Rule> rules = new ArrayList<>();
@@ -44,10 +45,10 @@ public class DummiesServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         for (Rule rule : rules) {
-            if( rule.matches(req)) {
+            if (rule.matches(req)) {
                 resp.setStatus(rule.getResponseCode());
                 resp.setContentType(rule.getContentType());
-                Files.copy(rule.getResponseFile().toPath(), resp.getOutputStream());
+                copy(rule.getResponseFile().toPath(), resp.getOutputStream());
                 return;
             }
         }
@@ -72,11 +73,11 @@ public class DummiesServlet extends HttpServlet {
         private final File responseFile;
 
         public Rule(File ruleFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ruleFile);
+            Document doc = newInstance().newDocumentBuilder().parse(ruleFile);
             path = doc.getDocumentElement().getElementsByTagName("path").item(0).getTextContent();
             method = doc.getDocumentElement().getElementsByTagName("method").item(0).getTextContent();
             contentType = doc.getDocumentElement().getElementsByTagName("content-type").item(0).getTextContent();
-            responseCode = Integer.parseInt(doc.getDocumentElement().getElementsByTagName("response-code").item(0).getTextContent());
+            responseCode = parseInt(doc.getDocumentElement().getElementsByTagName("response-code").item(0).getTextContent());
 
             String responseFileName = ruleFile.getName().substring(0, ruleFile.getName().indexOf("-rule.xml")) + "-response." + mapSuffix(contentType);
             responseFile = new File(ruleFile.getParentFile(), responseFileName);

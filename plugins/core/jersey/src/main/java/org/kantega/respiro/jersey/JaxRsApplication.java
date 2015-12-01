@@ -19,9 +19,6 @@ package org.kantega.respiro.jersey;
 import javax.ws.rs.core.Application;
 import java.util.*;
 
-/**
- * Created by helaar on 16.10.2015.
- */
 class JaxRsApplication extends Application {
     private final List<Object> jaxRsSingletonResources = new ArrayList<>();
     private final List<Class<?>> jaxRsContainerClasses = new ArrayList<>();
@@ -50,6 +47,7 @@ class JaxRsApplication extends Application {
     public Map<String, Object> getProperties() {
         return new HashMap<>(properties);
     }
+
     public void setProperty(String name, Object value) {
         properties.put(name, value);
     }

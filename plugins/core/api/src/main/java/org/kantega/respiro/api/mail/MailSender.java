@@ -16,9 +16,6 @@
 
 package org.kantega.respiro.api.mail;
 
-/**
- * Created by helaar on 20.11.2015.
- */
 public interface MailSender {
 
     String send(Message msg);

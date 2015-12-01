@@ -29,13 +29,12 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import java.util.List;
 
+import static javax.ws.rs.client.ClientBuilder.newClient;
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.basic;
 import static org.kantega.respiro.test.Utils.getReststopPort;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 public class UserProfileIT {
 
     private WebTarget target;
@@ -43,11 +42,12 @@ public class UserProfileIT {
     @Before
     public void before() {
         ClientConfig cc = new ClientConfig();
-        cc.register(HttpAuthenticationFeature.basic("joe", "joe"));
-        Client client = ClientBuilder.newClient(cc);
+        cc.register(basic("joe", "joe"));
+        Client client = newClient(cc);
         target = client.target("http://localhost:" + getReststopPort());
         target.path("dummy_smtpd").path("messages").request().delete();
     }
+
     @Test
     public void shouldGetFullname() {
 
@@ -58,7 +58,8 @@ public class UserProfileIT {
         assertThat(prof.getFullName(), is("Ola Nordmann"));
 
         // And when
-        List<MessageJson> messageJsons = target.path("dummy_smtpd").path("messages").request().get(new GenericType<List<MessageJson>>() {});
+        List<MessageJson> messageJsons = target.path("dummy_smtpd").path("messages").request().get(new GenericType<List<MessageJson>>() {
+        });
 
         // Then
         assertThat(messageJsons.size(), is(1));

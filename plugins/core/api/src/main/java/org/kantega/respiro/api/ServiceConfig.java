@@ -19,16 +19,16 @@ package org.kantega.respiro.api;
 import javax.xml.ws.Service;
 import java.net.URI;
 
-/**
- * Created by helaar on 16.10.2015.
- */
 public interface ServiceConfig {
 
     Class<? extends Service> getServiceClass();
+
     Class getPortClass();
 
     String getUsername();
+
     String getPassword();
+
     URI getEndpointAddress();
 
 

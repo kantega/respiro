@@ -16,7 +16,7 @@
 
 package org.kantega.respiro.executor;
 
-import org.kantega.respiro.api.NettyExecutorService;
+import org.kantega.respiro.api.RespiroExecutorService;
 import org.kantega.respiro.collector.Collector;
 import org.kantega.respiro.collector.ExchangeInfo;
 
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  *
  */
-public class DefaultExecutorService implements NettyExecutorService {
+public class DefaultExecutorService implements RespiroExecutorService {
     private final ExecutorService wrapped;
 
     public DefaultExecutorService(ExecutorService wrapped) {
@@ -131,7 +131,7 @@ public class DefaultExecutorService implements NettyExecutorService {
     private ExchangeInfo assertCurrentExchangeInfo() {
         return Collector.getCurrent()
                 .orElseThrow(() ->
-                        new IllegalStateException("NettyExecutorService cannot be used outside a SOAP / REST thread request context"));
+                        new IllegalStateException(RespiroExecutorService.class.getSimpleName() + " cannot be used outside a SOAP / REST thread request context"));
 
     }
 

@@ -25,23 +25,23 @@ import org.apache.cxf.phase.Phase;
 
 import java.util.UUID;
 
-/**
- * Created by helaar on 27.10.2015.
- */
+import static java.util.UUID.randomUUID;
+import static org.apache.cxf.phase.Phase.PREPARE_SEND;
+
 public class LogCorrelationInterceptor extends AbstractPhaseInterceptor<Message> {
 
     public LogCorrelationInterceptor() {
-        super(Phase.PREPARE_SEND);
+        super(PREPARE_SEND);
         addBefore(Soap11FaultOutInterceptor.class.getName());
     }
 
     @Override
     public void handleMessage(Message message) throws Fault {
 
-        Fault fault = (Fault)message.getContent(Exception.class);
-        String logCorrId = UUID.randomUUID().toString();
+        Fault fault = (Fault) message.getContent(Exception.class);
+        String logCorrId = randomUUID().toString();
         fault.setMessage(transformMessage(fault, logCorrId));
-        message.put("netty.logCorrelationId", logCorrId);
+        message.put("respiro.logCorrelationId", logCorrId);
 
 
     }
@@ -51,10 +51,9 @@ public class LogCorrelationInterceptor extends AbstractPhaseInterceptor<Message>
         msgBuilder.append("[logCorrelationId:").append(logCorrId).append("] ");
 
         String origMessage = fault.getMessage();
-        if( origMessage != null) {
+        if (origMessage != null) {
             msgBuilder.append(origMessage);
-        }
-        else {
+        } else {
             msgBuilder.append(fault.getClass().getName());
         }
         return msgBuilder.toString();

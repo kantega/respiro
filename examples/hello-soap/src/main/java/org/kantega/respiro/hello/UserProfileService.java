@@ -18,9 +18,6 @@ package org.kantega.respiro.hello;
 
 import javax.ws.rs.client.Client;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 public class UserProfileService {
 
     private final String baseUrl;
@@ -33,7 +30,7 @@ public class UserProfileService {
     }
 
 
-    UserProfile findUserProfile(String username){
+    UserProfile findUserProfile(String username) {
 
         return client.target(baseUrl).path("userprofiles")
                 .path(username.toUpperCase()).request().get(UserProfile.class);

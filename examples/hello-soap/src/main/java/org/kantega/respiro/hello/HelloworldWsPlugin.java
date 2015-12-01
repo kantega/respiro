@@ -49,7 +49,7 @@ public class HelloworldWsPlugin  {
                               ServiceBuilder srvBuilder,
                               RestClientBuilder clientBuilder,
                               ApplicationBuilder applicationBuilder,
-                              NettyExecutorService executorService) {
+                              RespiroExecutorService executorService) {
 
         Greeting greet = srvBuilder.service(GreetingService.class, Greeting.class)
                 .username(greetingUsername).password(greetingPassword)

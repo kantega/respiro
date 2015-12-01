@@ -20,12 +20,11 @@ import org.kantega.respiro.api.ApplicationBuilder;
 
 import javax.ws.rs.core.Application;
 
-/**
- * Created by helaar on 20.10.2015.
- */
+import static org.kantega.respiro.api.ApplicationBuilder.Build;
+
 public class DefaultApplicationBuilder implements ApplicationBuilder {
     @Override
-    public ApplicationBuilder.Build application() {
+    public Build application() {
         return new Build();
     }
 
@@ -34,19 +33,19 @@ public class DefaultApplicationBuilder implements ApplicationBuilder {
         private JaxRsApplication application = new JaxRsApplication();
 
         @Override
-        public ApplicationBuilder.Build singleton(Object resource) {
+        public Build singleton(Object resource) {
             application.addJaxRsSingletonResource(resource);
             return this;
         }
 
         @Override
-        public ApplicationBuilder.Build resource(Class resClass) {
+        public Build resource(Class resClass) {
             application.addJaxRsContainerClass(resClass);
             return this;
         }
 
         @Override
-        public ApplicationBuilder.Build property(String name, Object value) {
+        public Build property(String name, Object value) {
             application.setProperty(name, value);
             return this;
         }

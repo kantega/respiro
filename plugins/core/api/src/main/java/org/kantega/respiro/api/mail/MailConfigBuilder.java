@@ -16,9 +16,6 @@
 
 package org.kantega.respiro.api.mail;
 
-/**
- * Created by helaar on 20.11.2015.
- */
 public interface MailConfigBuilder {
 
 
@@ -27,10 +24,15 @@ public interface MailConfigBuilder {
     interface Build {
 
         Build useSsl(boolean ssl);
+
         Build auth(String username, String password);
+
         Build from(String email);
+
         Build to(String email);
+
         Build cc(String email);
+
         Build bcc(String email);
 
         MailSender build();

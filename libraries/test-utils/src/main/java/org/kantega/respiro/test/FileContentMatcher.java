@@ -25,9 +25,9 @@ import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-/**
- * Created by helaar on 26.11.2015.
- */
+import static java.lang.String.valueOf;
+import static java.nio.file.Files.lines;
+
 public class FileContentMatcher extends TypeSafeMatcher<File> {
 
     private final File fileMatched;
@@ -47,27 +47,27 @@ public class FileContentMatcher extends TypeSafeMatcher<File> {
     @Override
     protected boolean matchesSafely(File item) {
 
-        try (Stream<String> mStream = Files.lines(fileMatched.toPath());
-             Stream<String> iStream = Files.lines(item.toPath())){
-            lineNo =0;
+        try (Stream<String> mStream = lines(fileMatched.toPath());
+             Stream<String> iStream = lines(item.toPath())) {
+            lineNo = 0;
             Iterator<String> mIt = mStream.iterator();
             Iterator<String> iIt = iStream.iterator();
 
-            while(mIt.hasNext() && iIt.hasNext()) {
+            while (mIt.hasNext() && iIt.hasNext()) {
 
                 lineNo++;
                 mLine = mIt.next();
                 iLine = iIt.next();
 
-                String modLine = search != null && replace != null ? mLine.replaceAll(search,replace)
+                String modLine = search != null && replace != null ? mLine.replaceAll(search, replace)
                         : mLine;
 
-                if((iLine).compareTo((modLine)) != 0)
+                if ((iLine).compareTo((modLine)) != 0)
                     return false;
             }
-            if(fileMatched.length() != item.length()) {
-                mLine = "Filesize: " + String.valueOf(fileMatched.length());
-                iLine = "Filesize: " + String.valueOf(item.length());
+            if (fileMatched.length() != item.length()) {
+                mLine = "Filesize: " + valueOf(fileMatched.length());
+                iLine = "Filesize: " + valueOf(item.length());
                 return false;
             }
 
@@ -78,11 +78,10 @@ public class FileContentMatcher extends TypeSafeMatcher<File> {
     }
 
 
-
     @Override
     public void describeTo(Description description) {
 
-        if(mLine != null) {
+        if (mLine != null) {
             description.appendText(mLine).appendValue(iLine);
         }
 
@@ -96,6 +95,7 @@ public class FileContentMatcher extends TypeSafeMatcher<File> {
     public static FileContentMatcher hasSameContentAs(File item) {
         return new FileContentMatcher(item, null, null);
     }
+
     public static FileContentMatcher hasSameContentAs(File item, String search, String replace) {
         return new FileContentMatcher(item, search, replace);
     }

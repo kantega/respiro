@@ -16,9 +16,6 @@
 
 package org.kantega.respiro.api;
 
-/**
- * Created by helaar on 19.10.2015.
- */
 public interface DataSourceInitializer {
 
     void initialize();

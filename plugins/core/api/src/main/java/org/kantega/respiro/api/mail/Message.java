@@ -19,9 +19,6 @@ package org.kantega.respiro.api.mail;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by helaar on 20.11.2015.
- */
 public class Message {
 
     private final List<String> to = new ArrayList<>();
@@ -45,11 +42,13 @@ public class Message {
         cc.add(address);
         return this;
     }
+
     public Message bcc(String address) {
         bcc.add(address);
         return this;
     }
-    public Message body(String bodyPart){
+
+    public Message body(String bodyPart) {
         body.append(bodyPart);
         return this;
     }

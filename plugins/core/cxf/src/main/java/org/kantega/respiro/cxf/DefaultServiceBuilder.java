@@ -31,11 +31,11 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * Created by helaar on 16.10.2015.
- */
-class DefaultServiceBuilder implements ServiceBuilder {
+import static java.lang.Thread.currentThread;
+import static javax.xml.ws.BindingProvider.*;
+import static org.apache.cxf.frontend.ClientProxy.getClient;
 
+class DefaultServiceBuilder implements ServiceBuilder {
 
 
     private final Collection<ServiceCustomizer> serviceCustomizers;
@@ -47,7 +47,7 @@ class DefaultServiceBuilder implements ServiceBuilder {
     }
 
     @Override
-    public <P> ServiceBuilder.Build<P> service(Class<? extends Service> service, Class<P> port) {
+    public <P> Build<P> service(Class<? extends Service> service, Class<P> port) {
         return new Build<P>(service, port);
     }
 
@@ -59,7 +59,6 @@ class DefaultServiceBuilder implements ServiceBuilder {
         private String endpointAddress;
         private long connectionTimeoutMs = 15_000;
         private long receiveTimeoutMs = 60_000;
-
 
 
         public Build(Class<? extends Service> service, Class<P> port) {
@@ -100,9 +99,9 @@ class DefaultServiceBuilder implements ServiceBuilder {
         @Override
         public P build() {
 
-            ClassLoader current = Thread.currentThread().getContextClassLoader();
+            ClassLoader current = currentThread().getContextClassLoader();
             try {
-                Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+                currentThread().setContextClassLoader(getClass().getClassLoader());
                 String wsdlLocation = findWsdlLocation(serviceClass);
                 URL wsdlURL = serviceClass.getClassLoader().getResource(wsdlLocation);
                 Service srv = serviceClass.getConstructor(URL.class).newInstance(wsdlURL);
@@ -121,7 +120,7 @@ class DefaultServiceBuilder implements ServiceBuilder {
             } catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             } finally {
-                Thread.currentThread().setContextClassLoader(current);
+                currentThread().setContextClassLoader(current);
             }
         }
 
@@ -132,21 +131,21 @@ class DefaultServiceBuilder implements ServiceBuilder {
         }
 
         private void configureEndpointAddress(Map<String, Object> rc) {
-            rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
+            rc.put(ENDPOINT_ADDRESS_PROPERTY, endpointAddress);
         }
 
         private void configureAuthentication(Map<String, Object> rc) {
-            rc.put(BindingProvider.USERNAME_PROPERTY, username);
-            rc.put(BindingProvider.PASSWORD_PROPERTY, password);
+            rc.put(USERNAME_PROPERTY, username);
+            rc.put(PASSWORD_PROPERTY, password);
         }
 
         private void configureTimeouts(P port) {
-            Client client = ClientProxy.getClient(port);
+            Client client = getClient(port);
             HTTPConduit conduit = (HTTPConduit) client.getConduit();
 
             HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-            httpClientPolicy .setConnectionTimeout(connectionTimeoutMs);
-            httpClientPolicy .setReceiveTimeout(receiveTimeoutMs);
+            httpClientPolicy.setConnectionTimeout(connectionTimeoutMs);
+            httpClientPolicy.setReceiveTimeout(receiveTimeoutMs);
             conduit.setClient(httpClientPolicy);
         }
 

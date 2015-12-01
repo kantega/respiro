@@ -16,9 +16,6 @@
 
 package org.kantega.respiro.hello;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 class UserProfile {
     private String username;
     private String fullName;

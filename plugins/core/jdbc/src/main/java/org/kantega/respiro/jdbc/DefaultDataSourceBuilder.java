@@ -22,9 +22,6 @@ import org.kantega.respiro.api.DataSourceBuilder;
 import javax.sql.DataSource;
 import java.util.Collection;
 
-/**
- * Created by helaar on 19.10.2015.
- */
 public class DefaultDataSourceBuilder implements DataSourceBuilder {
     private final Collection<DataSourceCustomizer> dataSourceCustomizers;
 

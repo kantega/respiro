@@ -38,9 +38,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by helaar on 14.10.2015.
- */
+import static java.lang.Boolean.TRUE;
+import static java.util.Map.Entry;
+import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
+import static javax.xml.ws.handler.MessageContext.WSDL_OPERATION;
+import static javax.xml.xpath.XPathConstants.BOOLEAN;
+
 @WebServiceProvider
 @ServiceMode(Service.Mode.MESSAGE)
 @BindingType("http://schemas.xmlsoap.org/wsdl/soap/http")
@@ -59,8 +62,8 @@ public class DummyProvider implements Provider<Source> {
 
     @Override
     public Source invoke(Source request) {
-        QName operation = (QName) context.getMessageContext().get(MessageContext.WSDL_OPERATION);
-        DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
+        QName operation = (QName) context.getMessageContext().get(WSDL_OPERATION);
+        DocumentBuilderFactory fac = newInstance();
         fac.setNamespaceAware(true);
         DOMResult domResult = new DOMResult();
         try {
@@ -83,11 +86,11 @@ public class DummyProvider implements Provider<Source> {
         Map<String, String> namespaces = new HashMap<>();
 
         public Rule(File ruleFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(ruleFile);
+            Document doc = newInstance().newDocumentBuilder().parse(ruleFile);
             String xpath = doc.getDocumentElement().getElementsByTagName("xpath").item(0).getTextContent();
             operation = doc.getDocumentElement().getElementsByTagName("operation").item(0).getTextContent();
 
-            String responseFileName = ruleFile.getName().substring(0,ruleFile.getName().indexOf("-rule.xml"))+"-response.xml";
+            String responseFileName = ruleFile.getName().substring(0, ruleFile.getName().indexOf("-rule.xml")) + "-response.xml";
             responseFile = new File(ruleFile.getParentFile(), responseFileName);
 
             NodeList ns = doc.getDocumentElement().getElementsByTagName("namespace");
@@ -110,7 +113,7 @@ public class DummyProvider implements Provider<Source> {
             if (!this.operation.equals(operation.getLocalPart())) return false;
 
 
-            return Boolean.TRUE.equals(xPathExpression.evaluate(documentElement, XPathConstants.BOOLEAN));
+            return TRUE.equals(xPathExpression.evaluate(documentElement, BOOLEAN));
         }
 
         private class DefaultNamespaceContext implements NamespaceContext {
@@ -128,7 +131,7 @@ public class DummyProvider implements Provider<Source> {
 
             @Override
             public String getPrefix(String namespaceURI) {
-                for (Map.Entry<String, String> entry : namespaces.entrySet()) {
+                for (Entry<String, String> entry : namespaces.entrySet()) {
                     if (entry.getValue().equals(namespaceURI))
                         return entry.getKey();
                 }

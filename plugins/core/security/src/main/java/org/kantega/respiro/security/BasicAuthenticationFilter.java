@@ -24,9 +24,10 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
 
-/**
- * Created by helaar on 15.10.2015.
- */
+import static java.lang.String.format;
+import static java.util.Base64.getDecoder;
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+
 public class BasicAuthenticationFilter implements Filter {
 
     private final String securityRealm;
@@ -49,9 +50,9 @@ public class BasicAuthenticationFilter implements Filter {
 
         String auth = req.getHeader("Authorization");
 
-        if(auth != null) {
+        if (auth != null) {
 
-            final String[] usernameAndPassword = new String(Base64.getDecoder().decode( auth.substring("Basic ".length()).getBytes())).split(":");
+            final String[] usernameAndPassword = new String(getDecoder().decode(auth.substring("Basic ".length()).getBytes())).split(":");
             final String username = usernameAndPassword[0];
             String password = usernameAndPassword[1];
 
@@ -80,8 +81,8 @@ public class BasicAuthenticationFilter implements Filter {
         }
 
 
-        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        resp.setHeader("WWW-Authenticate", String.format("Basic realm=\"%s\"", securityRealm));
+        resp.setStatus(SC_UNAUTHORIZED);
+        resp.setHeader("WWW-Authenticate", format("Basic realm=\"%s\"", securityRealm));
 
     }
 

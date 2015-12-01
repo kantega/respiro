@@ -23,15 +23,11 @@ import org.kantega.reststop.api.Plugin;
 
 import javax.xml.ws.Endpoint;
 
-/**
- * Created by helaar on 27.10.2015.
- */
 @Plugin
-public class LoggingPlugin implements EndpointCustomizer{
+public class LoggingPlugin implements EndpointCustomizer {
 
     @Export
     final EndpointCustomizer endpointCustomizer = this;
-
 
 
     public LoggingPlugin() {

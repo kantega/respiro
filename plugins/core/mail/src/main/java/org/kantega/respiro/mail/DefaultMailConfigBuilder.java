@@ -19,10 +19,7 @@ package org.kantega.respiro.mail;
 import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.respiro.api.mail.MailSender;
 
-/**
- * Created by helaar on 20.11.2015.
- */
-public class DefaultMailConfigBuilder  implements MailConfigBuilder {
+public class DefaultMailConfigBuilder implements MailConfigBuilder {
 
     @Override
     public Build server(String hostname, int port) {

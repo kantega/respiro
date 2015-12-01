@@ -16,17 +16,14 @@
 
 package org.kantega.respiro;
 
-import org.kantega.respiro.test.Utils;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.kantega.respiro.test.Utils.getH2Port;
 
-/**
- * Created by helaar on 02.11.2015.
- */
 public class UserDatabaseIT {
 
     private JdbcDataSource dataSource;
@@ -42,7 +39,7 @@ public class UserDatabaseIT {
     @Before
     public void before() {
         dataSource = new JdbcDataSource();
-        dataSource.setUrl("jdbc:h2:tcp://localhost:" + Utils.getH2Port() + "/mem:hellodata;MODE=Oracle");
+        dataSource.setUrl("jdbc:h2:tcp://localhost:" + getH2Port() + "/mem:hellodata;MODE=Oracle");
         dataSource.setUser("admin");
         dataSource.setPassword("password");
     }

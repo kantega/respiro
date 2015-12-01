@@ -31,13 +31,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by helaar on 19.10.2015.
- */
+import static java.lang.String.format;
+import static java.lang.System.getProperty;
+import static java.lang.System.setProperty;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Files.write;
+import static java.sql.DriverManager.getConnection;
+import static org.h2.tools.Server.createTcpServer;
+
 @Plugin
 public class TestDatabasePlugin implements DataSourceInitializer {
 
-    private final String basedir = System.getProperty("reststopPluginDir");
+    private final String basedir = getProperty("reststopPluginDir");
     private final Server srv;
     private final int port;
     List<Connection> connections = new ArrayList<>();
@@ -46,10 +51,10 @@ public class TestDatabasePlugin implements DataSourceInitializer {
     private final DataSourceInitializer initializer = this;
 
     public TestDatabasePlugin() throws SQLException, IOException {
-        this.srv = Server.createTcpServer("-tcpPort", "0").start();
+        this.srv = createTcpServer("-tcpPort", "0").start();
         this.port = srv.getPort();
-        System.setProperty("h2Port", Integer.toString(port));
-        Files.write(new File(basedir, "target/test-classes/h2Port.txt").toPath(), Integer.toString(port).getBytes());
+        setProperty("h2Port", Integer.toString(port));
+        write(new File(basedir, "target/test-classes/h2Port.txt").toPath(), Integer.toString(port).getBytes());
     }
 
     private void loadTestdata() throws IOException, SQLException {
@@ -57,15 +62,15 @@ public class TestDatabasePlugin implements DataSourceInitializer {
         File dummyBasedir = new File(basedir, "src/test/database");
         File[] dirs = dummyBasedir.listFiles(File::isDirectory);
 
-        if(dirs != null) {
+        if (dirs != null) {
             for (File dir : dirs) {
-                String url = String.format("jdbc:h2:tcp://localhost:" + port + "/mem:%s;MODE=Oracle",dir.getName());
-                Connection conn = DriverManager.getConnection(url, "admin", "password");
+                String url = format("jdbc:h2:tcp://localhost:" + port + "/mem:%s;MODE=Oracle", dir.getName());
+                Connection conn = getConnection(url, "admin", "password");
                 connections.add(conn);
 
-                File[] files = dir.listFiles(pathname -> pathname.getName().endsWith(".sql") );
+                File[] files = dir.listFiles(pathname -> pathname.getName().endsWith(".sql"));
                 for (File sqlFile : files) {
-                    String fileContent = new String(Files.readAllBytes(sqlFile.toPath()), "utf-8");
+                    String fileContent = new String(readAllBytes(sqlFile.toPath()), "utf-8");
                     String expressions[] = fileContent.split(";");
                     for (String expression : expressions) {
                         conn.createStatement().executeUpdate(expression);

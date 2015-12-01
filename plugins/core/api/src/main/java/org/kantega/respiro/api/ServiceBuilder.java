@@ -18,17 +18,18 @@ package org.kantega.respiro.api;
 
 import javax.xml.ws.Service;
 
-/**
- * Created by helaar on 16.10.2015.
- */
 public interface ServiceBuilder {
     <P> Build<P> service(Class<? extends Service> service, Class<P> port);
 
     interface Build<P> {
         Build<P> username(String username);
+
         Build<P> password(String password);
+
         Build<P> endpointAddress(String endpointAddress);
+
         Build<P> receiveTimeoutMs(long timeoutMs);
+
         Build<P> connectTimeoutMs(long timeoutMs);
 
         P build();

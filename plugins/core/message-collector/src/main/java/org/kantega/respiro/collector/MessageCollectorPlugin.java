@@ -32,9 +32,8 @@ import org.kantega.reststop.api.ServletBuilder;
 
 import javax.servlet.Filter;
 
-/**
- * Created by helaar on 27.10.2015.
- */
+import static org.kantega.reststop.api.FilterPhase.PRE_UNMARSHAL;
+
 @Plugin
 public class MessageCollectorPlugin {
 
@@ -67,6 +66,6 @@ public class MessageCollectorPlugin {
 
         dataSourceCustomizer = new JdbcCollector();
 
-        clearingFilter = servletBuilder.filter(new ClearingFilter(), "/*", FilterPhase.PRE_UNMARSHAL);
+        clearingFilter = servletBuilder.filter(new ClearingFilter(), "/*", PRE_UNMARSHAL);
     }
 }

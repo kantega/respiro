@@ -23,23 +23,24 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 
-/**
- * Created by helaar on 27.10.2015.
- */
+import static org.apache.cxf.interceptor.MessageSenderInterceptor.MessageSenderEndingInterceptor;
+import static org.apache.cxf.phase.Phase.PREPARE_SEND_ENDING;
+import static org.kantega.respiro.collector.ExchangeInfo.EXCHANGE_INFO;
+
 public class ExchangesInterceptor extends AbstractPhaseInterceptor<Message> {
 
     private final Exchanges exchanges;
 
     public ExchangesInterceptor(Exchanges exchanges) {
-        super(Phase.PREPARE_SEND_ENDING);
+        super(PREPARE_SEND_ENDING);
         this.exchanges = exchanges;
-        addAfter(MessageSenderInterceptor.MessageSenderEndingInterceptor.class.getName());
+        addAfter(MessageSenderEndingInterceptor.class.getName());
     }
 
     @Override
     public void handleMessage(Message message) throws Fault {
 
-        ExchangeInfo exchangeInfo = (ExchangeInfo) message.getExchange().get(ExchangeInfo.EXCHANGE_INFO);
+        ExchangeInfo exchangeInfo = (ExchangeInfo) message.getExchange().get(EXCHANGE_INFO);
         exchanges.addExchange(exchangeInfo);
     }
 

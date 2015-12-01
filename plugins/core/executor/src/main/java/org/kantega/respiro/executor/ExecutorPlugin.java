@@ -16,7 +16,7 @@
 
 package org.kantega.respiro.executor;
 
-import org.kantega.respiro.api.NettyExecutorService;
+import org.kantega.respiro.api.RespiroExecutorService;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 @Plugin
 public class ExecutorPlugin {
 
-    @Export final NettyExecutorService executorService;
+    @Export final RespiroExecutorService executorService;
 
     public ExecutorPlugin() {
         ExecutorService wrapped = Executors.newFixedThreadPool(100);

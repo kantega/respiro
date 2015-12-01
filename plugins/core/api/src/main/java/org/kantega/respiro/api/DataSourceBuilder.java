@@ -18,16 +18,15 @@ package org.kantega.respiro.api;
 
 import javax.sql.DataSource;
 
-/**
- * Created by helaar on 19.10.2015.
- */
 public interface DataSourceBuilder {
 
     Build datasource(String url);
 
     interface Build {
         Build username(String username);
+
         Build password(String password);
+
         Build driverClassname(String driver);
 
         DataSource build();

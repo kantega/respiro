@@ -16,7 +16,7 @@
 
 package org.kantega.respiro.hello;
 
-import org.kantega.respiro.api.NettyExecutorService;
+import org.kantega.respiro.api.RespiroExecutorService;
 import org.kantega.respiro.hello.ws.greet_1_0.Greeting;
 import org.kantega.respiro.hello.ws.hello_1.FaultElement;
 import org.kantega.respiro.hello.ws.hello_1_0.Hello;
@@ -36,12 +36,12 @@ public class HelloService implements Hello{
 
     private Greeting grt;
     private UserProfileService upfs;
-    private NettyExecutorService executorService;
+    private RespiroExecutorService executorService;
 
     @Resource
     private WebServiceContext context;
 
-    public HelloService(Greeting grt, UserProfileService upfs, NettyExecutorService executorService) {
+    public HelloService(Greeting grt, UserProfileService upfs, RespiroExecutorService executorService) {
         this.grt = grt;
         this.upfs = upfs;
         this.executorService = executorService;

@@ -20,9 +20,6 @@ import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
-/**
- * Created by helaar on 20.11.2015.
- */
 @Plugin
 public class MailPlugin {
 

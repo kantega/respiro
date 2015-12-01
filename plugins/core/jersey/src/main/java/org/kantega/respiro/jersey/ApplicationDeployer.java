@@ -19,9 +19,6 @@ package org.kantega.respiro.jersey;
 import javax.ws.rs.core.Application;
 import java.util.Collection;
 
-/**
- * Created by helaar on 20.10.2015.
- */
 public interface ApplicationDeployer {
 
     void deploy(Collection<Application> applications);

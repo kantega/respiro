@@ -41,13 +41,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Created by helaar on 14.10.2015.
- */
+import static java.lang.String.format;
+import static java.lang.System.getProperty;
+import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
+import static org.kantega.reststop.classloaderutils.PluginInfo.parse;
+
 @Plugin
 public class DummyPlugin {
 
-    private final String basedir = System.getProperty("reststopPluginDir");
+    private final String basedir = getProperty("reststopPluginDir");
     private final String DUMMY_PROPS = "dummy.properties";
 
     @Export
@@ -68,17 +70,17 @@ public class DummyPlugin {
             File[] dirs = dummyBasedir.listFiles(File::isDirectory);
 
             endpointConfigs = new ArrayList<>();
-            if(dirs != null){
+            if (dirs != null) {
                 for (File dir : dirs) {
                     Properties props = new Properties();
                     props.load(new FileInputStream(new File(dir, DUMMY_PROPS)));
-                    String style = props.getProperty("style","SOAP").toUpperCase();
-                    if( "SOAP".equals(style))
+                    String style = props.getProperty("style", "SOAP").toUpperCase();
+                    if ("SOAP".equals(style))
                         addSOAPEndpoint(servletContext, ecBuilder, dir, props, moduleArtifactId);
                     else if ("REST".equals(style))
                         dummies.addRESTEndpoints(dir, props);
                     else
-                        throw new IllegalArgumentException(String.format("Unknown style %s. Should be one of REST, SOAP.", style));
+                        throw new IllegalArgumentException(format("Unknown style %s. Should be one of REST, SOAP.", style));
 
                 }
             }
@@ -89,10 +91,10 @@ public class DummyPlugin {
     }
 
     private String parseModuleArtifactId() {
-        File pomXml = new File(System.getProperty("reststopPluginDir"), "pom.xml");
+        File pomXml = new File(getProperty("reststopPluginDir"), "pom.xml");
 
         try {
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(pomXml);
+            Document doc = newInstance().newDocumentBuilder().parse(pomXml);
 
             return doc.getDocumentElement().getElementsByTagName("artifactId").item(0).getTextContent();
         } catch (SAXException | ParserConfigurationException | IOException e) {
@@ -102,15 +104,15 @@ public class DummyPlugin {
 
     private void addSOAPEndpoint(ServletContext servletContext, EndpointBuilder ecBuilder, File dir, Properties props, String moduleArtifactId) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
         String servicePath = props.getProperty("path");
-        String namespace= props.getProperty("namespace");
+        String namespace = props.getProperty("namespace");
         String service = props.getProperty("service");
         String port = props.getProperty("port");
 
         String wsdlLocation = props.getProperty("wsdl");
         URL wsdlURL;
-        if(wsdlLocation.contains(":")) {
+        if (wsdlLocation.contains(":")) {
             String artifactId = wsdlLocation.substring(0, wsdlLocation.indexOf(":"));
-            String path = wsdlLocation.substring(wsdlLocation.indexOf(":") +1);
+            String path = wsdlLocation.substring(wsdlLocation.indexOf(":") + 1);
             wsdlURL = findWsdlInPlugin(servletContext, artifactId, path);
         } else {
             wsdlURL = findWsdlInPlugin(servletContext, moduleArtifactId, wsdlLocation);
@@ -132,10 +134,10 @@ public class DummyPlugin {
         try {
             Document pluginsXml = (Document) servletContext.getAttribute("pluginsXml");
 
-            List<PluginInfo> infos = PluginInfo.parse(pluginsXml);
+            List<PluginInfo> infos = parse(pluginsXml);
 
             for (PluginInfo info : infos) {
-                if(artifactId.equals(info.getArtifactId())) {
+                if (artifactId.equals(info.getArtifactId())) {
                     List<URL> urls = new ArrayList<>();
                     for (Artifact runtime : info.getClassPath("test")) {
                         urls.add(runtime.getFile().toURI().toURL());
@@ -151,6 +153,6 @@ public class DummyPlugin {
         }
 
 
-        throw new RuntimeException("Could not find WSDL in plugin " + artifactId + " at path " +path);
+        throw new RuntimeException("Could not find WSDL in plugin " + artifactId + " at path " + path);
     }
 }

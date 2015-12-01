@@ -28,9 +28,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * Created by helaar on 20.11.2015.
- */
+import static java.lang.String.valueOf;
+
 class ServerConfig {
     private final String host;
     private final int port;
@@ -54,12 +53,12 @@ class ServerConfig {
         if (!ssl)
             mail.setSmtpPort(port);
         else
-            mail.setSslSmtpPort(String.valueOf(port));
+            mail.setSslSmtpPort(valueOf(port));
         if (username != null && password != null)
             mail.setAuthentication(username, password);
 
         try {
-            if( !to.isEmpty())
+            if (!to.isEmpty())
                 mail.setTo(to);
             if (!cc.isEmpty())
                 mail.setCc(cc);

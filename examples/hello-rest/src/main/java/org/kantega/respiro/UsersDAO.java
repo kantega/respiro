@@ -22,9 +22,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by helaar on 19.10.2015.
- */
+import static java.lang.String.format;
+
 public class UsersDAO {
 
     private final DataSource dataSource;
@@ -35,17 +34,17 @@ public class UsersDAO {
     }
 
 
-    public String findName(String username){
+    public String findName(String username) {
 
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(SQL)){
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL)) {
 
-            statement.setString(1,username.toUpperCase());
-            ResultSet rs  = statement.executeQuery();
-            if( rs.next())
+            statement.setString(1, username.toUpperCase());
+            ResultSet rs = statement.executeQuery();
+            if (rs.next())
                 return rs.getString(1);
             else
-                throw new RuntimeException(String.format("Username '%s' not found", username));
+                throw new RuntimeException(format("Username '%s' not found", username));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

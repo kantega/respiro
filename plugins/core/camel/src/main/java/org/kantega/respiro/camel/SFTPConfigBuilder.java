@@ -16,19 +16,23 @@
 
 package org.kantega.respiro.camel;
 
-/**
- * Created by helaar on 11.11.2015.
- */
-public class SFTPConfigBuilder {
+import static org.kantega.respiro.camel.SFTPConfigBuilder.LogLevel.WARN;
+import static org.kantega.respiro.camel.SFTPConfigBuilder.YesNo.no;
 
+public class SFTPConfigBuilder {
 
 
     public static Builder sftp(String knownHostsFile, String host, int port, String remotePath, String localWorkDir) {
         return new Builder(knownHostsFile, host, port, remotePath, localWorkDir);
     }
 
-    public enum YesNo {yes, no};
-    public enum LogLevel {INFO, WARN};
+    public enum YesNo {yes, no}
+
+    ;
+
+    public enum LogLevel {INFO, WARN}
+
+    ;
 
     public static class Builder {
 
@@ -41,8 +45,8 @@ public class SFTPConfigBuilder {
         private String password;
         private String localDir;
         private boolean shouldDelete = true;
-        private YesNo strictHostKeyChecking = YesNo.no;
-        private LogLevel jschLoggingLevel = LogLevel.WARN;
+        private YesNo strictHostKeyChecking = no;
+        private LogLevel jschLoggingLevel = WARN;
 
         public Builder(String knownHostsFile, String host, int port, String remotePath, String localWorkDir) {
 
