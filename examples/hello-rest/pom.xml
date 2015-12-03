@@ -29,10 +29,17 @@
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>org.kantega.respiro</groupId>
             <artifactId>respiro-validation-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kantega.respiro</groupId>
+            <artifactId>respiro-jms-api</artifactId>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -59,6 +66,20 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.kantega.respiro</groupId>
+            <artifactId>respiro-test-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>${activemq.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -66,6 +87,25 @@
             <plugin>
                 <groupId>org.kantega.reststop</groupId>
                 <artifactId>reststop-maven-plugin</artifactId>
+                <configuration>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.kantega.respiro</groupId>
+                            <artifactId>respiro-jms-api</artifactId>
+                            <version>${project.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.kantega.respiro</groupId>
+                            <artifactId>respiro-activemq-client-plugin</artifactId>
+                            <version>${project.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.kantega.respiro</groupId>
+                            <artifactId>respiro-test-activemq-plugin</artifactId>
+                            <version>${project.version}</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>

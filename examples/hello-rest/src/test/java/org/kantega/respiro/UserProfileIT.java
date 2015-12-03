@@ -16,12 +16,14 @@
 
 package org.kantega.respiro;
 
+import org.junit.After;
 import org.kantega.respiro.testsmtp.MessageJson;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.jms.JMSException;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -38,16 +40,22 @@ import static org.junit.Assert.assertThat;
 public class UserProfileIT {
 
     private WebTarget target;
+    private TopicListener topicListener;
 
     @Before
-    public void before() {
+    public void before() throws JMSException {
         ClientConfig cc = new ClientConfig();
         cc.register(basic("joe", "joe"));
         Client client = newClient(cc);
         target = client.target("http://localhost:" + getReststopPort());
         target.path("dummy_smtpd").path("messages").request().delete();
+        topicListener = new TopicListener();
     }
 
+    @After
+    public void after() {
+        topicListener.close();
+    }
     @Test
     public void shouldGetFullname() {
 
@@ -67,6 +75,10 @@ public class UserProfileIT {
         MessageJson email = messageJsons.get(0);
 
         assertThat(email.getSubject(), is("User Ola Nordmann looked up by joe"));
+
+        assertThat(topicListener.getMessages().size(), is(1));
+
+        assertThat(topicListener.getMessages().get(0), is("Profile 'Ola Nordmann' looked up by joe"));
 
     }
 

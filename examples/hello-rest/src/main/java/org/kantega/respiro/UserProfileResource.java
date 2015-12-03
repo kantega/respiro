@@ -38,10 +38,12 @@ public class UserProfileResource {
 
     private final UsersDAO dao;
     private final MailSender email;
+    private final TopicNotifier notifier;
 
-    public UserProfileResource(UsersDAO dao, MailSender email) {
+    public UserProfileResource(UsersDAO dao, MailSender email, TopicNotifier notifier) {
         this.dao = dao;
         this.email = email;
+        this.notifier = notifier;
     }
 
 
@@ -59,6 +61,9 @@ public class UserProfileResource {
         email.send( new Message(String.format("User %s looked up by %s",
                 prof.getFullName(), securityContext.getUserPrincipal().getName()))
                 .body("User lookup for user " + prof));
+
+        notifier.notifyLookup(prof, securityContext.getUserPrincipal().getName());
+
 
         return prof;
     }

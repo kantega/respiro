@@ -24,6 +24,11 @@ import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
+import javax.annotation.PreDestroy;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.TopicConnectionFactory;
 import javax.sql.DataSource;
 import javax.ws.rs.core.Application;
 
@@ -35,8 +40,9 @@ public class UserProfilePlugin {
 
 
 
-    @Export
-    private final Application exampleApplication;
+    @Export final Application exampleApplication;
+
+    private final TopicNotifier notifier;
 
 
     public UserProfilePlugin(@Config String jdbcDriverClass,
@@ -49,15 +55,22 @@ public class UserProfilePlugin {
                              @Config(defaultValue = "25") int smtpPort,
                              ApplicationBuilder builder,
                              DataSourceBuilder dsBuilder,
-                             MailConfigBuilder mailConfigBuilder) {
+                             MailConfigBuilder mailConfigBuilder,
+                             TopicConnectionFactory connectionFactory) throws JMSException {
 
         DataSource myDataSource = dsBuilder.datasource(helloDatabaseUrl)
                 .username(helloDatabaseUsername).password(helloDatabasePassword).driverClassname(jdbcDriverClass).build();
         UsersDAO dao = new UsersDAO(myDataSource);
 
         MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).from(smtpFrom).to(smtpTo).build();
-        exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender)).build();
+        notifier = new TopicNotifier(connectionFactory);
+        exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender, notifier)).build();
 
     }
 
+
+    @PreDestroy
+    public void destroy() {
+        notifier.close();
+    }
 }

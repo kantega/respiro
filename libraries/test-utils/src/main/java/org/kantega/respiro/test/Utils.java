@@ -40,7 +40,7 @@ public class Utils {
         return getPort("/h2Port.txt");
     }
 
-    private static String getPort(String path) {
+    public static String getPort(String path) {
         try {
             return new String(readAllBytes(new File(decode(Utils.class.getResource(path).getFile())).toPath()));
         } catch (IOException e) {

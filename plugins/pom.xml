@@ -49,6 +49,8 @@
         <module>core/jersey</module>
         <module>core/jersey-deploy</module>
         <module>core/jersey-validation</module>
+        <module>core/jms-api</module>
+        <module>core/activemq-client</module>
 
 
         <!-- Plugins used for integration testing / development -->
@@ -58,6 +60,7 @@
         <module>test/test-database</module>
         <module>test/test-sshd</module>
         <module>test/test-smtp</module>
+        <module>test/test-activemq</module>
     </modules>
 
     <dependencies>
