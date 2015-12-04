@@ -166,6 +166,11 @@
                             </plugin>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
+                                <artifactId>respiro-cxf-metrics-plugin</artifactId>
+                                <version>${project.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-cxf-deploy-plugin</artifactId>
                                 <version>${project.version}</version>
                             </plugin>
@@ -257,6 +262,17 @@
                                 <version>${project.version}</version>
                             </plugin>
 
+                            <!-- Reststop plugins -->
+                            <plugin>
+                                <groupId>org.kantega.reststop</groupId>
+                                <artifactId>reststop-metrics-plugin</artifactId>
+                                <version>${reststop.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.reststop</groupId>
+                                <artifactId>reststop-metrics-servlets-plugin</artifactId>
+                                <version>${reststop.version}</version>
+                            </plugin>
                         </basePlugins>
                     </configuration>
                 </plugin>
