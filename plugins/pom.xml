@@ -49,6 +49,7 @@
         <module>core/cxf-metrics</module>
         <module>core/jersey</module>
         <module>core/jersey-deploy</module>
+        <module>core/jersey-metrics</module>
         <module>core/jersey-validation</module>
         <module>core/jms-api</module>
         <module>core/activemq-client</module>

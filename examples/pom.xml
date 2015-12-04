@@ -161,6 +161,11 @@
                             </plugin>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
+                                <artifactId>respiro-jersey-metrics-plugin</artifactId>
+                                <version>${project.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-cxf-plugin</artifactId>
                                 <version>${project.version}</version>
                             </plugin>
