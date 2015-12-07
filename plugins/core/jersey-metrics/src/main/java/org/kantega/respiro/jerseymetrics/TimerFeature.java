@@ -22,6 +22,9 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.FeatureContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.ext.Provider;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.URL;
 
 /**
  *
@@ -33,18 +36,32 @@ public class TimerFeature implements DynamicFeature {
     @Override
     public void configure(ResourceInfo resourceInfo, FeatureContext context) {
 
-        Path methodPath = resourceInfo.getResourceMethod().getAnnotation(Path.class);
-        Path classPath  = resourceInfo.getResourceClass().getAnnotation(Path.class);
+        Method resourceMethod = resourceInfo.getResourceMethod();
+        Class<?> resourceClass = resourceInfo.getResourceClass();
+        if(metricsDisabled(resourceClass)) {
+            return;
+        }
+        Path methodPath = resourceMethod.getAnnotation(Path.class);
+        Path classPath  = resourceClass.getAnnotation(Path.class);
 
         Path path = methodPath != null ? methodPath : classPath;
         if(path != null) {
             UriBuilder builder = methodPath != null
-                    ? UriBuilder.fromResource(resourceInfo.getResourceClass()).path(resourceInfo.getResourceClass(),resourceInfo.getResourceMethod().getName())
-                    : UriBuilder.fromResource(resourceInfo.getResourceClass());
+                    ? UriBuilder.fromResource(resourceClass).path(resourceClass, resourceMethod.getName())
+                    : UriBuilder.fromResource(resourceClass);
 
             String template = builder.toTemplate();
             context.register(new TimerBeforeFilter(template));
             context.register(TimerAfterFilter.class);
+        }
+    }
+
+    private boolean metricsDisabled(Class<?> resourceClass) {
+        try {
+            Field metrics = resourceClass.getDeclaredField("METRICS");
+            return Boolean.FALSE.equals(metrics.get(null));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return false;
         }
     }
 }

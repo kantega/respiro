@@ -63,13 +63,20 @@ public class CxfMetricsPlugin implements EndpointCustomizer {
 
         @Override
         public void handleMessage(Message message) throws Fault {
+
+            if(Boolean.TRUE.equals(message.getExchange().getInMessage().get("ignore_metrics"))) {
+                return;
+            }
             Long time_before = (Long) message.getExchange().get("time_before");
             if(time_before != null) {
                 QName operation = (QName) message.get(Message.WSDL_OPERATION);
+                QName service = (QName) message.get(Message.WSDL_SERVICE);
 
                 String requestUri = (String) message.getExchange().getInMessage().get(Message.REQUEST_URI);
 
-                String name = name("SOAP", requestUri, operation.getLocalPart() );
+                String name = name("SOAP", service.getLocalPart(), operation.getLocalPart(), requestUri );
+
+
 
                 registry.timer(name).update(System.nanoTime() - time_before, TimeUnit.NANOSECONDS);
 

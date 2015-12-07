@@ -53,6 +53,7 @@
         <module>core/jersey-validation</module>
         <module>core/jms-api</module>
         <module>core/activemq-client</module>
+        <module>core/ui</module>
 
 
         <!-- Plugins used for integration testing / development -->
@@ -93,13 +94,6 @@
                     <groupId>org.kantega.reststop</groupId>
                     <artifactId>reststop-maven-plugin</artifactId>
                     <version>${reststop.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>mark-source-dir</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
@@ -107,5 +101,18 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.kantega.reststop</groupId>
+                <artifactId>reststop-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>mark-source-dir</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>

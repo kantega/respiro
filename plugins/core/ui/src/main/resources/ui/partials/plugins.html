@@ -1,0 +1,22 @@
+<div>
+
+
+    <table class="table table-striped">
+        <thead ng-repeat-start="group in plugins">
+        <tr>
+            <th>{{group.name}}:</th>
+            <th>Version</th>
+            <th>Exports</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="plugin in group.plugins">
+            <td>{{plugin.artifactId}}</td>
+            <td>{{plugin.version}}</td>
+            <td></td>
+        </tr>
+        </tbody>
+        <tfoot ng-repeat-end></tfoot>
+    </table>
+    </div>
+</div>

@@ -29,6 +29,9 @@ import java.util.stream.Stream;
  */
 @Path("dummy_smtpd")
 public class SmtpdResource {
+    // Disable metrics for this resource
+    public static boolean METRICS = false;
+
     private final MailStore mailStore;
 
     public SmtpdResource(MailStore mailStore) {
