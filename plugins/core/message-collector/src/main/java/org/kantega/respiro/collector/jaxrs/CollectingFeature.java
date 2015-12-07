@@ -30,7 +30,7 @@ public class CollectingFeature implements DynamicFeature {
     @Override
     public void configure(ResourceInfo resourceInfo, FeatureContext context) {
         if (!resourceInfo.getResourceClass().isAnnotationPresent(DoNotCollect.class)) {
-            context.register(CollectingFilter.class);
+            context.register(ContainerCollectingFilter.class);
         }
     }
 

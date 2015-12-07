@@ -18,7 +18,7 @@ package org.kantega.respiro.collector;
 
 import org.kantega.respiro.collector.cxf.MessageCollectorCustomizer;
 import org.kantega.respiro.collector.jaxrs.CollectingFeature;
-import org.kantega.respiro.collector.jaxrs.CollectingFilter;
+import org.kantega.respiro.collector.jaxrs.ClientCollectingFilter;
 import org.kantega.respiro.collector.jdbc.JdbcCollector;
 import org.kantega.respiro.cxf.api.EndpointCustomizer;
 import org.kantega.respiro.cxf.api.ServiceCustomizer;
@@ -26,7 +26,6 @@ import org.kantega.respiro.jdbc.DataSourceCustomizer;
 import org.kantega.respiro.jersey.ApplicationCustomizer;
 import org.kantega.respiro.jersey.ClientCustomizer;
 import org.kantega.reststop.api.Export;
-import org.kantega.reststop.api.FilterPhase;
 import org.kantega.reststop.api.Plugin;
 import org.kantega.reststop.api.ServletBuilder;
 
@@ -60,7 +59,7 @@ public class MessageCollectorPlugin {
         serviceMessageCollector = customizer;
         endpointMessageCollector = customizer;
 
-        clientCustomizer = cc -> cc.register(new CollectingFilter());
+        clientCustomizer = cc -> cc.register(new ClientCollectingFilter());
 
         applicationCustomizer = (r) -> r.register(CollectingFeature.class);
 
