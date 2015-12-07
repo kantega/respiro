@@ -19,6 +19,10 @@ angular
                 controller:'ExchangeDetailsController as details',
                 templateUrl:'../exchanges/details.html',
             })
+            .when('/registry', {
+                controller:'RegistryController as registry',
+                templateUrl:'partials/registry.html',
+            })
             .otherwise({
                 redirectTo: '/plugins'
             });
@@ -38,6 +42,10 @@ angular
             {
                 href: "/exchanges",
                 label: "Exchanges"
+            },
+            {
+                href: "/registry",
+                label: "Registry"
             }
         ];
 
@@ -154,6 +162,23 @@ angular
             $scope.ex= result.data;
         }, function() {
             alert("Failed getting exchange details from server");
+        })
+    })
+    .controller("RegistryController", function($http, $scope) {
+        $http.get("registry/soap").then(function(result) {
+
+            $scope.soap = result.data;
+
+        }, function() {
+            alert("Failed getting SOAP endpoints from server");
+        })
+
+        $http.get("registry/rest").then(function(result) {
+
+            $scope.rest= result.data;
+
+        }, function() {
+            alert("Failed getting REST resources from server");
         })
     });
 

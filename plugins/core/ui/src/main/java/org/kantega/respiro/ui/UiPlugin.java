@@ -2,6 +2,7 @@ package org.kantega.respiro.ui;
 
 import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.ui.resources.PluginsResource;
+import org.kantega.respiro.ui.resources.RegistryResource;
 import org.kantega.respiro.ui.resources.UserProfileResource;
 import org.kantega.reststop.api.*;
 
@@ -29,6 +30,7 @@ public class UiPlugin {
         uiApp = applicationBuilder.application()
                 .singleton(new UserProfileResource())
                 .singleton(new PluginsResource(pluginManager))
+                .singleton(new RegistryResource(pluginManager))
                 .build();
 
 
@@ -39,6 +41,7 @@ public class UiPlugin {
         filters.add(servletBuilder.resourceServlet(respiroDir +"respiro.js", getClass().getResource("/ui/respiro.js")));
         partial("plugins.html", servletBuilder, respiroDir);
         partial("metrics.html", servletBuilder, respiroDir);
+        partial("registry.html", servletBuilder, respiroDir);
 
 
     }

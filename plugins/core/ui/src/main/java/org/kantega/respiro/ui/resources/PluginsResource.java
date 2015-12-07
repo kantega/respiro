@@ -17,6 +17,10 @@ import java.util.Comparator;
 @Path("respiro/plugins")
 public class PluginsResource {
 
+    // Disable metrics for this resource
+    public static boolean METRICS = false;
+
+
     private final ReststopPluginManager pluginManager;
 
     public PluginsResource(ReststopPluginManager pluginManager) {
