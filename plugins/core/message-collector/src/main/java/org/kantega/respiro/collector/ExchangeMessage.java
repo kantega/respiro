@@ -30,10 +30,22 @@ public interface ExchangeMessage {
     String getMethod();
     String getHeaders();
 
-    int getResponseCode();
+    default ResponseStatus getResponseStatus() {
+        if(getResponseCode() != null) {
+            if (getResponseCode().startsWith("2")) {
+                return ResponseStatus.SUCCESS;
+            } else if (getResponseCode().startsWith("5")) {
+                return ResponseStatus.ERROR;
+            }
+        }
+        return ResponseStatus.UNDETERMINED;
+    }
+
+    String getResponseCode();
 
     Type getType();
 
     String getProtocol();
 
+    enum ResponseStatus {SUCCESS, WARNING, ERROR, UNDETERMINED}
 }

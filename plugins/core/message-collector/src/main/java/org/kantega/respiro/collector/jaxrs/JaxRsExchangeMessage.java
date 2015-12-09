@@ -45,8 +45,8 @@ public class JaxRsExchangeMessage implements ExchangeMessage {
     }
 
     @Override
-    public int getResponseCode() {
-        return responseCode;
+    public String  getResponseCode() {
+        return Integer.toString(responseCode);
     }
 
     @Override

@@ -2,9 +2,7 @@ package org.kantega.respiro.camelcollect;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
-import org.apache.camel.management.event.AbstractExchangeEvent;
-import org.apache.camel.management.event.ExchangeCompletedEvent;
-import org.apache.camel.management.event.ExchangeCreatedEvent;
+import org.apache.camel.management.event.*;
 import org.apache.camel.support.EventNotifierSupport;
 import org.kantega.respiro.camel.CamelContextCustomizer;
 import org.kantega.respiro.collector.Collector;
@@ -23,9 +21,6 @@ public class CamelCollectPlugin implements CamelContextCustomizer {
 
     public static final String RESPIRO_EXCHANGE_INFO = "respiro.exchangeInfo";
     @Export final CamelContextCustomizer camelContextCustomizer = this;
-    public CamelCollectPlugin() {
-
-    }
 
     @Override
     public void customize(CamelContext camelContext) {
@@ -42,10 +37,17 @@ public class CamelCollectPlugin implements CamelContextCustomizer {
                     Exchange exchange = event.getExchange();
 
                     if (event instanceof ExchangeCreatedEvent) {
+                        ExchangeInfo exchangeInfo = Collector.newCollectionContext(new CamelExchangeMessage(exchange.getIn()));
+                        exchange.setProperty(RESPIRO_EXCHANGE_INFO, exchangeInfo);
+                    } else if (event instanceof ExchangeFailureHandlingEvent) {
+                        ExchangeInfo exchangeInfo = (ExchangeInfo) exchange.getProperty(RESPIRO_EXCHANGE_INFO);
+                        CamelExchangeMessage message = (CamelExchangeMessage) exchangeInfo.getInMessage();
+                        message.fail(exchange.getException());
 
                     } else if (event instanceof ExchangeCompletedEvent) {
-                        ExchangeInfo exchangeInfo = Collector.newCollectionContext(new CamelExchangeMessage(exchange.getIn()));
-                        exchangeInfo.setOutMessage(new CamelExchangeMessage(exchange.getIn()));
+                        ExchangeInfo exchangeInfo = (ExchangeInfo) exchange.getProperty(RESPIRO_EXCHANGE_INFO);
+                        CamelExchangeMessage message = (CamelExchangeMessage) exchangeInfo.getInMessage();
+                        exchangeInfo.setOutMessage(message);
                         Collector.endCollectionContext();
                         Collector.clearCollectionContext();
                     }

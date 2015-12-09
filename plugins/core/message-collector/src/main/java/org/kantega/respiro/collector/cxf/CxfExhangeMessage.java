@@ -55,11 +55,11 @@ public class CxfExhangeMessage implements ExchangeMessage {
     }
 
     @Override
-    public int getResponseCode() {
+    public String getResponseCode() {
         if(loggingMessage.getResponseCode().length() > 0) {
-            return Integer.parseInt(loggingMessage.getResponseCode().toString());
+            return loggingMessage.getResponseCode().toString();
         }
-        return 0;
+        return "0";
     }
 
     @Override

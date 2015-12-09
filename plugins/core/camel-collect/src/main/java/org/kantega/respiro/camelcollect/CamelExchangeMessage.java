@@ -10,6 +10,8 @@ import java.net.URI;
  */
 public class CamelExchangeMessage implements ExchangeMessage {
     private final Message message;
+    private volatile boolean failed;
+    private volatile Exception exception;
 
     public CamelExchangeMessage(Message message) {
         this.message = message;
@@ -48,8 +50,13 @@ public class CamelExchangeMessage implements ExchangeMessage {
     }
 
     @Override
-    public int getResponseCode() {
-        return 0;
+    public ResponseStatus getResponseStatus() {
+        return failed ? ResponseStatus.ERROR : ResponseStatus.SUCCESS;
+    }
+
+    @Override
+    public String getResponseCode() {
+        return failed ? "FAILED" : "SUCCESS";
     }
 
     @Override
@@ -60,5 +67,10 @@ public class CamelExchangeMessage implements ExchangeMessage {
     @Override
     public String getProtocol() {
         return message.getExchange().getFromEndpoint().getEndpointConfiguration().getURI().getScheme();
+    }
+
+    public void fail(Exception exception) {
+        this.failed = true;
+        this.exception = exception;
     }
 }

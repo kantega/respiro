@@ -39,7 +39,7 @@
                 <a href="#/exchanges/details/{{ex.uuid}}" ng-click="ex.visible=!ex.visible">{{ex.inMessage.address}}</a>
             </td>
             <td>
-                <div class="label" ng-class="{'label-success': ex.outMessage.responseCode==200, 'label-danger': ex.outMessage.responseCode==500, 'label-default': ex.outMessage.responseCode != 200 && ex.outMessage.responseCode!= 500}">
+                <div class="label" ng-class="{'label-success': ex.outMessage.responseStatus=='SUCCESS', 'label-danger': ex.outMessage.responseStatus=='ERROR', 'label-default': ex.outMessage.responseStatus == 'UNDETERMINED'}">
                     {{ex.outMessage.responseCode}}
                 </div>
 

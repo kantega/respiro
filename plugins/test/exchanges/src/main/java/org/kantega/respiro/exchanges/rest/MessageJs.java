@@ -22,11 +22,12 @@ package org.kantega.respiro.exchanges.rest;
 public class MessageJs {
     private String payload;
     private String address;
-    private int responseCode;
+    private String responseCode;
     private String type;
     private String protocol;
     private String method;
     private String headers;
+    private String responseStatus;
 
     public void setPayload(String payload) {
         this.payload = payload;
@@ -44,11 +45,11 @@ public class MessageJs {
         return address;
     }
 
-    public void setResponseCode(int responseCode) {
+    public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
     }
 
-    public int getResponseCode() {
+    public String  getResponseCode() {
         return responseCode;
     }
 
@@ -82,5 +83,13 @@ public class MessageJs {
 
     public String getHeaders() {
         return headers;
+    }
+
+    public void setResponseStatus(String responseStatus) {
+        this.responseStatus = responseStatus;
+    }
+
+    public String getResponseStatus() {
+        return responseStatus;
     }
 }

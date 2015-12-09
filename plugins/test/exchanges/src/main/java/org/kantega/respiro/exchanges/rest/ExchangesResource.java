@@ -83,6 +83,7 @@ public class ExchangesResource {
         js.setPayload(message.getPayload());
         js.setAddress(message.getAddress());
         js.setResponseCode(message.getResponseCode());
+        js.setResponseStatus(message.getResponseStatus().toString());
         js.setType(message.getType().toString());
         js.setProtocol(message.getProtocol());
         js.setMethod(message.getMethod());

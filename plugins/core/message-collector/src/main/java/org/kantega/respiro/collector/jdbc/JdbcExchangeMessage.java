@@ -49,8 +49,13 @@ public class JdbcExchangeMessage implements ExchangeMessage {
     }
 
     @Override
-    public int getResponseCode() {
-        return 0;
+    public ResponseStatus getResponseStatus() {
+        return ResponseStatus.UNDETERMINED;
+    }
+
+    @Override
+    public String  getResponseCode() {
+        return "";
     }
 
     @Override
