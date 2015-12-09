@@ -45,6 +45,7 @@
         <module>core/executor</module>
         <module>core/camel</module>
         <module>core/camel-deploy</module>
+        <module>core/camel-collect</module>
         <module>core/cxf-deploy</module>
         <module>core/cxf-metrics</module>
         <module>core/jersey</module>

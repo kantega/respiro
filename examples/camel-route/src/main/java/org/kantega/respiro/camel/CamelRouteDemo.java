@@ -17,7 +17,6 @@
 package org.kantega.respiro.camel;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.file.GenericFile;
 import org.kantega.reststop.api.Config;
@@ -32,18 +31,17 @@ import java.io.File;
 @Plugin
 public class CamelRouteDemo {
 
-    @Export
-    final RoutesBuilder helloRoute;
+    @Export final RouteBuilder servletRoute;
+    @Export final RouteBuilder incomingRoute;
+    @Export final RouteBuilder remoteFilesRoute;
 
     public CamelRouteDemo(@Config int port,
                           @Config String knownHostsFile) {
 
-        helloRoute = new RouteBuilder() {
+        servletRoute = new RouteBuilder() {
             @Override
             public void configure() throws Exception {
 
-                onException(RuntimeException.class)
-                        .to("file:target/failed");
 
                 from("servlet:///hello")
                         .process(exchange -> {
@@ -59,21 +57,39 @@ public class CamelRouteDemo {
                             exchange.getOut().setBody("<b>Hei Verden!</b>");
                         });
 
+                from("servlet:///goddag").to("file:target/goddags");
+
+
+            }
+        };
+
+        remoteFilesRoute = new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+                from(SFTPConfigBuilder.sftp(knownHostsFile, "localhost", port, "/remotefiles", "target/work").auth("joe", "joe").build())
+                        .to("file:target/fetchedfiles");
+            }
+        };
+
+        incomingRoute = new RouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+                onException(BadNameException.class)
+                        .handled(true)
+                        .to("file:target/badnames");
+
                 from("file:target/incoming")
                         .process(exchange -> {
                             GenericFile<File> file = (GenericFile<File>) exchange.getIn().getBody();
-                            System.out.println("Procesing " + file);
+                            System.out.println("Processing " + file);
                             if (file.getFile().getName().startsWith("yo"))
-                                throw new RuntimeException("inappropriate file");
+                                throw new BadNameException("inappropriate file");
 
                         })
                         .to("file:target/processed");
 
-                from(SFTPConfigBuilder.sftp(knownHostsFile, "localhost", port, "/remotefiles", "target/work").auth("joe", "joe").build())
-                        .to("file:target/fetchedfiles");
-                from("servlet:///goddag").to("file:target/goddags");
+
             }
         };
-
     }
 }

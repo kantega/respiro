@@ -258,6 +258,11 @@
                             </plugin>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
+                                <artifactId>respiro-camel-collect-plugin</artifactId>
+                                <version>${project.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-validation-api</artifactId>
                                 <version>${project.version}</version>
                             </plugin>

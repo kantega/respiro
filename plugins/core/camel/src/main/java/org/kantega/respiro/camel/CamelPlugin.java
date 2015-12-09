@@ -40,14 +40,18 @@ public class CamelPlugin implements CamelRouteDeployer {
     private final Filter camelServlet;
 
     private final CamelHttpTransportServlet httpServlet;
+    private final ServletBuilder servletBuilder;
+    private final Collection<DataSourceInitializer> dataSourceInitializers;
+    private final Collection<CamelContextCustomizer> camelContextCustomizers;
 
     private CamelContext camelContext;
 
     @Export final CamelRouteDeployer camelRouteDeployer = this;
 
-    public CamelPlugin(ServletBuilder servletBuilder, Collection<DataSourceInitializer> dataSourceInitializers) throws Exception {
-
-
+    public CamelPlugin(ServletBuilder servletBuilder, Collection<DataSourceInitializer> dataSourceInitializers, Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
+        this.servletBuilder = servletBuilder;
+        this.dataSourceInitializers = dataSourceInitializers;
+        this.camelContextCustomizers = camelContextCustomizers;
 
 
         httpServlet = new CamelHttpTransportServlet();
@@ -58,19 +62,7 @@ public class CamelPlugin implements CamelRouteDeployer {
         camelServlet = servletBuilder.servlet(httpServlet, "/camel/*");
 
 
-        /*camelContext.addInterceptStrategy(new InterceptStrategy() {
-            @Override
-            public Processor wrapProcessorInInterceptors(CamelContext context, ProcessorDefinition<?> definition, Processor target, Processor nextTarget) throws Exception {
-                return new DelegateAsyncProcessor(){
-                    @Override
-                    public boolean process(Exchange exchange, AsyncCallback callback) {
-                        System.out.println(exchange.toString());
-                        return super.process(exchange, callback);
-                    }
-                };
 
-            }
-        });*/
 
 
     }
@@ -79,6 +71,9 @@ public class CamelPlugin implements CamelRouteDeployer {
     public void deploy(Collection<RouteBuilder> routeBuilders) {
         try {
             camelContext = new DefaultCamelContext();
+
+            camelContextCustomizers.forEach(c -> c.customize(camelContext));
+
             for (RouteBuilder routeBuilder : routeBuilders) {
                 camelContext.addRoutes(routeBuilder);
             }
