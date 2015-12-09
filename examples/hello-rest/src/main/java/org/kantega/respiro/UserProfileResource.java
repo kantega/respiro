@@ -35,6 +35,9 @@ import javax.ws.rs.core.SecurityContext;
 @RolesAllowed("innholdsprodusent")
 public class UserProfileResource {
 
+    // Disable metrics for this resource
+    public static boolean METRICS = false;
+
 
     private final UsersDAO dao;
     private final MailSender email;

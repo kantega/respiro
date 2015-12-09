@@ -3,6 +3,8 @@ package org.kantega.respiro.camelcollect;
 import org.apache.camel.Message;
 import org.kantega.respiro.collector.ExchangeMessage;
 
+import java.net.URI;
+
 /**
  *
  */
@@ -15,7 +17,19 @@ public class CamelExchangeMessage implements ExchangeMessage {
 
     @Override
     public String getAddress() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        URI uri = message.getExchange().getFromEndpoint().getEndpointConfiguration().getURI();
+
+        sb.append(uri.getHost());
+        if(uri.getPort() != -1 ) {
+            sb.append(":").append(uri.getPort());
+        }
+        if(uri.getPath() != null) {
+            sb.append(uri.getPath());
+        }
+
+        return sb.toString();
     }
 
     @Override
@@ -25,7 +39,7 @@ public class CamelExchangeMessage implements ExchangeMessage {
 
     @Override
     public String getMethod() {
-        return message.getExchange().getFromEndpoint().getEndpointKey();
+        return "Camel" ;
     }
 
     @Override
@@ -45,6 +59,6 @@ public class CamelExchangeMessage implements ExchangeMessage {
 
     @Override
     public String getProtocol() {
-        return "Camel";
+        return message.getExchange().getFromEndpoint().getEndpointConfiguration().getURI().getScheme();
     }
 }

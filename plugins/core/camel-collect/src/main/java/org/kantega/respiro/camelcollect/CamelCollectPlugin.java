@@ -7,6 +7,8 @@ import org.apache.camel.management.event.ExchangeCompletedEvent;
 import org.apache.camel.management.event.ExchangeCreatedEvent;
 import org.apache.camel.support.EventNotifierSupport;
 import org.kantega.respiro.camel.CamelContextCustomizer;
+import org.kantega.respiro.collector.Collector;
+import org.kantega.respiro.collector.ExchangeInfo;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -42,7 +44,10 @@ public class CamelCollectPlugin implements CamelContextCustomizer {
                     if (event instanceof ExchangeCreatedEvent) {
 
                     } else if (event instanceof ExchangeCompletedEvent) {
-
+                        ExchangeInfo exchangeInfo = Collector.newCollectionContext(new CamelExchangeMessage(exchange.getIn()));
+                        exchangeInfo.setOutMessage(new CamelExchangeMessage(exchange.getIn()));
+                        Collector.endCollectionContext();
+                        Collector.clearCollectionContext();
                     }
                 }
             }

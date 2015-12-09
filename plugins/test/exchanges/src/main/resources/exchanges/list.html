@@ -23,8 +23,8 @@
         <tr>
 
             <th>Method</th>
-            <th>Address</th>
             <th>Protocol</th>
+            <th>Address</th>
             <th>Status</th>
             <th>Time</th>
         </tr>
@@ -33,10 +33,10 @@
                 {{ex.inMessage.method}}
             </td>
             <td>
-                <a href="#/exchanges/details/{{ex.uuid}}" ng-click="ex.visible=!ex.visible">{{ex.inMessage.address}}</a>
+                {{ex.inMessage.protocol}}
             </td>
             <td>
-                {{ex.inMessage.protocol}}
+                <a href="#/exchanges/details/{{ex.uuid}}" ng-click="ex.visible=!ex.visible">{{ex.inMessage.address}}</a>
             </td>
             <td>
                 <div class="label" ng-class="{'label-success': ex.outMessage.responseCode==200, 'label-danger': ex.outMessage.responseCode==500, 'label-default': ex.outMessage.responseCode != 200 && ex.outMessage.responseCode!= 500}">
