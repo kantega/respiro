@@ -19,6 +19,7 @@ package org.kantega.respiro.exchanges;
 import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.cxf.api.EndpointCustomizer;
 import org.kantega.respiro.exchanges.rest.ExchangesResource;
+import org.kantega.respiro.ui.UiModule;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 import org.kantega.reststop.api.ServletBuilder;
@@ -42,6 +43,8 @@ public class ExchangesPlugin  {
 
     @Export final Application exhangesApp;
 
+    @Export final UiModule uiModule;
+
     public ExchangesPlugin(ServletBuilder servletBuilder, ApplicationBuilder applicationBuilder) {
         Exchanges exchanges = new Exchanges();
         filters.add(servletBuilder.redirectServlet("/exchanges", "respiro/#/exchanges"));
@@ -49,6 +52,7 @@ public class ExchangesPlugin  {
 
         filters.add(servletBuilder.resourceServlet("/exchanges/list.html", getClass().getResource("/exchanges/list.html")));
         filters.add(servletBuilder.resourceServlet("/exchanges/details.html", getClass().getResource("/exchanges/details.html")));
+        filters.add(servletBuilder.resourceServlet("/exchanges/exchanges.js", getClass().getResource("/exchanges/exchanges.js")));
 
         endpointCustomizer = new ExhangesCustomizer(exchanges);
 
@@ -57,9 +61,7 @@ public class ExchangesPlugin  {
                 .resource( ExhangesFeature.class)
                 .build();
 
-
-
-
+        uiModule = () -> "../exchanges/exchanges.js";
 
     }
 }

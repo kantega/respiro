@@ -26,7 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>respiro-exchanges-plugin</artifactId>
+    <artifactId>respiro-ui-registry-plugin</artifactId>
 
     <dependencies>
         <dependency>
@@ -40,18 +40,6 @@
             <artifactId>respiro-ui-plugin</artifactId>
             <scope>provided</scope>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kantega.respiro</groupId>
-            <artifactId>respiro-cxf-plugin</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.kantega.respiro</groupId>
-            <artifactId>respiro-message-collector-plugin</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

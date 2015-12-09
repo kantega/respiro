@@ -273,6 +273,24 @@
                                 <version>${project.version}</version>
                             </plugin>
 
+                            <plugin>
+                                <groupId>org.kantega.respiro</groupId>
+                                <artifactId>respiro-ui-metrics-plugin</artifactId>
+                                <version>${project.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.respiro</groupId>
+                                <artifactId>respiro-ui-registry-plugin</artifactId>
+                                <version>${project.version}</version>
+                            </plugin>
+
+                            <plugin>
+                                <groupId>org.kantega.respiro</groupId>
+                                <artifactId>respiro-ui-plugins-plugin</artifactId>
+                                <version>${project.version}</version>
+                            </plugin>
+
+
                             <!-- Reststop plugins -->
                             <plugin>
                                 <groupId>org.kantega.reststop</groupId>
