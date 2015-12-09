@@ -68,7 +68,6 @@ angular
                 script.addEventListener("load", function() {
                     remaining--;
                     if(remaining == 0) {
-                        alert("Items: " + items.length)
                         angular.bootstrap(document, items)
                     }
                 })
