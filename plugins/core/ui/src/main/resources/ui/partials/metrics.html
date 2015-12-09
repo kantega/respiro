@@ -1,0 +1,95 @@
+<div>
+
+    <h2>REST resources</h2>
+
+    <table class="table table-condensed table-bordered">
+        <thead>
+        <tr>
+            <th>Method</th>
+            <th>Resource</th>
+            <th>Count</th>
+            <th>Max</th>
+            <th>Mean</th>
+            <th>Min</th>
+            <th>P50</th>
+            <th>P75</th>
+            <th>P95</th>
+            <th>P99</th>
+            <th>P999</th>
+            <th>stddev</th>
+            <th>m1_rate</th>
+            <th>m5_rate</th>
+            <th>m15_rate</th>
+            <th>mean_rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="timer in resources">
+            <td>{{timer.method}}</td>
+            <td>{{timer.path}}</td>
+            <td style="text-align: right">{{timer.timer.count}}</td>
+            <td style="text-align: right">{{timer.timer.max | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.min | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.mean | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p50 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p75 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p95 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p99 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p999 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.stddev | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.m1_rate | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.m5_rate | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.m15_rate | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.mean_rate | number:2}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h2>SOAP operations</h2>
+
+    <table class="table table-condensed table-bordered">
+        <thead>
+        <tr>
+            <th>Service</th>
+            <th>Operation</th>
+            <th>Path</th>
+            <th>Count</th>
+            <th>Max</th>
+            <th>Mean</th>
+            <th>Min</th>
+            <th>P50</th>
+            <th>P75</th>
+            <th>P95</th>
+            <th>P99</th>
+            <th>P999</th>
+            <th>stddev</th>
+            <th>m1_rate</th>
+            <th>m5_rate</th>
+            <th>m15_rate</th>
+            <th>mean_rate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="timer in endpoints">
+            <td>{{timer.service}}</td>
+            <td>{{timer.operation}}</td>
+            <td>{{timer.path}}</td>
+            <td style="text-align: right">{{timer.timer.count}}</td>
+            <td style="text-align: right">{{timer.timer.max | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.min | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.mean | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p50 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p75 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p95 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p99 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.p999 | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.stddev | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.m1_rate | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.m5_rate | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.m15_rate | number:2}}</td>
+            <td style="text-align: right">{{timer.timer.mean_rate | number:2}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,42 @@
+<div>
+
+
+    <h2>SOAP endpoints</h2>
+    <table class="table table-striped">
+
+        <tr>
+            <th>Path</th>
+            <th>Service</th>
+            <th>WSDL</th>
+        </tr>
+
+        <tbody>
+        <tr ng-repeat="endpoint in soap">
+            <td>{{endpoint.path}}</td>
+            <td>{{endpoint.serviceName}}</td>
+            <th>
+                <a href="../ws{{endpoint.path}}?wsdl">WSDL</a>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h2>REST resources</h2>
+    <table class="table table-striped">
+
+        <tr>
+            <th>Method</th>
+            <th>Path</th>
+        </tr>
+
+        <tbody ng-repeat="resource in rest">
+        <tr ng-repeat="method in resource.methods">
+            <td>{{method.method}}</td>
+            <td>{{method.pathTemplate}}</td>
+        </tr>
+        </tbody>
+        </tbody>
+    </table>
+
+</div>

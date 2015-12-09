@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 @DoNotCollect
 public class ExchangesResource {
 
+    // Disable metrics for this resource
+    public static boolean METRICS = false;
+
     private final Exchanges exchanges;
 
     public ExchangesResource(Exchanges exchanges) {

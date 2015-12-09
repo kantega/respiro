@@ -63,6 +63,7 @@ public class DummyProvider implements Provider<Source> {
     @Override
     public Source invoke(Source request) {
         QName operation = (QName) context.getMessageContext().get(WSDL_OPERATION);
+        context.getMessageContext().put("ignore_metrics", Boolean.TRUE);
         DocumentBuilderFactory fac = newInstance();
         fac.setNamespaceAware(true);
         DOMResult domResult = new DOMResult();

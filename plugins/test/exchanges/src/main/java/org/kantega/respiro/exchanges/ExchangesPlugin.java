@@ -44,9 +44,9 @@ public class ExchangesPlugin  {
 
     public ExchangesPlugin(ServletBuilder servletBuilder, ApplicationBuilder applicationBuilder) {
         Exchanges exchanges = new Exchanges();
-        filters.add(servletBuilder.redirectServlet("/exchanges", "exchanges/"));
+        filters.add(servletBuilder.redirectServlet("/exchanges", "respiro/#/exchanges"));
+        filters.add(servletBuilder.redirectServlet("/exchanges/", "../respiro/#/exchanges"));
 
-        filters.add(servletBuilder.resourceServlet("/exchanges/", getClass().getResource("/exchanges/index.html")));
         filters.add(servletBuilder.resourceServlet("/exchanges/list.html", getClass().getResource("/exchanges/list.html")));
         filters.add(servletBuilder.resourceServlet("/exchanges/details.html", getClass().getResource("/exchanges/details.html")));
 
