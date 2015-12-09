@@ -1,4 +1,4 @@
-package org.kantega.respiro.ui.resources;
+package org.kantega.respiro.ui.registry;
 
 import javax.ws.rs.*;
 import java.lang.annotation.Annotation;

@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  *
  */
-@Path("exchanges/api")
+@Path("respiro/exchanges/api")
 @DoNotCollect
 public class ExchangesResource {
 

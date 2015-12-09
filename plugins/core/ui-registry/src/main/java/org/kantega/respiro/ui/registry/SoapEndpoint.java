@@ -1,4 +1,4 @@
-package org.kantega.respiro.ui.resources;
+package org.kantega.respiro.ui.registry;
 
 import org.kantega.respiro.api.EndpointConfig;
 import org.kantega.reststop.api.PluginExport;

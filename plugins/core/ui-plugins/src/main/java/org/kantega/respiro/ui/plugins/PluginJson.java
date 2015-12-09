@@ -1,4 +1,4 @@
-package org.kantega.respiro.ui.resources;
+package org.kantega.respiro.ui.plugins;
 
 
 import org.kantega.reststop.classloaderutils.PluginClassLoader;

@@ -37,6 +37,12 @@
         </dependency>
         <dependency>
             <groupId>org.kantega.respiro</groupId>
+            <artifactId>respiro-ui-plugin</artifactId>
+            <scope>provided</scope>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kantega.respiro</groupId>
             <artifactId>respiro-cxf-plugin</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
