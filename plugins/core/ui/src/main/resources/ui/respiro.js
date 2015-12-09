@@ -36,3 +36,46 @@ angular
                 });
 
     });
+
+
+
+(function() {
+
+    window.respiro = {}
+
+    var items = ["respiro"];
+
+    window.respiro.module = function(name) {
+        items.push(name);
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "modules", true);
+
+
+    xhr.onreadystatechange = function() {
+
+        if(xhr.readyState == 4 && xhr.status == 200) {
+
+            var modules = angular.fromJson(xhr.responseText);
+
+            var remaining = modules.length;
+
+            for(var i = 0; i < modules.length; i++) {
+                var module = modules[i];
+                var script = document.createElement("script");
+                script.setAttribute("src", module.src);
+                script.addEventListener("load", function() {
+                    remaining--;
+                    if(remaining == 0) {
+                        alert("Items: " + items.length)
+                        angular.bootstrap(document, items)
+                    }
+                })
+                document.head.appendChild(script)
+            }
+        }
+    }
+
+    xhr.send();
+})();

@@ -1,5 +1,5 @@
 angular
-    .module("respiro")
+    .module("respiro.registry", ["respiro"])
     .config(function(respiroMenuProvider) {
         respiroMenuProvider
             .add({
@@ -33,3 +33,4 @@ angular
         })
     });
 
+respiro.module("respiro.registry");

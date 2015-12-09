@@ -2,6 +2,7 @@ package org.kantega.respiro.ui;
 
 import org.apache.commons.io.IOUtils;
 import org.kantega.respiro.api.ApplicationBuilder;
+import org.kantega.respiro.ui.resources.UserModulesResource;
 import org.kantega.respiro.ui.resources.UserProfileResource;
 import org.kantega.reststop.api.*;
 
@@ -33,6 +34,7 @@ public class UiPlugin {
                     ApplicationBuilder applicationBuilder) throws IOException {
 
         uiApp = applicationBuilder.application()
+                .singleton(new UserModulesResource(uiModules))
                 .singleton(new UserProfileResource())
                 .build();
 
@@ -40,36 +42,9 @@ public class UiPlugin {
         String respiroDir = respiroPath + "/";
 
         filters.add(servletBuilder.redirectServlet(respiroPath, respiroDir));
-        filters.add(indexServlet(servletBuilder, respiroDir, uiModules));
         filters.add(servletBuilder.resourceServlet(respiroDir +"respiro.js", getClass().getResource("/ui/respiro.js")));
+        filters.add(servletBuilder.resourceServlet(respiroDir, getClass().getResource("/ui/index.html")));
 
-
-    }
-
-    private Filter indexServlet(ServletBuilder servletBuilder, String respiroDir, Collection<UiModule> uiModules) throws IOException {
-
-        URL resource = getClass().getResource("/ui/index.html");
-
-
-
-
-
-        return servletBuilder.servlet(new HttpServlet() {
-            @Override
-            protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-                String scriptTags = uiModules.stream()
-                        .map(mod -> String.format("<script src='%s'></script>", mod.getSrc()))
-                        .collect(Collectors.joining("\n"));
-
-                byte[] content = IOUtils.toString(resource.openStream())
-                        .replace("${RESPIROMODULES}", scriptTags).getBytes("utf-8");
-
-                resp.setContentType("text/html");
-                resp.setContentLength(content.length);
-                resp.getOutputStream().write(content);
-            }
-        }, respiroDir);
 
     }
 

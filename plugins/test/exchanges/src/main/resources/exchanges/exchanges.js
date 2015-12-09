@@ -1,5 +1,5 @@
 angular
-    .module("respiro")
+    .module("respiro.exchanges", ["respiro"])
     .config(function(respiroMenuProvider) {
 
         respiroMenuProvider
@@ -42,3 +42,4 @@ angular
         })
     });
 
+respiro.module("respiro.exchanges");
