@@ -31,6 +31,8 @@ import org.kantega.reststop.api.ServletBuilder;
 
 import javax.servlet.Filter;
 
+import java.util.Collection;
+
 import static org.kantega.reststop.api.FilterPhase.PRE_UNMARSHAL;
 
 @Plugin
@@ -55,6 +57,7 @@ public class MessageCollectorPlugin {
     private final Filter clearingFilter;
 
     public MessageCollectorPlugin(ServletBuilder servletBuilder) {
+
         MessageCollectorCustomizer customizer = new MessageCollectorCustomizer();
         serviceMessageCollector = customizer;
         endpointMessageCollector = customizer;

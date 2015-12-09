@@ -79,6 +79,7 @@ public class MessageCollectorCustomizer implements EndpointCustomizer,ServiceCus
                 Exchange exchange = exchangeLocal.get();
                 ExchangeInfo exchangeInfo = (ExchangeInfo) exchange.get(ExchangeInfo.EXCHANGE_INFO);
                 exchangeInfo.setOutMessage(new CxfExhangeMessage(ExchangeMessage.Type.RESPONSE, loggingMessage));
+                Collector.endCollectionContext();
                 Collector.clearCollectionContext();
                 return null;
             }

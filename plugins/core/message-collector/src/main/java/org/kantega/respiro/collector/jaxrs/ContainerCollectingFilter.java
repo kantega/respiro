@@ -63,6 +63,7 @@ public class ContainerCollectingFilter extends CollectingFilter implements Conta
                     @Override
                     public void collect() {
                         exchangeInfo.setOutMessage(msg);
+                        Collector.endCollectionContext();
                         Collector.clearCollectionContext();
                     }
                 };
@@ -71,6 +72,7 @@ public class ContainerCollectingFilter extends CollectingFilter implements Conta
                 // not calling log(b) here - it will be called by the interceptor
             } else {
                 exchangeInfo.setOutMessage(msg);
+                Collector.endCollectionContext();
                 Collector.clearCollectionContext();
             }
 

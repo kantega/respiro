@@ -17,7 +17,8 @@
 package org.kantega.respiro.exchanges;
 
 import org.kantega.respiro.api.ApplicationBuilder;
-import org.kantega.respiro.cxf.api.EndpointCustomizer;
+import org.kantega.respiro.collector.CollectionListener;
+import org.kantega.respiro.collector.Collector;
 import org.kantega.respiro.exchanges.rest.ExchangesResource;
 import org.kantega.respiro.ui.UiModule;
 import org.kantega.reststop.api.Config;
@@ -25,6 +26,7 @@ import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 import org.kantega.reststop.api.ServletBuilder;
 
+import javax.annotation.PreDestroy;
 import javax.servlet.Filter;
 import javax.ws.rs.core.Application;
 import java.util.ArrayList;
@@ -36,8 +38,6 @@ import java.util.Collection;
 @Plugin
 public class ExchangesPlugin  {
 
-    @Export
-    private final EndpointCustomizer endpointCustomizer;
 
     @Export
     private final Collection<Filter> filters = new ArrayList<>();
@@ -45,6 +45,7 @@ public class ExchangesPlugin  {
     @Export final Application exhangesApp;
 
     @Export final UiModule uiModule;
+    private final CollectionListener exchangesListener;
 
     public ExchangesPlugin(@Config(defaultValue = "/respiro") String respiroPath,
                            ServletBuilder servletBuilder,
@@ -60,14 +61,19 @@ public class ExchangesPlugin  {
         filters.add(servletBuilder.resourceServlet(respiroDir + "partials/exchanges-details.html", getClass().getResource("/exchanges/details.html")));
         filters.add(servletBuilder.resourceServlet(respiroDir + "exchanges.js", getClass().getResource("/exchanges/exchanges.js")));
 
-        endpointCustomizer = new ExhangesCustomizer(exchanges);
-
         exhangesApp = applicationBuilder.application()
                 .singleton(new ExchangesResource(exchanges))
-                .resource( ExhangesFeature.class)
                 .build();
 
         uiModule = () -> "exchanges.js";
 
+        exchangesListener = exchanges::addExchange;
+        Collector.addListener(exchangesListener);
+
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        Collector.removeListener(exchangesListener);
     }
 }

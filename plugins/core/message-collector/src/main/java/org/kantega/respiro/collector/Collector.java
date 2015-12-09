@@ -16,7 +16,9 @@
 
 package org.kantega.respiro.collector;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class Collector {
 
     private static ThreadLocal<ExchangeInfo> current = new ThreadLocal<>();
+    private static Collection<CollectionListener> listeners = new CopyOnWriteArrayList<>();
 
     public static ExchangeInfo newCollectionContext(ExchangeMessage inMessage) {
         ExchangeInfo info = new ExchangeInfo(inMessage);
@@ -41,5 +44,19 @@ public class Collector {
 
     public static void clearCollectionContext() {
         Collector.current.remove();
+    }
+
+    public static void addListener(CollectionListener listener) {
+        Collector.listeners.add(listener);
+    }
+    public static void removeListener(CollectionListener listener) {
+        Collector.listeners.remove(listener);
+    }
+
+    public static void endCollectionContext() {
+        for (CollectionListener listener : listeners) {
+            Optional.ofNullable(current.get())
+            .ifPresent(listener::collected);
+        }
     }
 }
