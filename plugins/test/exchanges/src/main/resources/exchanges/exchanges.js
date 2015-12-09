@@ -13,20 +13,15 @@ angular
         $routeProvider
             .when('/exchanges', {
                 controller:'ExchangesController as exchangesList',
-                templateUrl:'../exchanges/list.html',
+                templateUrl:'partials/exchanges.html',
             })
             .when('/exchanges/details/:exchangeUuid', {
                 controller:'ExchangeDetailsController as details',
-                templateUrl:'../exchanges/details.html',
+                templateUrl:'partials/exchanges-details.html',
             })
-            .otherwise({
-                redirectTo: '/plugins'
-            });
-
-
     })
     .controller("ExchangesController", function($http, $scope) {
-        $http.get("../exchanges/api/exchanges").then(function(result) {
+        $http.get("exchanges/api/exchanges").then(function(result) {
 
             $scope.exchanges = result.data;
 
@@ -35,7 +30,7 @@ angular
         })
     })
     .controller("ExchangeDetailsController", function($http, $scope, $routeParams) {
-        $http.get("../exchanges/api/exchanges/" + $routeParams.exchangeUuid).then(function(result) {
+        $http.get("exchanges/api/exchanges/" + $routeParams.exchangeUuid).then(function(result) {
             $scope.ex= result.data;
         }, function() {
             alert("Failed getting exchange details from server");

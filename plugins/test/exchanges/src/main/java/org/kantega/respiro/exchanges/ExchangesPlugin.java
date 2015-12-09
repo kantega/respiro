@@ -20,6 +20,7 @@ import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.cxf.api.EndpointCustomizer;
 import org.kantega.respiro.exchanges.rest.ExchangesResource;
 import org.kantega.respiro.ui.UiModule;
+import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 import org.kantega.reststop.api.ServletBuilder;
@@ -45,14 +46,19 @@ public class ExchangesPlugin  {
 
     @Export final UiModule uiModule;
 
-    public ExchangesPlugin(ServletBuilder servletBuilder, ApplicationBuilder applicationBuilder) {
+    public ExchangesPlugin(@Config(defaultValue = "/respiro") String respiroPath,
+                           ServletBuilder servletBuilder,
+                           ApplicationBuilder applicationBuilder) {
+
+        String respiroDir = respiroPath + "/";
+
         Exchanges exchanges = new Exchanges();
         filters.add(servletBuilder.redirectServlet("/exchanges", "respiro/#/exchanges"));
         filters.add(servletBuilder.redirectServlet("/exchanges/", "../respiro/#/exchanges"));
 
-        filters.add(servletBuilder.resourceServlet("/exchanges/list.html", getClass().getResource("/exchanges/list.html")));
-        filters.add(servletBuilder.resourceServlet("/exchanges/details.html", getClass().getResource("/exchanges/details.html")));
-        filters.add(servletBuilder.resourceServlet("/exchanges/exchanges.js", getClass().getResource("/exchanges/exchanges.js")));
+        filters.add(servletBuilder.resourceServlet(respiroDir+ "partials/exchanges.html", getClass().getResource("/exchanges/list.html")));
+        filters.add(servletBuilder.resourceServlet(respiroDir + "partials/exchanges-details.html", getClass().getResource("/exchanges/details.html")));
+        filters.add(servletBuilder.resourceServlet(respiroDir + "exchanges.js", getClass().getResource("/exchanges/exchanges.js")));
 
         endpointCustomizer = new ExhangesCustomizer(exchanges);
 
@@ -61,7 +67,7 @@ public class ExchangesPlugin  {
                 .resource( ExhangesFeature.class)
                 .build();
 
-        uiModule = () -> "../exchanges/exchanges.js";
+        uiModule = () -> "exchanges.js";
 
     }
 }
