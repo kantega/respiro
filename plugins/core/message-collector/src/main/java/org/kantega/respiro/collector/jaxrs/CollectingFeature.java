@@ -21,6 +21,7 @@ import org.kantega.respiro.collector.DoNotCollect;
 import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.FeatureContext;
+import java.lang.reflect.Field;
 
 /**
  *
@@ -29,9 +30,18 @@ public class CollectingFeature implements DynamicFeature {
 
     @Override
     public void configure(ResourceInfo resourceInfo, FeatureContext context) {
-        if (!resourceInfo.getResourceClass().isAnnotationPresent(DoNotCollect.class)) {
+        if (!resourceInfo.getResourceClass().isAnnotationPresent(DoNotCollect.class)
+                && ! metricsDisabled(resourceInfo.getResourceClass())) {
             context.register(ContainerCollectingFilter.class);
         }
     }
 
+    private boolean metricsDisabled(Class<?> resourceClass) {
+        try {
+            Field metrics = resourceClass.getDeclaredField("METRICS");
+            return Boolean.FALSE.equals(metrics.get(null));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return false;
+        }
+    }
 }
