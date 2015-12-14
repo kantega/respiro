@@ -54,6 +54,18 @@
 
     <packaging>pom</packaging>
 
+    <distributionManagement>
+        <repository>
+            <id>oss.sonatype.org-kantega</id>
+            <name>Kantega's staging repository at Sonatype</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>kantega-snapshots</id>
+            <url>http://opensource.kantega.no/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <modules>
         <module>libraries/test-utils</module>
         <module>plugins</module>
