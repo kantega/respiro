@@ -20,7 +20,7 @@
 
     <groupId>org.kantega.respiro.examples</groupId>
     <artifactId>greeting-wsdl</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
 
     <properties>
         <service.name>GreetingService</service.name>
