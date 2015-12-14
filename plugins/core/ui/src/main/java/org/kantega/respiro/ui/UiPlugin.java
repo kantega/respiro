@@ -1,22 +1,18 @@
 package org.kantega.respiro.ui;
 
-import org.apache.commons.io.IOUtils;
 import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.ui.resources.UserModulesResource;
 import org.kantega.respiro.ui.resources.UserProfileResource;
-import org.kantega.reststop.api.*;
+import org.kantega.reststop.api.Config;
+import org.kantega.reststop.api.Export;
+import org.kantega.reststop.api.Plugin;
+import org.kantega.reststop.api.ServletBuilder;
 
 import javax.servlet.Filter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Application;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -44,14 +40,5 @@ public class UiPlugin {
         filters.add(servletBuilder.redirectServlet(respiroPath, respiroDir));
         filters.add(servletBuilder.resourceServlet(respiroDir +"respiro.js", getClass().getResource("/ui/respiro.js")));
         filters.add(servletBuilder.resourceServlet(respiroDir, getClass().getResource("/ui/index.html")));
-
-
     }
-
-
-    private boolean partial(String name, ServletBuilder servletBuilder, String respiroDir) {
-        return filters.add(servletBuilder.resourceServlet(respiroDir +"partials/" +name, getClass().getResource("/ui/partials/" + name)));
-    }
-
-
 }
