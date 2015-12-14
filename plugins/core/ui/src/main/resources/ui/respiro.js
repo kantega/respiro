@@ -68,13 +68,13 @@ angular
                 script.addEventListener("load", function() {
                     remaining--;
                     if(remaining == 0) {
-                        angular.bootstrap(document, items)
+                        angular.bootstrap(document, items);
                     }
-                })
-                document.head.appendChild(script)
+                });
+                document.head.appendChild(script);
             }
         }
-    }
+    };
 
     xhr.send();
 })();
