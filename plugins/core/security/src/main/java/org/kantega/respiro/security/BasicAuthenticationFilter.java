@@ -50,33 +50,39 @@ public class BasicAuthenticationFilter implements Filter {
 
         String auth = req.getHeader("Authorization");
 
-        if (auth != null) {
+        if (auth != null && auth.startsWith("Basic ")) {
 
-            final String[] usernameAndPassword = new String(getDecoder().decode(auth.substring("Basic ".length()).getBytes())).split(":");
-            final String username = usernameAndPassword.length > 0 ? usernameAndPassword[0] : "";
-            String password = usernameAndPassword.length > 1 ? usernameAndPassword[1] : "";
+            String decodedPair = new String(getDecoder().decode(auth.substring("Basic ".length()).getBytes()));
 
+            if (decodedPair.contains(":")) {
+                final String[] usernameAndPassword = decodedPair.split(":");
+                final String username = usernameAndPassword[0].trim();
+                String password = usernameAndPassword[1].trim();
 
-            AuthenticationResult result = passwordChecker.checkPassword(username, password);
-            if (result.isAuthenticated()) {
-                filterChain.doFilter(new HttpServletRequestWrapper(req) {
-                    @Override
-                    public String getRemoteUser() {
-                        return username;
+                if(! (username.isEmpty() || password.isEmpty())) {
+
+                    AuthenticationResult result = passwordChecker.checkPassword(username, password);
+                    if (result.isAuthenticated()) {
+                        filterChain.doFilter(new HttpServletRequestWrapper(req) {
+                            @Override
+                            public String getRemoteUser() {
+                                return username;
+                            }
+
+                            @Override
+                            public boolean isUserInRole(String role) {
+                                return result.getRoles().contains(role);
+                            }
+
+                            @Override
+                            public Principal getUserPrincipal() {
+                                return this::getRemoteUser;
+                            }
+                        }, servletResponse);
+
+                        return;
                     }
-
-                    @Override
-                    public boolean isUserInRole(String role) {
-                        return result.getRoles().contains(role);
-                    }
-
-                    @Override
-                    public Principal getUserPrincipal() {
-                        return this::getRemoteUser;
-                    }
-                }, servletResponse);
-
-                return;
+                }
             }
         }
 
