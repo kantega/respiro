@@ -16,7 +16,6 @@
 
 package org.kantega.respiro.camel;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.file.GenericFile;
 import org.kantega.reststop.api.Config;
@@ -31,37 +30,11 @@ import java.io.File;
 @Plugin
 public class CamelRouteDemo {
 
-    @Export final RouteBuilder servletRoute;
     @Export final RouteBuilder incomingRoute;
     @Export final RouteBuilder remoteFilesRoute;
 
     public CamelRouteDemo(@Config int port,
                           @Config String knownHostsFile) {
-
-        servletRoute = new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-
-
-                from("servlet:///hello")
-                        .process(exchange -> {
-                            String contentType = exchange.getIn().getHeader(Exchange.CONTENT_TYPE, String.class);
-                            String path = exchange.getIn().getHeader(Exchange.HTTP_URI, String.class);
-                            path = path.substring(path.lastIndexOf("/"));
-
-                            // assert camel http header
-                            String charsetEncoding = exchange.getIn().getHeader(Exchange.HTTP_CHARACTER_ENCODING, String.class);
-                            // assert exchange charset
-                            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, contentType + "; charset=UTF-8");
-                            exchange.getOut().setHeader("PATH", path);
-                            exchange.getOut().setBody("<b>Hei Verden!</b>");
-                        });
-
-                from("servlet:///goddag").to("file:target/goddags");
-
-
-            }
-        };
 
         remoteFilesRoute = new RouteBuilder() {
             @Override

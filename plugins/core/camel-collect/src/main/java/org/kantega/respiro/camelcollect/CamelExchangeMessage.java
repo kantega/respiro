@@ -39,7 +39,9 @@ public class CamelExchangeMessage implements ExchangeMessage {
 
         URI uri = message.getExchange().getFromEndpoint().getEndpointConfiguration().getURI();
 
-        sb.append(uri.getHost());
+        if(uri.getHost() != null) {
+            sb.append(uri.getHost());
+        }
         if(uri.getPort() != -1 ) {
             sb.append(":").append(uri.getPort());
         }
