@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static java.util.Base64.getDecoder;
@@ -48,52 +49,70 @@ public class BasicAuthenticationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        String auth = req.getHeader("Authorization");
+        Optional<UsernameAndPassword> usernameAndPassword = findCredentials(req.getHeader("Authorization"));
 
+        if(usernameAndPassword.isPresent()) {
+            AuthenticationResult result = passwordChecker.checkPassword(usernameAndPassword.get().username, usernameAndPassword.get().password);
+            if (result.isAuthenticated()) {
+                filterChain.doFilter(new HttpServletRequestWrapper(req) {
+                    @Override
+                    public String getRemoteUser() {
+                        return usernameAndPassword.get().username;
+                    }
+
+                    @Override
+                    public boolean isUserInRole(String role) {
+                        return result.getRoles().contains(role);
+                    }
+
+                    @Override
+                    public Principal getUserPrincipal() {
+                        return this::getRemoteUser;
+                    }
+                }, servletResponse);
+
+                return;
+            }
+        }
+        resp.setStatus(SC_UNAUTHORIZED);
+        resp.setHeader("WWW-Authenticate", format("Basic realm=\"%s\"", securityRealm));
+
+    }
+
+    private Optional<UsernameAndPassword> findCredentials(String auth) {
         if (auth != null && auth.startsWith("Basic ")) {
 
             String decodedPair = new String(getDecoder().decode(auth.substring("Basic ".length()).getBytes()));
 
             if (decodedPair.contains(":")) {
                 final String[] usernameAndPassword = decodedPair.split(":");
-                final String username = usernameAndPassword[0].trim();
-                String password = usernameAndPassword[1].trim();
+                if(usernameAndPassword.length == 2) {
+                    final String username = usernameAndPassword[0].trim();
+                    String password = usernameAndPassword[1].trim();
 
-                if(! (username.isEmpty() || password.isEmpty())) {
+                    if (!(username.isEmpty() || password.isEmpty())) {
 
-                    AuthenticationResult result = passwordChecker.checkPassword(username, password);
-                    if (result.isAuthenticated()) {
-                        filterChain.doFilter(new HttpServletRequestWrapper(req) {
-                            @Override
-                            public String getRemoteUser() {
-                                return username;
-                            }
-
-                            @Override
-                            public boolean isUserInRole(String role) {
-                                return result.getRoles().contains(role);
-                            }
-
-                            @Override
-                            public Principal getUserPrincipal() {
-                                return this::getRemoteUser;
-                            }
-                        }, servletResponse);
-
-                        return;
+                       return Optional.of(new UsernameAndPassword(username, password));
                     }
                 }
             }
         }
-
-
-        resp.setStatus(SC_UNAUTHORIZED);
-        resp.setHeader("WWW-Authenticate", format("Basic realm=\"%s\"", securityRealm));
-
+        return Optional.empty();
     }
 
     @Override
     public void destroy() {
+
+    }
+
+
+    private static class UsernameAndPassword {
+        public UsernameAndPassword(String password, String username) {
+            this.password = password;
+            this.username = username;
+        }
+
+        final String username, password;
 
     }
 }
