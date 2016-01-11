@@ -16,19 +16,15 @@
 
 package org.kantega.respiro.camel;
 
-import org.kantega.respiro.api.DataSourceInitializer;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.kantega.respiro.api.DataSourceInitializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
 
 import javax.annotation.PreDestroy;
-import javax.servlet.Filter;
 import java.util.Collection;
-import java.util.Properties;
 
 /**
  *
@@ -36,11 +32,6 @@ import java.util.Properties;
 @Plugin
 public class CamelPlugin implements CamelRouteDeployer {
 
-    @Export
-    private final Filter camelServlet;
-
-    private final CamelHttpTransportServlet httpServlet;
-    private final ServletBuilder servletBuilder;
     private final Collection<DataSourceInitializer> dataSourceInitializers;
     private final Collection<CamelContextCustomizer> camelContextCustomizers;
 
@@ -48,23 +39,9 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     @Export final CamelRouteDeployer camelRouteDeployer = this;
 
-    public CamelPlugin(ServletBuilder servletBuilder, Collection<DataSourceInitializer> dataSourceInitializers, Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
-        this.servletBuilder = servletBuilder;
+    public CamelPlugin(Collection<DataSourceInitializer> dataSourceInitializers, Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
         this.dataSourceInitializers = dataSourceInitializers;
         this.camelContextCustomizers = camelContextCustomizers;
-
-
-        httpServlet = new CamelHttpTransportServlet();
-
-
-        httpServlet.init(servletBuilder.servletConfig("CamelServlet", new Properties()));
-
-        camelServlet = servletBuilder.servlet(httpServlet, "/camel/*");
-
-
-
-
-
     }
 
     @Override
@@ -85,7 +62,6 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     @PreDestroy
     public void stop() throws Exception {
-        httpServlet.destroy();
         camelContext.stop();
 
     }
