@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import static java.lang.System.currentTimeMillis;
 import static java.lang.Thread.sleep;
@@ -57,5 +58,18 @@ public class Utils {
             } catch (InterruptedException e) {
                 //
             }
+    }
+
+    public static void copyFile(String fromFile, String toDir ){
+
+        File scoreDir = new File(getBasedir(), toDir);
+        scoreDir.mkdirs();
+        File src = new File(getBasedir(), fromFile);
+        try {
+            Files.copy(src.toPath(), new File(scoreDir,src.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
