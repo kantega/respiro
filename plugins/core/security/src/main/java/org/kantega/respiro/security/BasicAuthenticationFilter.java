@@ -53,8 +53,8 @@ public class BasicAuthenticationFilter implements Filter {
         if (auth != null) {
 
             final String[] usernameAndPassword = new String(getDecoder().decode(auth.substring("Basic ".length()).getBytes())).split(":");
-            final String username = usernameAndPassword.length > 1 ? usernameAndPassword[0] : "";
-            String password = usernameAndPassword.length > 2 ? usernameAndPassword[1] : "";
+            final String username = usernameAndPassword.length > 0 ? usernameAndPassword[0] : "";
+            String password = usernameAndPassword.length > 1 ? usernameAndPassword[1] : "";
 
 
             AuthenticationResult result = passwordChecker.checkPassword(username, password);
