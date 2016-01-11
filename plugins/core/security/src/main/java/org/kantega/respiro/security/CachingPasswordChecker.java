@@ -37,7 +37,7 @@ public class CachingPasswordChecker implements PasswordChecker {
     private final Cache<String, AuthenticationResult> cache;
 
     private final SecretKeyFactory secretKeyFactory;
-    private final String salt ;
+    private final String salt;
     private final int passwordCacheValidity;
 
     public CachingPasswordChecker(PasswordChecker wrapped, int passwordCacheValidity, TimeUnit timeUnit) {
@@ -61,7 +61,9 @@ public class CachingPasswordChecker implements PasswordChecker {
     @Override
     public AuthenticationResult checkPassword(String username, String password) {
         try {
-            return cache.get(getSecureHash(username, password), () -> wrapped.checkPassword(username, password));
+            return username == null || username.isEmpty()
+                    ? AuthenticationResult.UNAUTHENTICATED
+                    : cache.get(getSecureHash(username, password), () -> wrapped.checkPassword(username, password));
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +76,7 @@ public class CachingPasswordChecker implements PasswordChecker {
             String hash = Base64.getEncoder().encodeToString(secretKeyFactory.generateSecret(keySpec).getEncoded());
             return hash;
         } catch (InvalidKeySpecException e) {
-            throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 }
