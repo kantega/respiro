@@ -37,6 +37,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.kantega.reststop</groupId>
+            <artifactId>reststop-servlet</artifactId>
+            <version>${reststop.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
