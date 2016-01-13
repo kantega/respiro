@@ -68,7 +68,6 @@
     <modules>
         <module>libraries/test-utils</module>
         <module>plugins</module>
-        <module>webapp</module>
         <module>examples</module>
     </modules>
 

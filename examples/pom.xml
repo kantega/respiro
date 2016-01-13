@@ -108,7 +108,7 @@
                     <configuration>
                         <!-- krever at det finnes en src/config/${applicationName}.conf -->
                         <applicationName>module</applicationName>
-                        <warCoords>org.kantega.respiro:respiro-webapp:war:${project.version}</warCoords>
+                        <!--<warCoords>org.kantega.respiro:respiro-webapp:war:${project.version}</warCoords>-->
                         <basePlugins>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
