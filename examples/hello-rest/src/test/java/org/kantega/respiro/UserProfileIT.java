@@ -16,26 +16,25 @@
 
 package org.kantega.respiro;
 
-import org.junit.After;
-import org.kantega.respiro.testsmtp.MessageJson;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.kantega.respiro.testsmtp.MessageJson;
 
 import javax.jms.JMSException;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import java.util.List;
 
 import static javax.ws.rs.client.ClientBuilder.newClient;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.basic;
-import static org.kantega.respiro.test.Utils.getReststopPort;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.kantega.respiro.test.Utils.getReststopPort;
 
 public class UserProfileIT {
 
@@ -86,6 +85,14 @@ public class UserProfileIT {
     public void shouldFailWithValidationError() {
 
         target.path("userprofiles").path("OL").request().get(UserProfile.class);
+
+    }
+
+    @Test
+    public void shouldPostFullname() {
+        UserProfile userProfile = target.path("userprofiles").path("OLANOR")
+                .request().post(Entity.entity("Ola Normann", "text/plain"), UserProfile.class);
+
 
     }
 }

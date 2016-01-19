@@ -21,10 +21,7 @@ import org.kantega.respiro.api.mail.Message;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.constraints.Size;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
@@ -34,9 +31,6 @@ import javax.ws.rs.core.SecurityContext;
 @Path("userprofiles")
 @RolesAllowed("innholdsprodusent")
 public class UserProfileResource {
-
-    // Disable metrics for this resource
-    public static boolean METRICS = false;
 
 
     private final UsersDAO dao;
@@ -69,6 +63,17 @@ public class UserProfileResource {
 
 
         return prof;
+    }
+
+    @POST
+    @Produces({"application/json", "application/xml"})
+    @Consumes("text/plain")
+    @Path("{username}")
+    public UserProfile postFullname(@Size(min = 3) @PathParam("username") String username,
+                                    String fullName,
+                                    @Context SecurityContext securityContext) {
+
+        return getProfile(username, securityContext);
     }
 
 }
