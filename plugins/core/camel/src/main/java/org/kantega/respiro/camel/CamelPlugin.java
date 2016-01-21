@@ -19,6 +19,7 @@ package org.kantega.respiro.camel;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.SimpleRegistry;
 import org.kantega.respiro.api.DataSourceInitializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
@@ -37,7 +38,11 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     private CamelContext camelContext;
 
+    private SimpleRegistry simpleRegistry = new SimpleRegistry();
+
     @Export final CamelRouteDeployer camelRouteDeployer = this;
+
+    @Export final CamelRegistry camelRegistry = new SimpleCamelRegistry(simpleRegistry);
 
     public CamelPlugin(Collection<DataSourceInitializer> dataSourceInitializers, Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
         this.dataSourceInitializers = dataSourceInitializers;
@@ -47,7 +52,7 @@ public class CamelPlugin implements CamelRouteDeployer {
     @Override
     public void deploy(Collection<RouteBuilder> routeBuilders) {
         try {
-            camelContext = new DefaultCamelContext();
+            camelContext = new DefaultCamelContext(simpleRegistry);
 
             camelContextCustomizers.forEach(c -> c.customize(camelContext));
 
@@ -64,6 +69,24 @@ public class CamelPlugin implements CamelRouteDeployer {
     public void stop() throws Exception {
         camelContext.stop();
 
+    }
+
+    private class SimpleCamelRegistry implements CamelRegistry {
+        private final SimpleRegistry simpleRegistry;
+
+        public SimpleCamelRegistry(SimpleRegistry simpleRegistry) {
+            this.simpleRegistry = simpleRegistry;
+        }
+
+        @Override
+        public void add(String name, Object component) {
+            simpleRegistry.put(name, component);
+        }
+
+        @Override
+        public void remove(String name) {
+            simpleRegistry.remove(name);
+        }
     }
 }
 
