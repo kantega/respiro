@@ -21,10 +21,7 @@ import org.kantega.respiro.collector.ExchangeInfo;
 import org.kantega.respiro.collector.ExchangeMessage;
 import org.kantega.respiro.exchanges.Exchanges;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
@@ -53,6 +50,13 @@ public class ExchangesResource {
         return exchanges.getExchangeLog()
                 .stream()
                 .map(ExchangesResource::toJs).collect(Collectors.toList());
+    }
+
+    @Path("exchanges")
+    @DELETE
+
+    public void clear() {
+        exchanges.clear();
     }
 
     @Path("exchanges/{uuid}")

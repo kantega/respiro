@@ -48,4 +48,8 @@ public class Exchanges {
     public ArrayList<ExchangeInfo> getExchangeLog() {
         return new ArrayList<>(exchangeLog);
     }
+
+    public void clear() {
+        exchangeLog.clear();
+    }
 }

@@ -27,6 +27,7 @@ import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.kantega.respiro.test.Utils.getReststopPort;
 
 /**
  *
@@ -69,7 +70,7 @@ public class HelloJavaServiceIT {
 
     }
 
-    private Hello getService() {
+    public static  Hello getService() {
         org.kantega.respiro.hello.ws.hello_1_0.HelloService helloService = new org.kantega.respiro.hello.ws.hello_1_0.HelloService();
         Hello helloPort = helloService.getHelloPort();
 
@@ -77,7 +78,7 @@ public class HelloJavaServiceIT {
         Map<String,Object> rc = prov.getRequestContext();
         rc.put(BindingProvider.USERNAME_PROPERTY, "jane");
         rc.put(BindingProvider.PASSWORD_PROPERTY, "jane");
-        rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + System.getProperty("reststopPort", "8080") + "/ws/hello-1.0");
+        rc.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:" + getReststopPort() + "/ws/hello-1.0");
         return helloPort;
     }
 }

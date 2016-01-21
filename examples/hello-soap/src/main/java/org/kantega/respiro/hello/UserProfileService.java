@@ -17,6 +17,7 @@
 package org.kantega.respiro.hello;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 
 public class UserProfileService {
 
@@ -31,6 +32,11 @@ public class UserProfileService {
 
 
     UserProfile findUserProfile(String username) {
+
+        if(true) {
+            UserProfile prof = client.target(baseUrl).path("userprofiles").path("OLANOR")
+                    .request().post(Entity.entity("Ola Normann", "text/plain"), UserProfile.class);
+        }
 
         return client.target(baseUrl).path("userprofiles")
                 .path(username.toUpperCase()).request().get(UserProfile.class);
