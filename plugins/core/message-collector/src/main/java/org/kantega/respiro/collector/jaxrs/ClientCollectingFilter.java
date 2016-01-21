@@ -34,7 +34,6 @@ import java.io.OutputStream;
 @Priority(Integer.MIN_VALUE+1)
 public class ClientCollectingFilter extends CollectingFilter implements ClientRequestFilter, ClientResponseFilter {
 
-    private static final String ENTITY_LOGGER_PROPERTY = ClientCollectingFilter.class.getName() + ".entityLogger";
 
     private static final int DEFAULT_MAX_ENTITY_SIZE = 8 * 1024;
 
