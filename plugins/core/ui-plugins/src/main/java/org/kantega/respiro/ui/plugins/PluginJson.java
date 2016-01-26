@@ -19,6 +19,9 @@ package org.kantega.respiro.ui.plugins;
 
 import org.kantega.reststop.classloaderutils.PluginClassLoader;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  *
  */
@@ -26,6 +29,8 @@ public class PluginJson {
     private final String groupId;
     private String artifactId;
     private final String version;
+    private Set<String> exports = new TreeSet<>();
+
 
     public PluginJson(PluginClassLoader classLoader) {
         this.artifactId = classLoader.getPluginInfo().getArtifactId();
@@ -43,5 +48,9 @@ public class PluginJson {
 
     public String getVersion() {
         return version;
+    }
+
+    public Set<String> getExports() {
+        return exports;
     }
 }

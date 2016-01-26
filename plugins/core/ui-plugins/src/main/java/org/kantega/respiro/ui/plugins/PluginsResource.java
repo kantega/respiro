@@ -17,6 +17,7 @@
 package org.kantega.respiro.ui.plugins;
 
 
+import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.ReststopPluginManager;
 import org.kantega.reststop.classloaderutils.PluginClassLoader;
 
@@ -24,8 +25,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
-import java.util.Comparator;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  *
@@ -46,13 +47,33 @@ public class PluginsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public PluginList get() {
+    public PluginList get() throws IllegalAccessException {
 
-        PluginList plugins = new PluginList();
+
+
+        Map<ClassLoader, List<Object>> map = new IdentityHashMap<>();
 
         for (ClassLoader classLoader : pluginManager.getPluginClassLoaders()) {
             if(classLoader instanceof PluginClassLoader) {
-                plugins.add(toJson(classLoader));
+                map.put(classLoader, new ArrayList<>());
+            }
+        }
+
+        for (Object plugin : pluginManager.getPlugins()) {
+            map.get(pluginManager.getClassLoader(plugin)).add(plugin);
+        }
+
+        PluginList plugins = new PluginList();
+
+        for (ClassLoader classLoader : map.keySet()) {
+            PluginJson plugin = toJson(classLoader);
+            plugins.add(plugin);
+            for (Object pluginObj : map.get(classLoader)) {
+                for (Field field : pluginObj.getClass().getDeclaredFields()) {
+                    if (field.getAnnotation(Export.class) != null) {
+                        plugin.getExports().add(field.getGenericType().getTypeName());
+                    }
+                }
             }
         }
         Collections.sort(plugins, Comparator.comparing(PluginJson::getArtifactId));

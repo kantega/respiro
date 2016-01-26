@@ -29,7 +29,9 @@
         <tr ng-repeat="plugin in group.plugins">
             <td>{{plugin.artifactId}}</td>
             <td>{{plugin.version}}</td>
-            <td></td>
+            <td>
+                <div ng-repeat="e in plugin.exports">{{e}}</div>
+            </td>
         </tr>
         </tbody>
         <tfoot ng-repeat-end></tfoot>
