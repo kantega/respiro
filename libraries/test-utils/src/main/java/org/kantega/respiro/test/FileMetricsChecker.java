@@ -21,6 +21,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class FileMetricsChecker extends TypeSafeMatcher<File> {
     private final long filesize;
     private final int linelength;
     private final int lines;
+    private final String charset;
 
     private StringBuilder message = new StringBuilder();
 
@@ -41,6 +43,15 @@ public class FileMetricsChecker extends TypeSafeMatcher<File> {
         this.filesize = filesize;
         this.linelength = linelength;
         this.lines = lines;
+        this.charset = "utf-8";
+    }
+
+    public FileMetricsChecker(String charset, String namePrefix, long filesize, int linelength, int lines) {
+        this.namePrefix = namePrefix;
+        this.filesize = filesize;
+        this.linelength = linelength;
+        this.lines = lines;
+        this.charset = charset;
     }
 
     @Override
@@ -53,7 +64,7 @@ public class FileMetricsChecker extends TypeSafeMatcher<File> {
                 message.append("\nFilesize was ").append(file.length()).append(", expected ").append(filesize);
 
             try {
-                List<String> fileLines = Files.readAllLines(file.toPath());
+                List<String> fileLines = Files.readAllLines(file.toPath(), Charset.forName(charset));
                 if( fileLines.size() != lines)
                     message.append("\nNumber of lines was ").append(fileLines.size()).append(", expected ").append(lines);
 
@@ -87,5 +98,8 @@ public class FileMetricsChecker extends TypeSafeMatcher<File> {
 
     public static FileMetricsChecker hasMetrics(String prefix, long filesize, int linelength, int lines){
         return new FileMetricsChecker(prefix, filesize, linelength, lines);
+    }
+    public static FileMetricsChecker hasMetrics(String charset, String prefix, long filesize, int linelength, int lines){
+        return new FileMetricsChecker(charset, prefix, filesize, linelength, lines);
     }
 }

@@ -21,7 +21,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
@@ -33,23 +33,25 @@ public class FileContentMatcher extends TypeSafeMatcher<File> {
     private final File fileMatched;
     private final String search;
     private final String replace;
-    private int lineNo;
+    private final String charset;
     private String mLine;
     private String iLine;
 
 
-    public FileContentMatcher(File fileMatched, String search, String replace) {
+    public FileContentMatcher(String charset, File fileMatched, String search, String replace) {
+        this.charset = charset;
         this.fileMatched = fileMatched;
         this.search = search;
         this.replace = replace;
+
     }
 
     @Override
     protected boolean matchesSafely(File item) {
 
-        try (Stream<String> mStream = lines(fileMatched.toPath());
-             Stream<String> iStream = lines(item.toPath())) {
-            lineNo = 0;
+        try (Stream<String> mStream = lines(fileMatched.toPath(), Charset.forName(charset));
+             Stream<String> iStream = lines(item.toPath(), Charset.forName(charset))) {
+            int lineNo = 0;
             Iterator<String> mIt = mStream.iterator();
             Iterator<String> iIt = iStream.iterator();
 
@@ -92,11 +94,11 @@ public class FileContentMatcher extends TypeSafeMatcher<File> {
         return super.toString();
     }
 
-    public static FileContentMatcher hasSameContentAs(File item) {
-        return new FileContentMatcher(item, null, null);
+    public static FileContentMatcher hasSameContentAs(String charset, File item) {
+        return new FileContentMatcher(charset, item, null, null);
     }
 
-    public static FileContentMatcher hasSameContentAs(File item, String search, String replace) {
-        return new FileContentMatcher(item, search, replace);
+    public static FileContentMatcher hasSameContentAs(String charset, File item, String search, String replace) {
+        return new FileContentMatcher(charset, item, search, replace);
     }
 }

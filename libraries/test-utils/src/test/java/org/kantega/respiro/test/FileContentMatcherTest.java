@@ -29,7 +29,7 @@ public class FileContentMatcherTest {
         File one = new File("pom.xml");
         File two = new File("pom.xml");
 
-        assertThat(one, hasSameContentAs(two));
+        assertThat(one, hasSameContentAs("utf-8", two));
     }
 
 }
