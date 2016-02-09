@@ -70,9 +70,11 @@ public class FileMetricsChecker extends TypeSafeMatcher<File> {
 
                 int lineNo = 0;
                 for (String oneLine : fileLines) {
-                    if( oneLine.length() != linelength )
-                        message.append("\nLength of line #").append(lineNo).append(" was ").append(oneLine.length()).append(", expected ").append(linelength);
                     lineNo++;
+
+                    if( oneLine.length() != linelength ) {
+                        message.append("\nLength of line #").append(lineNo).append(" was ").append(oneLine.length()).append(", expected ").append(linelength);
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
