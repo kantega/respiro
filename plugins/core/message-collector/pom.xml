@@ -52,6 +52,21 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.kantega.respiro</groupId>
+            <artifactId>respiro-mail-plugin</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kantega.respiro</groupId>
+            <artifactId>respiro-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
     
 </project>

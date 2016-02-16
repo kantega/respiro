@@ -19,7 +19,16 @@ package org.kantega.respiro.mail;
 import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.respiro.api.mail.MailSender;
 
+import java.util.Collection;
+import java.util.List;
+
 public class DefaultMailConfigBuilder implements MailConfigBuilder {
+
+    private final Collection<MailSenderCustomizer> customizerList;
+
+    public DefaultMailConfigBuilder(Collection<MailSenderCustomizer> customizerList) {
+        this.customizerList = customizerList;
+    }
 
     @Override
     public Build server(String hostname, int port) {
@@ -71,7 +80,11 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
 
         @Override
         public MailSender build() {
-            return new SMTPMailSender(config);
+            MailSender sender =  new SMTPMailSender(config);
+            for(MailSenderCustomizer msc:customizerList){
+                sender = msc.wrapMailSender(sender);
+            }
+            return sender;
         }
     }
 }

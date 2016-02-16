@@ -20,12 +20,15 @@ import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
+import java.util.Collection;
+
 @Plugin
 public class MailPlugin {
 
     @Export
-    private final MailConfigBuilder configBuilder = new DefaultMailConfigBuilder();
+    private final MailConfigBuilder configBuilder;
 
-    public MailPlugin() {
+    public MailPlugin(Collection<MailSenderCustomizer> customizerCollection) {
+        configBuilder = new DefaultMailConfigBuilder(customizerCollection);
     }
 }

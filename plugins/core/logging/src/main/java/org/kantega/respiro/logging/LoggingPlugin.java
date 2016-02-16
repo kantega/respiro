@@ -39,7 +39,5 @@ public class LoggingPlugin implements EndpointCustomizer {
         EndpointImpl impl = (EndpointImpl) endpoint;
         impl.getOutFaultInterceptors().add(new LogCorrelationInterceptor());
         impl.getOutFaultInterceptors().add(new FaultLoggingInterceptor());
-
-
     }
 }
