@@ -39,8 +39,8 @@ public class Exchanges {
     }
 
     public void addExchange(ExchangeInfo message) {
-        while(exchangeLog.size() > 50) {
-            exchangeLog.remove(0);
+        while(exchangeLog.size() >= 50) {
+            exchangeLog.remove(49);
         }
         exchangeLog.add(0, message);
     }
