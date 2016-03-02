@@ -49,6 +49,9 @@ public class CamelExchangeMessage implements ExchangeMessage {
             sb.append(uri.getPath());
         }
 
+        if( sb.length() == 0 && uri.getScheme().equals("file"))
+            sb.append(message.getExchange().getIn().toString());
+
         return sb.toString();
     }
 
