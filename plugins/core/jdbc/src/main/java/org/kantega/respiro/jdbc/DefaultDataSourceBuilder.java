@@ -24,15 +24,17 @@ import java.util.Collection;
 
 public class DefaultDataSourceBuilder implements DataSourceBuilder {
     private final Collection<DataSourceCustomizer> dataSourceCustomizers;
+    private final long defaultMaxAge;
 
-    public DefaultDataSourceBuilder(Collection<DataSourceCustomizer> dataSourceCustomizers) {
+    public DefaultDataSourceBuilder(Collection<DataSourceCustomizer> dataSourceCustomizers, long maxAge) {
 
+        this.defaultMaxAge = maxAge;
         this.dataSourceCustomizers = dataSourceCustomizers;
     }
 
     @Override
     public Build datasource(String url) {
-        return new DefaultBuild(url);
+        return new DefaultBuild(url, defaultMaxAge);
     }
 
     private class DefaultBuild implements Build {
@@ -42,10 +44,11 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         private String username;
         private String password;
         private String driverClassname;
-        private long maxAge = 20_000L;
+        private long maxAge;
 
-        public DefaultBuild(String url) {
+        public DefaultBuild(String url, long defaultMaxAge) {
             this.url = url;
+            this.maxAge = defaultMaxAge;
 
         }
 
