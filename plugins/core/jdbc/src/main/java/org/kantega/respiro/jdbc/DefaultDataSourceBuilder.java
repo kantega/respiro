@@ -42,6 +42,7 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         private String username;
         private String password;
         private String driverClassname;
+        private long maxAge;
 
         public DefaultBuild(String url) {
             this.url = url;
@@ -67,12 +68,21 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         }
 
         @Override
+        public Build maxAge(long maxAge) {
+            this.maxAge = maxAge;
+            return this;
+        }
+
+        @Override
         public DataSource build() {
             PoolProperties poolProperties = new PoolProperties();
             poolProperties.setDriverClassName(driverClassname);
             poolProperties.setUrl(url);
             poolProperties.setUsername(username);
             poolProperties.setPassword(password);
+
+            poolProperties.setMaxAge(maxAge);
+
             DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
             for (DataSourceCustomizer customizer : dataSourceCustomizers) {
                 dataSource = customizer.wrapDataSource(dataSource);
