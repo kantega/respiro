@@ -18,6 +18,7 @@ package org.kantega.respiro.jdbc;
 
 import org.kantega.respiro.api.DataSourceBuilder;
 import org.kantega.respiro.api.DataSourceInitializer;
+import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -29,8 +30,11 @@ public class JdbcPlugin {
     @Export
     private final DataSourceBuilder dsBuilder;
 
-    public JdbcPlugin(Collection<DataSourceInitializer> initializers, Collection<DataSourceCustomizer> dataSourceCustomizers) {
-        this.dsBuilder = new DefaultDataSourceBuilder(dataSourceCustomizers);
+    public JdbcPlugin(
+            @Config(doc = "Max time(milliseconds) to live for created jdbc connections", defaultValue = "20000") long jdbcConnectionMaxAge,
+            Collection<DataSourceInitializer> initializers,
+            Collection<DataSourceCustomizer> dataSourceCustomizers) {
+        this.dsBuilder = new DefaultDataSourceBuilder(dataSourceCustomizers, jdbcConnectionMaxAge);
 
         for (DataSourceInitializer initializer : initializers) {
             initializer.initialize();
