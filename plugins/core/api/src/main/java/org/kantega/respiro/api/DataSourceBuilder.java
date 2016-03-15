@@ -29,6 +29,8 @@ public interface DataSourceBuilder {
 
         Build driverClassname(String driver);
 
+        Build maxAge(long maxAge) ;
+
         DataSource build();
     }
 }
