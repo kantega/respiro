@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Base64;
 import java.util.Optional;
 
 import static java.lang.String.format;
@@ -73,6 +72,10 @@ public class BasicAuthenticationFilter implements Filter {
 
                 return;
             }
+        } else if (Boolean.TRUE.equals(req.getAttribute("skipBasicAuth"))) {
+            // endponts that does not need to be protected
+            filterChain.doFilter(req, resp);
+            return;
         }
         resp.setStatus(SC_UNAUTHORIZED);
         resp.setHeader("WWW-Authenticate", format("Basic realm=\"%s\"", securityRealm));

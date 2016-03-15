@@ -22,7 +22,9 @@ public class DummyAuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        filterChain.doFilter(new DummyAuthWrapper((HttpServletRequest) servletRequest, openServices), servletResponse);
+        if(openServices.contains(((HttpServletRequest)servletRequest).getServletPath()))
+            servletRequest.setAttribute("skipBasicAuth", Boolean.TRUE);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
