@@ -23,15 +23,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 import static java.nio.file.Files.copy;
@@ -40,6 +39,11 @@ import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
 public class DummiesServlet extends HttpServlet {
 
     private List<Rule> rules = new ArrayList<>();
+
+    public List<String> getPaths() {
+
+        return rules.stream().map(Rule::getPath).collect(Collectors.toList());
+    }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
