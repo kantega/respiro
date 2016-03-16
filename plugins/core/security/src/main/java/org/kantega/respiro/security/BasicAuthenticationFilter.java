@@ -50,7 +50,11 @@ public class BasicAuthenticationFilter implements Filter {
 
         Optional<UsernameAndPassword> usernameAndPassword = findCredentials(req.getHeader("Authorization"));
 
-        if(usernameAndPassword.isPresent()) {
+        if (Boolean.TRUE.equals(req.getAttribute("skipBasicAuth"))) {
+            // endponts that does not need to be protected
+            filterChain.doFilter(req, resp);
+            return;
+        } else if(usernameAndPassword.isPresent()) {
             AuthenticationResult result = passwordChecker.checkPassword(usernameAndPassword.get().username, usernameAndPassword.get().password);
             if (result.isAuthenticated()) {
                 filterChain.doFilter(new HttpServletRequestWrapper(req) {
@@ -72,10 +76,6 @@ public class BasicAuthenticationFilter implements Filter {
 
                 return;
             }
-        } else if (Boolean.TRUE.equals(req.getAttribute("skipBasicAuth"))) {
-            // endponts that does not need to be protected
-            filterChain.doFilter(req, resp);
-            return;
         }
         resp.setStatus(SC_UNAUTHORIZED);
         resp.setHeader("WWW-Authenticate", format("Basic realm=\"%s\"", securityRealm));
