@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Base64;
 import java.util.Optional;
 
 import static java.lang.String.format;
@@ -51,7 +50,11 @@ public class BasicAuthenticationFilter implements Filter {
 
         Optional<UsernameAndPassword> usernameAndPassword = findCredentials(req.getHeader("Authorization"));
 
-        if(usernameAndPassword.isPresent()) {
+        if (Boolean.TRUE.equals(req.getAttribute("skipBasicAuth"))) {
+            // endponts that does not need to be protected
+            filterChain.doFilter(req, resp);
+            return;
+        } else if(usernameAndPassword.isPresent()) {
             AuthenticationResult result = passwordChecker.checkPassword(usernameAndPassword.get().username, usernameAndPassword.get().password);
             if (result.isAuthenticated()) {
                 filterChain.doFilter(new HttpServletRequestWrapper(req) {
