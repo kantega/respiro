@@ -110,7 +110,7 @@ public class BasicAuthenticationFilter implements Filter {
 
 
     private static class UsernameAndPassword {
-        public UsernameAndPassword(String password, String username) {
+        public UsernameAndPassword(String username, String password) {
             this.password = password;
             this.username = username;
         }
