@@ -80,6 +80,7 @@
         <camel.version>2.16.0</camel.version>
         <activemq.version>5.12.1</activemq.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <h2database.version>1.4.190</h2database.version>
     </properties>
 
     <dependencies>
