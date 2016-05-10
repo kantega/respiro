@@ -19,14 +19,19 @@ package org.kantega.respiro.exchanges;
 import org.kantega.respiro.collector.ExchangeInfo;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  *
  */
 public class Exchanges {
-    private List<ExchangeInfo> exchangeLog = new CopyOnWriteArrayList<>();
+    private Deque<ExchangeInfo> exchangeLog = new ConcurrentLinkedDeque<>();
+
+    private AtomicLong counter = new AtomicLong();
 
     private static Exchanges instance;
 
@@ -40,9 +45,9 @@ public class Exchanges {
 
     public void addExchange(ExchangeInfo message) {
         while(exchangeLog.size() >= 50) {
-            exchangeLog.remove(49);
+            exchangeLog.removeLast();
         }
-        exchangeLog.add(0, message);
+        exchangeLog.addFirst(message);
     }
 
     public ArrayList<ExchangeInfo> getExchangeLog() {
