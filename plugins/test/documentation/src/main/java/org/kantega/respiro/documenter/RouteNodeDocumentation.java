@@ -18,7 +18,7 @@ public class RouteNodeDocumentation {
 
     public static Show<RouteNodeDocumentation> loggerShow(int indent) {
         return Show.show(rnd -> {
-            Stream<Character> s = toIndent(indent).append(lparen).append(space).append(Stream.fromString(rnd.label)).append(space).append(rparen);
+            Stream<Character> s = toIndent(indent).append(lparen).append(space).append(Stream.fromString(rnd.label)).append(space).append(rparen).append(nl);
             Stream<Character> withNext =
               rnd.next.isEmpty() ?
               s :

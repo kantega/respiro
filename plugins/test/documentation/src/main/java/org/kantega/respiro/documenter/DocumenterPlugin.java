@@ -94,7 +94,7 @@ public class DocumenterPlugin {
     public void logdocs() {
         try {
             logger.info("**** Routes: ****");
-            logger.info(Strings.mkString(RouteDocumentation.loggerShow, "\n").showS(routeDocumentations));
+            logger.info("\n"+Strings.mkString(RouteDocumentation.loggerShow, "\n").showS(routeDocumentations));
 
             Path baseDirectory =
               getBasedir();
@@ -118,7 +118,7 @@ public class DocumenterPlugin {
                 );
 
             logger.info("**** Dependencies ****");
-            logger.info(Strings.mkString(DependencyDocumentation.loggerShow, "\n").showS(dependencies.toList()));
+            logger.info("\n"+Strings.mkString(DependencyDocumentation.loggerShow, "\n").showS(dependencies.toList()));
 
             List<ResourceDocumentation> resourceDocs =
               runDoc(sourceDir).map(rDoc -> {
@@ -143,7 +143,7 @@ public class DocumenterPlugin {
               });
 
             logger.info("**** Api docs ****");
-            logger.info(Strings.mkString(ResourceDocumentation.loggerShow, "\n").showS(resourceDocs));
+            logger.info("\n"+Strings.mkString(ResourceDocumentation.loggerShow, "\n").showS(resourceDocs));
 
             Documentation doc = new Documentation(dependencies.toList(), routeDocumentations, resourceDocs);
 
