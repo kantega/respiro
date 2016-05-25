@@ -22,7 +22,7 @@ import java.sql.*;
  *
  */
 public class ProxyStatement implements Statement {
-    private final Statement wrapped;
+    protected final Statement wrapped;
 
     public ProxyStatement(Statement wrapped) {
         this.wrapped = wrapped;
