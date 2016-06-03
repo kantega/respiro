@@ -19,7 +19,6 @@ package org.kantega.respiro.mail;
 import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.respiro.api.mail.MailSender;
 
-import java.nio.charset.Charset;
 import java.util.Collection;
 
 public class DefaultMailConfigBuilder implements MailConfigBuilder {
@@ -51,17 +50,6 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
         @Override
         public Build auth(String username, String password) {
             config.setAuth(username, password);
-            return this;
-        }
-
-        @Override
-        public Build charset(String charset) {
-            config.setCharset(Charset.forName(charset));
-            return this;
-        }
-
-        public Build charset(Charset charset) {
-            config.setCharset(charset);
             return this;
         }
 
