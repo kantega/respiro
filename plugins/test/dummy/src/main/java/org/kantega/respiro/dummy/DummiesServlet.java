@@ -110,14 +110,16 @@ public class DummiesServlet extends HttpServlet {
         }
 
         private String mapSuffix(String contentType) {
-            if ("application/json".equals(contentType))
-                return "json";
-            else if ("application/xml".equals(contentType))
-                return "xml";
-            else if ("text/plain".equals(contentType))
-                return "txt";
-            else
-                throw new IllegalArgumentException("Unsupported content type: " + contentType);
+            String[] ct = contentType.split(";");
+            for (String content : ct) {
+                if ("application/json".equals(content))
+                    return "json";
+                else if ("application/xml".equals(content))
+                    return "xml";
+                else if ("text/plain".equals(content))
+                    return "txt";
+            }
+            throw new IllegalArgumentException("Unsupported content type: " + contentType);
 
         }
 

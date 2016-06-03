@@ -20,7 +20,7 @@
 
     <groupId>org.kantega.respiro</groupId>
     <artifactId>respiro</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
 
     <name>Respiro</name>
     <description>Modular, developer-friendly integration platform</description>
