@@ -9,6 +9,7 @@ import static org.kantega.respiro.documenter.Strings.nl;
 public class ExchangeDocumentation {
     public static final Show<ExchangeDocumentation> loggerShow =
       Show.show(ed-> nil.append(Stream.fromString("Request:")).append(nl)
+        .append(Stream.fromString(ed.requestDocumentation.url)).append(nl)
         .append(Stream.fromString(ed.requestDocumentation.body)).append(nl)
         .append(Stream.fromString("Response: ")).append(Stream.fromString(ed.responseDocumentation.status)).append(nl)
         .append(Stream.fromString(ed.responseDocumentation.body)));

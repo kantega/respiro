@@ -21,6 +21,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
@@ -40,23 +41,33 @@ import static fj.data.Option.some;
 /**
  *
  */
-public class DocumentationExtractor {
+public class ResourceParser {
 
     public static ExchangeLog exchanges = new ExchangeLog();
 
-    public static Option<ResourceDocumentation> document(CompilationUnit root) {
+    public static Option<String> parsePlugin(CompilationUnit root) {
+        return fold(root.getChildrenNodes(), ClassOrInterfaceDeclaration.class, none(), (maybeDoc, decl) ->
+          maybeDoc.orElse(() ->
+            walk(decl, MarkerAnnotationExpr.class).exists(hasName("plugin")) ?
+            Option.fromNull(decl.getComment()).map(Comment::getContent) :
+            none()
+        ));
+    }
+
+
+    public static Option<ResourceDocumentation> parseResource(CompilationUnit root) {
         return fold(root.getChildrenNodes(), ClassOrInterfaceDeclaration.class, none(), (maybeDoc, decl) ->
           maybeDoc.orElse(() ->
             walk(decl, SingleMemberAnnotationExpr.class).exists(hasName("path")) ?
             some(walk(decl, MethodDeclaration.class).foldLeft((rDoc, mDelc) ->
-                walk(mDelc, SingleMemberAnnotationExpr.class).exists(hasName("path"))||walk(mDelc,MarkerAnnotationExpr.class).exists(Booleans.or(hasName("get"),hasName("post"))) ?
+                walk(mDelc, SingleMemberAnnotationExpr.class).exists(hasName("path")) || walk(mDelc, MarkerAnnotationExpr.class).exists(Booleans.or(hasName("get"), hasName("post"))) ?
                 rDoc.append(
                   new MethodDocumentation(
-                    ofType(mDelc.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("path")).headOption().map(a -> rDoc.path+a.getMemberValue().toString()).orSome(rDoc.path),
+                    ofType(mDelc.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("path")).headOption().map(a -> rDoc.path + a.getMemberValue().toString()).orSome(rDoc.path),
                     ofType(mDelc.getChildrenNodes(), MarkerAnnotationExpr.class).filter(Booleans.or(hasName("get"), hasName("post"))).headOption().map(a -> a.getName().getName()).orSome("GET"),
                     ofType(mDelc.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("rolesallowed")).headOption().map(a -> arrayList(a.getMemberValue().toString().split(","))).orSome(nil()),
                     mDelc.getComment() != null ? mDelc.getComment().getContent() : "",
-                    ofType(decl.getChildrenNodes(), Parameter.class).map(Node::toString),
+                    iterableList(mDelc.getParameters()).map(Node::toString),
                     nil())) :
                 rDoc,
               new ResourceDocumentation(

@@ -8,10 +8,12 @@ import static org.kantega.respiro.documenter.Strings.*;
 
 public class RouteNodeDocumentation {
 
+    public final String id;
     public final String label;
     public final List<RouteNodeDocumentation> next;
 
-    public RouteNodeDocumentation(String label, List<RouteNodeDocumentation> next) {
+    public RouteNodeDocumentation(String id, String label, List<RouteNodeDocumentation> next) {
+        this.id = id;
         this.label = label;
         this.next = next;
     }

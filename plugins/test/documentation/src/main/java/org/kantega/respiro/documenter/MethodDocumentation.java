@@ -33,7 +33,8 @@ public class MethodDocumentation {
       String method,
       List<String> rolesAllowed,
       String documentation,
-      List<String> parameters, List<ExchangeDocumentation> exchangeDocumentations) {
+      List<String> parameters,
+      List<ExchangeDocumentation> exchangeDocumentations) {
         this.path = StringUtils.remove(path, "\"");
         this.method = method;
         this.rolesAllowed = rolesAllowed;

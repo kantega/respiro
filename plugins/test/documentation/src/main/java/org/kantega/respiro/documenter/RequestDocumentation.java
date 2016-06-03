@@ -4,10 +4,12 @@ import fj.data.Option;
 
 public class RequestDocumentation {
 
+    public final String url;
     public final String headers;
     public final String body;
 
-    public RequestDocumentation(String headers, String body) {
+    public RequestDocumentation(String url, String headers, String body) {
+        this.url = url;
         this.headers = Option.fromNull(headers).orSome("");
         this.body = Option.fromNull(body).orSome("");
     }
@@ -15,7 +17,8 @@ public class RequestDocumentation {
     @Override
     public String toString() {
         return "RequestDocumentation{" +
-          "headers='" + headers + '\'' +
+          "url='" + url + '\'' +
+          ", headers='" + headers + '\'' +
           ", body='" + body + '\'' +
           '}';
     }
