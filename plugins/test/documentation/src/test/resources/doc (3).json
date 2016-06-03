@@ -1,0 +1,204 @@
+{
+  "dependencies": [
+    {
+      "type": "JDBC",
+      "url": "jdbc:h2:tcp://localhost:50184/mem:agresso"
+    },
+    {
+      "type": "SMTP",
+      "url": ""
+    }
+  ],
+  "routes": [
+    {
+      "inputs": [
+        {
+          "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\import?readLock=markerFile&delete=true"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class no.nte.grossistimport.model.AgressoDbNotReached]]",
+          "next": [
+            {
+              "label": "Processor@0x296577c",
+              "next": []
+            },
+            {
+              "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\failed?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x296577c",
+              "next": []
+            },
+            {
+              "label": "setBody[{}]",
+              "next": []
+            },
+            {
+              "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\failed?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "Processor@0x1f182d41",
+          "next": []
+        },
+        {
+          "label": "Processor@0x5140f549",
+          "next": []
+        },
+        {
+          "label": "Processor@0x4407991d",
+          "next": []
+        },
+        {
+          "label": "Processor@0x741a0b56",
+          "next": []
+        },
+        {
+          "label": "Processor@0x2ab652b1",
+          "next": []
+        },
+        {
+          "label": "Processor@0x7c8a1013",
+          "next": []
+        },
+        {
+          "label": "Processor@0x43da1ee",
+          "next": []
+        },
+        {
+          "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\agresso",
+          "next": []
+        },
+        {
+          "label": "Processor@0x20d95a84",
+          "next": []
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "label": "sftp:joe@localhost:50187/fetch/ahlsell?knownHostsFile=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\test-classes\\known_hosts&localWorkDirectory=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\work&delete=true&strictHostKeyChecking=no&jschLoggingLevel=WARN&readLock=markerFile&password=joe"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x296577c",
+              "next": []
+            },
+            {
+              "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\failed?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\import?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+          "next": []
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\export\\ahlsell?readLock=markerFile&delete=true"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x296577c",
+              "next": []
+            },
+            {
+              "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\failed?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "filter[{no.nte.grossistimport.GrossistImportPlugin$$Lambda$95/1957925990@3398a19a}]",
+          "next": [
+            {
+              "label": "sftp:joe@localhost:50187/put/ahlsell?knownHostsFile=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\test-classes\\known_hosts&localWorkDirectory=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\work&delete=true&strictHostKeyChecking=no&jschLoggingLevel=WARN&readLock=markerFile&password=joe",
+              "next": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "label": "sftp:joe@localhost:50187/fetch/elektroskandia?knownHostsFile=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\test-classes\\known_hosts&localWorkDirectory=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\work&delete=true&strictHostKeyChecking=no&jschLoggingLevel=WARN&readLock=markerFile&password=joe"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x296577c",
+              "next": []
+            },
+            {
+              "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\failed?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\import?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+          "next": []
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\export\\tess?readLock=markerFile&delete=true"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x296577c",
+              "next": []
+            },
+            {
+              "label": "file:C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\failed?fileName=${file:onlyname.noext}-${exchangeId}.${file:ext}",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "filter[{no.nte.grossistimport.GrossistImportPlugin$$Lambda$95/1957925990@3398a19a}]",
+          "next": [
+            {
+              "label": "sftp:joe@localhost:50187/put/elektroskandia?knownHostsFile=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\test-classes\\known_hosts&localWorkDirectory=C:\\workspace\\nettyrepo\\projects\\NTENett\\GrossistImport\\trunk\\target\\tmp\\work&delete=true&strictHostKeyChecking=no&jschLoggingLevel=WARN&readLock=markerFile&password=joe",
+              "next": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resources": []
+}

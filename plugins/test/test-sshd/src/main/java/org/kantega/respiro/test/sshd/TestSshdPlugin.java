@@ -120,7 +120,7 @@ public class TestSshdPlugin {
 
             @Override
             public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                sshdFiles.toFile().delete();
+                dir.toFile().delete();
                 return FileVisitResult.CONTINUE;
             }
         });

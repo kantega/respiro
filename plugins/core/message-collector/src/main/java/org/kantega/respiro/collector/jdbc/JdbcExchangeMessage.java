@@ -23,9 +23,11 @@ import org.kantega.respiro.collector.ExchangeMessage;
  */
 public class JdbcExchangeMessage implements ExchangeMessage {
     private final String sql;
+    private final String url;
 
-    public JdbcExchangeMessage(String sql) {
+    public JdbcExchangeMessage(String url, String sql) {
         this.sql = sql;
+        this.url = url;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class JdbcExchangeMessage implements ExchangeMessage {
 
     @Override
     public String getAddress() {
-        return null;
+        return url;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class JdbcExchangeMessage implements ExchangeMessage {
     }
 
     @Override
-    public String  getResponseCode() {
+    public String getResponseCode() {
         return "";
     }
 

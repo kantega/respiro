@@ -49,7 +49,6 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         public DefaultBuild(String url, long defaultMaxAge) {
             this.url = url;
             this.maxAge = defaultMaxAge;
-
         }
 
         @Override

@@ -69,6 +69,7 @@
         <module>test/test-sshd</module>
         <module>test/test-smtp</module>
         <module>test/test-activemq</module>
+        <module>test/documentation</module>
     </modules>
 
     <dependencies>

@@ -36,20 +36,24 @@ import java.util.Collection;
  *
  */
 @Plugin
-public class ExchangesPlugin  {
+public class ExchangesPlugin {
 
 
     @Export
     private final Collection<Filter> filters = new ArrayList<>();
 
-    @Export final Application exhangesApp;
+    @Export
+    final Application exhangesApp;
 
-    @Export final UiModule uiModule;
+    @Export
+    final UiModule uiModule;
+
     private final CollectionListener exchangesListener;
 
-    public ExchangesPlugin(@Config(defaultValue = "/respiro") String respiroPath,
-                           ServletBuilder servletBuilder,
-                           ApplicationBuilder applicationBuilder) {
+    public ExchangesPlugin(
+      @Config(defaultValue = "/respiro") String respiroPath,
+      ServletBuilder servletBuilder,
+      ApplicationBuilder applicationBuilder) {
 
         String respiroDir = respiroPath + "/";
 
@@ -57,13 +61,13 @@ public class ExchangesPlugin  {
         filters.add(servletBuilder.redirectServlet("/exchanges", "respiro/#/exchanges"));
         filters.add(servletBuilder.redirectServlet("/exchanges/", "../respiro/#/exchanges"));
 
-        filters.add(servletBuilder.resourceServlet(respiroDir+ "partials/exchanges.html", getClass().getResource("/exchanges/list.html")));
+        filters.add(servletBuilder.resourceServlet(respiroDir + "partials/exchanges.html", getClass().getResource("/exchanges/list.html")));
         filters.add(servletBuilder.resourceServlet(respiroDir + "partials/exchanges-details.html", getClass().getResource("/exchanges/details.html")));
         filters.add(servletBuilder.resourceServlet(respiroDir + "exchanges.js", getClass().getResource("/exchanges/exchanges.js")));
 
         exhangesApp = applicationBuilder.application()
-                .singleton(new ExchangesResource(exchanges))
-                .build();
+          .singleton(new ExchangesResource(exchanges))
+          .build();
 
         uiModule = () -> "exchanges.js";
 
