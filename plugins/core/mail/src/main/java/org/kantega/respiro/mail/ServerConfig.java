@@ -21,7 +21,6 @@ import org.apache.commons.mail.MultiPartEmail;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +36,6 @@ class ServerConfig {
     private final List<InternetAddress> to = new ArrayList<>();
     private final List<InternetAddress> cc = new ArrayList<>();
     private final List<InternetAddress> bcc = new ArrayList<>();
-    private Charset charset;
 
     public ServerConfig(String host, int port) {
         this.host = host;
@@ -55,9 +53,6 @@ class ServerConfig {
         if (username != null && password != null)
             mail.setAuthentication(username, password);
 
-        if(charset != null ){
-            mail.setCharset(charset.toString());
-        }
         try {
             if (!to.isEmpty())
                 mail.setTo(to);
@@ -116,7 +111,4 @@ class ServerConfig {
     }
 
 
-    public void setCharset(Charset charset) {
-        this.charset = charset;
-    }
 }

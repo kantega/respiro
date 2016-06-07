@@ -16,8 +16,6 @@
 
 package org.kantega.respiro.api.mail;
 
-import java.nio.charset.Charset;
-
 public interface MailConfigBuilder {
 
 
@@ -28,10 +26,6 @@ public interface MailConfigBuilder {
         Build useSsl(boolean ssl);
 
         Build auth(String username, String password);
-
-        Build charset(String charset);
-
-        Build charset(Charset charset);
 
         Build from(String email);
 
