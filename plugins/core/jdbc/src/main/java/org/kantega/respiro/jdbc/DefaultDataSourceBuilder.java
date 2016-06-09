@@ -16,7 +16,8 @@
 
 package org.kantega.respiro.jdbc;
 
-import org.apache.tomcat.jdbc.pool.PoolProperties;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.kantega.respiro.api.DataSourceBuilder;
 
 import javax.sql.DataSource;
@@ -27,7 +28,6 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
     private final long defaultMaxAge;
 
     public DefaultDataSourceBuilder(Collection<DataSourceCustomizer> dataSourceCustomizers, long maxAge) {
-
         this.defaultMaxAge = maxAge;
         this.dataSourceCustomizers = dataSourceCustomizers;
     }
@@ -77,15 +77,16 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
 
         @Override
         public DataSource build() {
-            PoolProperties poolProperties = new PoolProperties();
-            poolProperties.setDriverClassName(driverClassname);
-            poolProperties.setUrl(url);
-            poolProperties.setUsername(username);
-            poolProperties.setPassword(password);
 
-            poolProperties.setMaxAge(maxAge);
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(url);
+            config.setUsername(username);
+            config.setPassword(password);
+            config.setMaxLifetime(maxAge);
+            config.setDriverClassName(driverClassname);
+            config.setMaximumPoolSize(3);
+            DataSource dataSource = new HikariDataSource(config);
 
-            DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
             for (DataSourceCustomizer customizer : dataSourceCustomizers) {
                 dataSource = customizer.wrapDataSource(dataSource);
             }
