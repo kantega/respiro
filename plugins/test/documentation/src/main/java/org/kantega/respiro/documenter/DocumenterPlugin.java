@@ -163,8 +163,8 @@ public class DocumenterPlugin {
             mapper.writeValue(targetDirectory.resolve("doc.json").toFile(), doc);
 
             Model model = ModelBuilder.extractModel(routeDocumentations);
-            Map<String,Object> json = ModelBuilder.toJsonString(model );
-            mapper.writeValue(targetDirectory.resolve("model.json").toFile(),model);
+            Map<String,Object> json = ModelBuilder.toJson(model );
+            mapper.writeValue(targetDirectory.resolve("model.json").toFile(),json);
 
         }
         catch (Throwable e) {

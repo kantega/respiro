@@ -59,7 +59,7 @@ public class ModelBuilder {
         return processTask.next.foldLeft((m, proc) -> append(proc, task, m), model.add(task).add(edge));
     }
 
-    public static Map<String, Object> toJsonString(Model model) {
+    public static Map<String, Object> toJson(Model model) {
         HashMap<String, Object> json = new HashMap<>();
         ArrayList<Object> nodes = new ArrayList<>();
 
@@ -68,15 +68,23 @@ public class ModelBuilder {
             nodeJson.put("id", n.id);
             nodeJson.put("label", n.label);
             nodeJson.put("nodeType", n.type.name());
-            nodes.add(nodeJson);
+            HashMap<String, Object> dataJson = new HashMap<>();
+            dataJson.put("data", nodeJson);
+            nodes.add(dataJson);
         });
 
+        ArrayList<Object> edges = new ArrayList<>();
         model.edges.forEach(e -> {
             HashMap<String, Object> edgeJson = new HashMap<>();
-            edgeJson.put("from", e.from.id);
-            edgeJson.put("to", e.to.id);
-            nodes.add(edgeJson);
+            edgeJson.put("source", e.from.id);
+            edgeJson.put("target", e.to.id);
+            HashMap<String, Object> dataJson = new HashMap<>();
+            dataJson.put("data", edgeJson);
+            edges.add(dataJson);
         });
+
+        json.put("nodes", nodes);
+        json.put("edges", edges);
         return json;
 
     }
