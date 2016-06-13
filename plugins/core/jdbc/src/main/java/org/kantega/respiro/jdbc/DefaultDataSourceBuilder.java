@@ -19,6 +19,8 @@ package org.kantega.respiro.jdbc;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.kantega.respiro.api.DataSourceBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Collection;
@@ -26,6 +28,8 @@ import java.util.Collection;
 public class DefaultDataSourceBuilder implements DataSourceBuilder {
     private final Collection<DataSourceCustomizer> dataSourceCustomizers;
     private final long defaultMaxAge;
+    final static Logger logger = LoggerFactory.getLogger(DefaultDataSourceBuilder.class);
+
 
     public DefaultDataSourceBuilder(Collection<DataSourceCustomizer> dataSourceCustomizers, long maxAge) {
         this.defaultMaxAge = maxAge;
@@ -86,7 +90,8 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
             config.setDriverClassName(driverClassname);
 
             //JTDS does not support connection.isValid()
-            if(driverClassname.toLowerCase().contains("jtds")){
+            if (driverClassname.toLowerCase().contains("jtds")) {
+                logger.info("JTDS driver detected, setting connection-test-query");
                 config.setConnectionTestQuery("SELECT 1");
             }
             config.setMaximumPoolSize(3);
