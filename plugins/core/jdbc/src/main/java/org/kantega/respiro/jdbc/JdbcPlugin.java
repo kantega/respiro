@@ -31,7 +31,7 @@ public class JdbcPlugin {
     private final DataSourceBuilder dsBuilder;
 
     public JdbcPlugin(
-            @Config(doc = "Max time(milliseconds) to live for created jdbc connections", defaultValue = "20000") long jdbcConnectionMaxAge,
+            @Config(doc = "Max time(milliseconds) to live for created jdbc connections", defaultValue = "1800000") long jdbcConnectionMaxAge,
             Collection<DataSourceInitializer> initializers,
             Collection<DataSourceCustomizer> dataSourceCustomizers) {
         this.dsBuilder = new DefaultDataSourceBuilder(dataSourceCustomizers, jdbcConnectionMaxAge);
