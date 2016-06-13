@@ -84,6 +84,11 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
             config.setPassword(password);
             config.setMaxLifetime(maxAge);
             config.setDriverClassName(driverClassname);
+
+            //JDTS does not support connection.isValid()
+            if(driverClassname.toLowerCase().contains("jdts")){
+                config.setConnectionTestQuery("SELECT 1");
+            }
             config.setMaximumPoolSize(3);
             DataSource dataSource = new HikariDataSource(config);
 
