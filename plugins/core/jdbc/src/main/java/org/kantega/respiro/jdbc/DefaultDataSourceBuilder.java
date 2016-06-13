@@ -85,7 +85,7 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
             config.setMaxLifetime(maxAge);
             config.setDriverClassName(driverClassname);
 
-            //JDTS does not support connection.isValid()
+            //JTDS does not support connection.isValid()
             if(driverClassname.toLowerCase().contains("jtds")){
                 config.setConnectionTestQuery("SELECT 1");
             }
