@@ -93,6 +93,8 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
             if (driverClassname.toLowerCase().contains("jtds")) {
                 logger.info("JTDS driver detected, setting connection-test-query");
                 config.setConnectionTestQuery("SELECT 1");
+            }else{
+                logger.info("Using jdbc built-in isValid() test");
             }
             config.setMaximumPoolSize(3);
             DataSource dataSource = new HikariDataSource(config);
