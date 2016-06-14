@@ -46,13 +46,13 @@ public class SMTPMailSender implements MailSender {
         MultiPartEmail mail = config.newMail();
 
         try {
+            mail.setCharset(msg.getCharset().name());
             addAddresses(mail.getToAddresses(), msg.getTo());
             addAddresses(mail.getCcAddresses(), msg.getCc());
             addAddresses(mail.getBccAddresses(), msg.getBcc());
             addAttachments(mail, msg);
             mail.setSubject(msg.getSubject());
             mail.setMsg(msg.getBody());
-            mail.setCharset(msg.getCharset().name());
             return mail.send();
         } catch (EmailException | AddressException e) {
             throw new RuntimeException(e);
