@@ -20,7 +20,7 @@
 
     <groupId>org.kantega.respiro</groupId>
     <artifactId>respiro</artifactId>
-    <version>1.5</version>
+    <version>1.6-SNAPSHOT</version>
 
     <name>Respiro</name>
     <description>Modular, developer-friendly integration platform</description>
@@ -48,7 +48,7 @@
     <scm>
         <url>https://github.com/kantega/respiro</url>
         <connection>scm:git:git@github.com:kantega/respiro.git</connection>
-        <tag>respiro-1.5</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <packaging>pom</packaging>
