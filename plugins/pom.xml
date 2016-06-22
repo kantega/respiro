@@ -53,6 +53,7 @@
         <module>core/jersey-validation</module>
         <module>core/jms-api</module>
         <module>core/activemq-client</module>
+        <module>core/mongodb</module>
 
         <!-- UI plugins -->
         <module>core/ui</module>
