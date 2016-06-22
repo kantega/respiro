@@ -16,6 +16,7 @@
 
 package org.kantega.respiro.api.mail;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class Message {
 
     private final StringBuilder body = new StringBuilder();
     private final String subject;
+    private Charset charset = Charset.defaultCharset();
 
     public Message(String subject) {
         this.subject = subject;
@@ -51,6 +53,15 @@ public class Message {
     public Message body(String bodyPart) {
         body.append(bodyPart);
         return this;
+    }
+
+    public Message charset(Charset charset){
+        this.charset = charset;
+        return this;
+    }
+
+    public Message charset(String charset) {
+        return charset(Charset.forName(charset));
     }
 
     public Message attach(String filename, String mimeType, byte[] content) {
@@ -81,5 +92,9 @@ public class Message {
 
     public String getBody() {
         return body.toString();
+    }
+
+    public Charset getCharset() {
+        return charset;
     }
 }

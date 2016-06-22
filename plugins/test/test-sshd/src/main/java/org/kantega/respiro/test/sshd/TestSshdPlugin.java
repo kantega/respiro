@@ -51,7 +51,9 @@ public class TestSshdPlugin {
     private final Optional<SshServer> sshd;
 
 
-    @Export final DataSourceInitializer dataSourceInitializer = () -> {};
+    @Export
+    final DataSourceInitializer dataSourceInitializer = () -> {
+    };
 
     public TestSshdPlugin() throws IOException {
 
@@ -59,7 +61,7 @@ public class TestSshdPlugin {
 
         File sourceFiles = new File(baseDir, "src/test/sshd");
 
-        if(sourceFiles.exists()) {
+        if (sourceFiles.exists()) {
 
 
             File homeDir = new File(baseDir, "target/sshd");
@@ -80,11 +82,10 @@ public class TestSshdPlugin {
             contentDir.mkdirs();
 
 
-            copySshdFilesToContentDirectory(sourceFiles.toPath(),
-                    contentDir.toPath());
+            copySshdFilesToContentDirectory(sourceFiles.toPath(), contentDir.toPath());
 
             sshd.setCommandFactory(command -> {
-                if("resetfiles".equals(command)) {
+                if ("resetfiles".equals(command)) {
                     return new ResetDataCommand(sourceFiles.toPath(), contentDir.toPath());
                 }
                 return new UnknownCommand(command);
@@ -120,7 +121,7 @@ public class TestSshdPlugin {
 
             @Override
             public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                sshdFiles.toFile().delete();
+                dir.toFile().delete();
                 return FileVisitResult.CONTINUE;
             }
         });
@@ -135,9 +136,19 @@ public class TestSshdPlugin {
 
                 Path dst = dest.resolve(relativize);
 
-
                 dst.toFile().getParentFile().mkdirs();
                 Files.copy(file, dst, StandardCopyOption.REPLACE_EXISTING);
+
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                Path relativize = sshdFiles.relativize(dir);
+
+                Path dst = dest.resolve(relativize);
+
+                dst.toFile().mkdirs();
 
                 return FileVisitResult.CONTINUE;
             }
@@ -147,16 +158,18 @@ public class TestSshdPlugin {
     private void writePort(int port) throws IOException {
 
         Files.write(new File(System.getProperty("reststopPluginDir"), "target/test-classes/sshdPort.txt").toPath(),
-                Integer.toString(port).getBytes());
+          Integer.toString(port).getBytes());
         System.setProperty("sshdPort", Integer.toString(port));
     }
 
-    private void writeFingerprintAndKnownHosts(SimpleGeneratorHostKeyProvider keyProvider, int port) throws IOException {
+    private void writeFingerprintAndKnownHosts(
+      SimpleGeneratorHostKeyProvider keyProvider,
+      int port) throws IOException {
         for (KeyPair keyPair : keyProvider.loadKeys()) {
             String fingerPrint = KeyUtils.getFingerPrint(keyPair.getPublic());
             System.setProperty("sshdFingerprint", fingerPrint);
             Files.write(new File(System.getProperty("reststopPluginDir"), "target/test-classes/sshdFingerprint.txt").toPath(),
-                    fingerPrint.getBytes());
+              fingerPrint.getBytes());
 
 
             PublicKeyEntryDecoder<PublicKey, PrivateKey> publicKeyEntryDecoder = (PublicKeyEntryDecoder<PublicKey, PrivateKey>) KeyUtils.getPublicKeyEntryDecoder(keyPair.getPublic());
@@ -167,13 +180,11 @@ public class TestSshdPlugin {
             publicKeyEntryDecoder.encodePublicKey(bytes, keyPair.getPublic());
 
 
-
             ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            out.write(("[localhost]:" + port +" ssh-dss ").getBytes());
+            out.write(("[localhost]:" + port + " ssh-dss ").getBytes());
             out.write(Base64.getEncoder().encode(bytes.toByteArray()));
             out.write("\n".getBytes());
-
 
 
             Path knownHostsFile = new File(System.getProperty("reststopPluginDir"), "target/test-classes/known_hosts").toPath();
@@ -185,7 +196,7 @@ public class TestSshdPlugin {
 
     @PreDestroy
     public void stop() throws IOException {
-        if(sshd.isPresent()) {
+        if (sshd.isPresent()) {
             sshd.get().stop();
         }
     }
@@ -240,9 +251,11 @@ public class TestSshdPlugin {
                 public void run() {
                     try {
                         copySshdFilesToContentDirectory(source, dest);
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         throw new RuntimeException(e);
-                    } finally {
+                    }
+                    finally {
                         callback.onExit(0);
                     }
                 }

@@ -16,23 +16,29 @@
 
 package org.kantega.respiro.jdbc;
 
-import org.apache.tomcat.jdbc.pool.PoolProperties;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.kantega.respiro.api.DataSourceBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Collection;
 
 public class DefaultDataSourceBuilder implements DataSourceBuilder {
     private final Collection<DataSourceCustomizer> dataSourceCustomizers;
+    private final long defaultMaxAge;
+    final static Logger logger = LoggerFactory.getLogger(DefaultDataSourceBuilder.class);
 
-    public DefaultDataSourceBuilder(Collection<DataSourceCustomizer> dataSourceCustomizers) {
 
+    public DefaultDataSourceBuilder(Collection<DataSourceCustomizer> dataSourceCustomizers, long maxAge) {
+        this.defaultMaxAge = maxAge;
         this.dataSourceCustomizers = dataSourceCustomizers;
     }
 
     @Override
     public Build datasource(String url) {
-        return new DefaultBuild(url);
+        return new DefaultBuild(url, defaultMaxAge);
     }
 
     private class DefaultBuild implements Build {
@@ -42,10 +48,11 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         private String username;
         private String password;
         private String driverClassname;
+        private long maxAge;
 
-        public DefaultBuild(String url) {
+        public DefaultBuild(String url, long defaultMaxAge) {
             this.url = url;
-
+            this.maxAge = defaultMaxAge;
         }
 
         @Override
@@ -67,13 +74,31 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         }
 
         @Override
+        public Build maxAge(long maxAge) {
+            this.maxAge = maxAge;
+            return this;
+        }
+
+        @Override
         public DataSource build() {
-            PoolProperties poolProperties = new PoolProperties();
-            poolProperties.setDriverClassName(driverClassname);
-            poolProperties.setUrl(url);
-            poolProperties.setUsername(username);
-            poolProperties.setPassword(password);
-            DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
+
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(url);
+            config.setUsername(username);
+            config.setPassword(password);
+            config.setMaxLifetime(maxAge);
+            config.setDriverClassName(driverClassname);
+
+            //JTDS does not support connection.isValid()
+            if (driverClassname.toLowerCase().contains("jtds")) {
+                logger.info("JTDS driver detected, setting connection-test-query");
+                config.setConnectionTestQuery("SELECT 1");
+            }else{
+                logger.info("Using jdbc built-in isValid() test");
+            }
+            config.setMaximumPoolSize(3);
+            DataSource dataSource = new HikariDataSource(config);
+
             for (DataSourceCustomizer customizer : dataSourceCustomizers) {
                 dataSource = customizer.wrapDataSource(dataSource);
             }

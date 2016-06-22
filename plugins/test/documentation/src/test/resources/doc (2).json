@@ -1,0 +1,142 @@
+{
+  "dependencies": [
+    {
+      "type": "JDBC",
+      "url": "jdbc:h2:tcp://localhost:59612/mem:agresso"
+    },
+    {
+      "type": "JDBC",
+      "url": "jdbc:h2:tcp://localhost:59612/mem:netty"
+    },
+    {
+      "type": "JDBC",
+      "url": "jdbc:h2:tcp://localhost:59612/mem:ntesystemer"
+    },
+    {
+      "type": "REST",
+      "url": ""
+    },
+    {
+      "type": "REST",
+      "url": "http://localhost:9998/sms"
+    },
+    {
+      "type": "REST",
+      "url": "http://localhost:9998/sms/reply"
+    }
+  ],
+  "routes": [
+    {
+      "inputs": [
+        {
+          "label": "quartz2://checkForOrdersTrigger?cron=*+*+*+*+*+?+*"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x4af44e42",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "Processor@0x37a522c8",
+          "next": []
+        },
+        {
+          "label": "split[simple{${body}}]",
+          "next": [
+            {
+              "label": "Processor@0x6ab80ea",
+              "next": []
+            },
+            {
+              "label": "Processor@0x4982b310",
+              "next": []
+            },
+            {
+              "label": "filter[{no.nte.ktielektro.common.CommonProcess$$Lambda$89/976011906@1cc00f56}]",
+              "next": [
+                {
+                  "label": "Processor@0x21ec723c",
+                  "next": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "label": "quartz2://checkForReplies?cron=*+*+*+*+*+?+*"
+        }
+      ],
+      "route": [
+        {
+          "label": "onException[[class java.lang.Exception]]",
+          "next": [
+            {
+              "label": "Processor@0x3f41a7ab",
+              "next": []
+            }
+          ]
+        },
+        {
+          "label": "Processor@0x6537dc79",
+          "next": []
+        },
+        {
+          "label": "split[simple{${body}}]",
+          "next": [
+            {
+              "label": "Processor@0x39f1e9fc",
+              "next": []
+            },
+            {
+              "label": "Processor@0x7bce016c",
+              "next": []
+            },
+            {
+              "label": "filter[{no.nte.ktielektro.common.CommonProcess$$Lambda$89/976011906@1cc00f56}]",
+              "next": [
+                {
+                  "label": "Processor@0x49808d41",
+                  "next": []
+                },
+                {
+                  "label": "when[{no.nte.ktielektro.replies.HandleSmsReplyRoute$$Lambda$81/571813280@680c372f}]choice[]",
+                  "next": [
+                    {
+                      "label": "when[{no.nte.ktielektro.replies.HandleSmsReplyRoute$$Lambda$81/571813280@680c372f}]",
+                      "next": [
+                        {
+                          "label": "Processor@0x2fc94125",
+                          "next": []
+                        }
+                      ]
+                    },
+                    {
+                      "label": "Processor@0x626e3b18otherwise[]",
+                      "next": [
+                        {
+                          "label": "Processor@0x626e3b18",
+                          "next": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resources": []
+}

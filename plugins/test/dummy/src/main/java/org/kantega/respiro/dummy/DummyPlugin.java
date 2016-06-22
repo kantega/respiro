@@ -28,7 +28,6 @@ import org.xml.sax.SAXException;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
@@ -44,6 +43,7 @@ import java.util.Properties;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
+import static org.kantega.reststop.api.FilterPhase.PRE_AUTHENTICATION;
 import static org.kantega.reststop.classloaderutils.PluginInfo.parse;
 
 @Plugin
@@ -51,12 +51,15 @@ public class DummyPlugin {
 
     private final String basedir = getProperty("reststopPluginDir");
     private final String DUMMY_PROPS = "dummy.properties";
+    private final List<String> openServices = new ArrayList<>();
 
     @Export
     private final Collection<EndpointConfig> endpointConfigs;
-
     @Export
     private final Filter dummiesServlet;
+    @Export
+    private final Filter authFilter;
+
 
     public DummyPlugin(ServletContext servletContext, EndpointBuilder ecBuilder, ServletBuilder servletBuilder) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
 
@@ -77,9 +80,11 @@ public class DummyPlugin {
                     String style = props.getProperty("style", "SOAP").toUpperCase();
                     if ("SOAP".equals(style))
                         addSOAPEndpoint(servletContext, ecBuilder, dir, props, moduleArtifactId);
-                    else if ("REST".equals(style))
+                    else if ("REST".equals(style)) {
                         dummies.addRESTEndpoints(dir, props);
-                    else
+                        if( "NONE".equals(props.getProperty("auth","BASIC")))
+                            openServices.addAll(dummies.getPaths());
+                    }else
                         throw new IllegalArgumentException(format("Unknown style %s. Should be one of REST, SOAP.", style));
 
                 }
@@ -88,6 +93,7 @@ public class DummyPlugin {
             throw new RuntimeException(e);
         }
 
+        this.authFilter = servletBuilder.filter(new DummyAuthFilter(openServices),"/*", PRE_AUTHENTICATION);
     }
 
     private String parseModuleArtifactId() {
@@ -107,6 +113,7 @@ public class DummyPlugin {
         String namespace = props.getProperty("namespace");
         String service = props.getProperty("service");
         String port = props.getProperty("port");
+        String auth = props.getProperty("auth","BASIC");
 
         String wsdlLocation = props.getProperty("wsdl");
         URL wsdlURL;
@@ -128,6 +135,9 @@ public class DummyPlugin {
                 .wsdlService(service)
                 .wsdlPort(port)
                 .path(servicePath).build());
+
+        if("NONE".equals(auth.toUpperCase()))
+            openServices.add("/ws"+servicePath);
     }
 
     private URL findWsdlInPlugin(ServletContext servletContext, String artifactId, String path) {

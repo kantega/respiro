@@ -20,7 +20,6 @@ import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.respiro.api.mail.MailSender;
 
 import java.util.Collection;
-import java.util.List;
 
 public class DefaultMailConfigBuilder implements MailConfigBuilder {
 

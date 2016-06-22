@@ -16,11 +16,11 @@
 
 package org.kantega.respiro.mail;
 
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
 import org.kantega.respiro.api.mail.Attachment;
 import org.kantega.respiro.api.mail.MailSender;
 import org.kantega.respiro.api.mail.Message;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.MultiPartEmail;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -46,6 +46,7 @@ public class SMTPMailSender implements MailSender {
         MultiPartEmail mail = config.newMail();
 
         try {
+            mail.setCharset(msg.getCharset().name());
             addAddresses(mail.getToAddresses(), msg.getTo());
             addAddresses(mail.getCcAddresses(), msg.getCc());
             addAddresses(mail.getBccAddresses(), msg.getBcc());
