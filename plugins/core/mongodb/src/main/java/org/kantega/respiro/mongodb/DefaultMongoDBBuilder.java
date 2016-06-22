@@ -52,14 +52,9 @@ public class DefaultMongoDBBuilder implements MongoDBBuilder {
         }
 
         @Override
-        public Build username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        @Override
-        public Build password(String password) {
+        public Build auth(String username, String password) {
             this.password = password;
+            this.username = username;
             return this;
         }
 

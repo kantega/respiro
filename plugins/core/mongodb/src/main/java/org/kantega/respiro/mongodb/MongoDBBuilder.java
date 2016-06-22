@@ -24,9 +24,8 @@ public interface MongoDBBuilder {
     Build mongodatabase(String serverAddress, int port, String databaseName);
 
     interface Build {
-        Build username(String username);
 
-        Build password(String password);
+        Build auth(String username, String password);
 
         Build serverAddress(String server, int port);
 
