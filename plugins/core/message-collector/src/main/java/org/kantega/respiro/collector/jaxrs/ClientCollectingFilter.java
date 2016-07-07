@@ -31,7 +31,7 @@ import java.io.OutputStream;
 /**
  *
  */
-@Priority(Integer.MIN_VALUE+1)
+@Priority(Integer.MIN_VALUE + 1)
 public class ClientCollectingFilter extends CollectingFilter implements ClientRequestFilter, ClientResponseFilter {
 
 
@@ -50,8 +50,8 @@ public class ClientCollectingFilter extends CollectingFilter implements ClientRe
             JaxRsExchangeMessage msg = new JaxRsExchangeMessage(ExchangeMessage.Type.REQUEST);
 
             msg.setMethod(context.getMethod());
-            msg.setAddress( context.getUri().toString());
-            msg.setHeaders( context.getStringHeaders());
+            msg.setAddress(context.getUri().toString());
+            msg.setHeaders(context.getStringHeaders());
 
 
             if (context.hasEntity()) {
@@ -68,7 +68,6 @@ public class ClientCollectingFilter extends CollectingFilter implements ClientRe
                 exchangeInfo.addBackendMessage(msg);
             }
 
-
         }));
 
     }
@@ -84,17 +83,18 @@ public class ClientCollectingFilter extends CollectingFilter implements ClientRe
 
 
                 msg.setResponseCode(responseContext.getStatus());
-                msg.setHeaders( responseContext.getHeaders());
+                msg.setHeaders(responseContext.getHeaders());
 
                 if (responseContext.hasEntity()) {
                     responseContext.setEntityStream(logInboundEntity(b, responseContext.getEntityStream(),
-                            MessageUtils.getCharset(responseContext.getMediaType())));
+                      MessageUtils.getCharset(responseContext.getMediaType())));
                 }
 
                 msg.setPayload(b.toString());
 
                 exchangeInfo.addBackendMessage(msg);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });

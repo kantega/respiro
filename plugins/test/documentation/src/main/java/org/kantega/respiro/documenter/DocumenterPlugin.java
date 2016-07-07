@@ -92,9 +92,8 @@ public class DocumenterPlugin {
     public void logdocs() {
         try {
 
-
-            logger.info("**** Routes: ****");
-            logger.info(Strings.mkString(RouteDocumentation.loggerShow, "\n").showS(routeDocumentations));
+            logger.debug("**** Routes: ****");
+            logger.debug(Strings.mkString(RouteDocumentation.loggerShow, "\n").showS(routeDocumentations));
 
             Path baseDirectory =
               getBasedir();
@@ -121,8 +120,8 @@ public class DocumenterPlugin {
                 .foldLeft(Set::insert, Set.empty(DependencyDocumentation.ord));
 
 
-            logger.info("**** Dependencies ****");
-            logger.info(Strings.mkString(DependencyDocumentation.loggerShow, "\n").showS(dependencies.toList()));
+            logger.debug("**** Dependencies ****");
+            logger.debug(Strings.mkString(DependencyDocumentation.loggerShow, "\n").showS(dependencies.toList()));
 
             List<Either<String, ResourceDocumentation>> docsAndDesc =
               buildDoc(sourceDir);
@@ -149,22 +148,22 @@ public class DocumenterPlugin {
                   return new ResourceDocumentation(rDoc.path, rDoc.rolesAllowed, rDoc.documentation, mDocs);
               });
 
-            logger.info("**** Api docs ****");
-            logger.info(Strings.mkString(ResourceDocumentation.loggerShow, "\n").showS(resourceDocs));
+            logger.debug("**** Api docs ****");
+            logger.debug(Strings.mkString(ResourceDocumentation.loggerShow, "\n").showS(resourceDocs));
 
             String desc = Either.lefts(docsAndDesc).headOption().orSome("N/A");
 
-            logger.info("**** Plugin docs ****");
-            logger.info(desc);
+            logger.debug("**** Plugin docs ****");
+            logger.debug(desc);
 
             Model model = ModelBuilder.extractModel(routeDocumentations);
-            Map<String,Object> json = ModelBuilder.toJson(model );
+            Map<String, Object> json = ModelBuilder.toJson(model);
             PluginDocumentation doc = new PluginDocumentation(desc, dependencies.toList(), routeDocumentations, resourceDocs, json);
 
 
             mapper.writeValue(targetDirectory.resolve("doc.json").toFile(), doc);
 
-
+            logger.info(String.format("Documenter plugin found %s resources, %s dependencies",resourceDocs.length(),dependencies.size()));
 
         }
         catch (Throwable e) {

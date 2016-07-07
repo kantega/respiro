@@ -32,7 +32,7 @@ import java.io.OutputStream;
 /**
  *
  */
-@Priority(Integer.MIN_VALUE+1)
+@Priority(Integer.MIN_VALUE + 1)
 public class ContainerCollectingFilter extends CollectingFilter implements ContainerResponseFilter, ContainerRequestFilter {
 
 
@@ -44,11 +44,10 @@ public class ContainerCollectingFilter extends CollectingFilter implements Conta
     }
 
 
-
-
-
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+    public void filter(
+      ContainerRequestContext requestContext,
+      ContainerResponseContext responseContext) throws IOException {
 
         Collector.getCurrent().ifPresent(exchangeInfo -> {
 
@@ -88,11 +87,11 @@ public class ContainerCollectingFilter extends CollectingFilter implements Conta
 
         msg.setMethod(context.getMethod());
         msg.setAddress(context.getUriInfo().getAbsolutePath().toString());
-        msg.setHeaders( context.getHeaders());
+        msg.setHeaders(context.getHeaders());
 
         if (context.hasEntity()) {
             context.setEntityStream(
-                    logInboundEntity(b, context.getEntityStream(), MessageUtils.getCharset(context.getMediaType())));
+              logInboundEntity(b, context.getEntityStream(), MessageUtils.getCharset(context.getMediaType())));
         }
 
         msg.setPayload(b.toString());

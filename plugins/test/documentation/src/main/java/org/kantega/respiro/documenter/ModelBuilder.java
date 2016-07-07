@@ -1,10 +1,7 @@
 package org.kantega.respiro.documenter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fj.F;
 import fj.data.List;
-import org.apache.commons.lang3.StringUtils;
 import org.kantega.respiro.documenter.flow.Edge;
 import org.kantega.respiro.documenter.flow.Model;
 import org.kantega.respiro.documenter.flow.Node;
@@ -14,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.kantega.respiro.documenter.flow.Edge.*;
-import static org.kantega.respiro.documenter.flow.Node.*;
+import static org.kantega.respiro.documenter.flow.Edge.Edge;
+import static org.kantega.respiro.documenter.flow.Node.Node;
 
 
 public class ModelBuilder {
