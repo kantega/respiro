@@ -31,8 +31,6 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Exchanges {
     private Deque<ExchangeInfo> exchangeLog = new ConcurrentLinkedDeque<>();
 
-    private AtomicLong counter = new AtomicLong();
-
     private static Exchanges instance;
 
     public Exchanges() {
