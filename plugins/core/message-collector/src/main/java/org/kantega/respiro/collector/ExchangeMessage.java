@@ -28,6 +28,7 @@ public interface ExchangeMessage {
     String getAddress();
 
     String getMethod();
+
     String getHeaders();
 
     default ResponseStatus getResponseStatus() {
