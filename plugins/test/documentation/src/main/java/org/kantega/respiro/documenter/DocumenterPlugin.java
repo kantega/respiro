@@ -127,26 +127,7 @@ public class DocumenterPlugin {
               buildDoc(sourceDir);
 
             List<ResourceDocumentation> resourceDocs =
-              Either.rights(docsAndDesc).map(rDoc -> {
-                  List<MethodDocumentation> mDocs =
-                    rDoc.methodDocs.map(mDoc -> {
-                        List<ExchangeDocumentation> docs =
-                          log.asList()
-                            .filter(exinfo ->
-                              substringBefore(exinfo.getInMessage().getAddress(), "?").endsWith(mDoc.path) && exinfo.getInMessage().getMethod().equalsIgnoreCase(mDoc.method))
-                            .map(exInfo -> {
-                                RequestDocumentation requestDocumentation =
-                                  new RequestDocumentation(exInfo.getInMessage().getAddress(), exInfo.getInMessage().getHeaders(), exInfo.getInMessage().getPayload());
-
-                                ResponseDocumentation responseDocumentation =
-                                  new ResponseDocumentation(exInfo.getOutMessage().getHeaders(), exInfo.getOutMessage().getPayload(), exInfo.getOutMessage().getResponseCode());
-
-                                return new ExchangeDocumentation(requestDocumentation, responseDocumentation);
-                            });
-                        return mDoc.withRecorded(docs);
-                    });
-                  return new ResourceDocumentation(rDoc.path, rDoc.rolesAllowed, rDoc.documentation, mDocs);
-              });
+              addRequestAndResponse(Either.rights(docsAndDesc), log);
 
             logger.debug("**** Api docs ****");
             logger.debug(Strings.mkString(ResourceDocumentation.loggerShow, "\n").showS(resourceDocs));
@@ -163,7 +144,7 @@ public class DocumenterPlugin {
 
             mapper.writeValue(targetDirectory.resolve("doc.json").toFile(), doc);
 
-            logger.info(String.format("Documenter plugin found %s resources, %s dependencies",resourceDocs.length(),dependencies.size()));
+            logger.info(String.format("Documenter plugin found %s resources, %s dependencies", resourceDocs.length(), dependencies.size()));
 
         }
         catch (Throwable e) {
@@ -206,6 +187,31 @@ public class DocumenterPlugin {
                 }
             })
             .collect(Collectors.toList()));
+    }
+
+    private static List<ResourceDocumentation> addRequestAndResponse(
+      List<ResourceDocumentation> descs,
+      ExchangeLog log) {
+        return descs.map(rDoc -> {
+            List<MethodDocumentation> mDocs =
+              rDoc.methodDocs.map(mDoc -> {
+                  List<ExchangeDocumentation> docs =
+                    log.asList()
+                      .filter(exinfo ->
+                        Strings.normalizeUrl(substringBefore(exinfo.getInMessage().getAddress(), "?")).endsWith(mDoc.path) && exinfo.getInMessage().getMethod().equalsIgnoreCase(mDoc.method))
+                      .map(exInfo -> {
+                          RequestDocumentation requestDocumentation =
+                            new RequestDocumentation(exInfo.getInMessage().getAddress(), exInfo.getInMessage().getHeaders(), exInfo.getInMessage().getPayload());
+
+                          ResponseDocumentation responseDocumentation =
+                            new ResponseDocumentation(exInfo.getOutMessage().getHeaders(), exInfo.getOutMessage().getPayload(), exInfo.getOutMessage().getResponseCode());
+
+                          return new ExchangeDocumentation(requestDocumentation, responseDocumentation);
+                      });
+                  return mDoc.withRecorded(docs);
+              });
+            return new ResourceDocumentation(rDoc.path, rDoc.rolesAllowed, rDoc.documentation, mDocs);
+        });
     }
 
     public static Path getBasedir() {

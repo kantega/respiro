@@ -30,7 +30,7 @@ public class ResourceDocumentation {
       List<String> rolesAllowed,
       String documentation,
       List<MethodDocumentation> methodDocs) {
-        this.path = StringUtils.remove(path, "\"");
+        this.path = path;
         this.rolesAllowed = rolesAllowed;
         this.documentation = StringUtils.remove(documentation, "*");
         this.methodDocs = methodDocs;

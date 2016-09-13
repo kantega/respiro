@@ -3,6 +3,7 @@ package org.kantega.respiro.documenter;
 import fj.Show;
 import fj.data.List;
 import fj.data.Stream;
+import org.apache.commons.lang3.StringUtils;
 
 public class Strings {
     public static final Stream<Character> nil = Stream.fromString("");
@@ -33,4 +34,8 @@ public class Strings {
                 return s.show(head).append(Stream.fromString(separator)).append(mkString(s,separator).show(tail));
         });
     }
+    public static String normalizeUrl(String url) {
+        return StringUtils.removeEnd(StringUtils.prependIfMissing(StringUtils.remove(url, "\""), "/"), "/");
+    }
+
 }

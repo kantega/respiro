@@ -39,6 +39,7 @@ import static fj.data.Option.*;
 import static fj.data.Option.none;
 import static fj.data.Option.some;
 import static fj.function.Booleans.*;
+import static org.kantega.respiro.documenter.Strings.normalizeUrl;
 
 /**
  *
@@ -73,7 +74,7 @@ public class ResourceParser {
                     nil())) :
                 rDoc,
               new ResourceDocumentation(
-                ofType(decl.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("path")).headOption().map(a -> a.getMemberValue().toString()).map(ResourceParser::normalizeUrl).orSome("/"),
+                ofType(decl.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("path")).headOption().map(a -> a.getMemberValue().toString()).map(Strings::normalizeUrl).orSome("/"),
                 ofType(decl.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("rolesallowed")).headOption().map(a -> arrayList(a.getMemberValue().toString().split(","))).orSome(nil()),
                 decl.getComment() == null ? "" : decl.getComment().getContent(),
                 nil()))) :
@@ -104,7 +105,5 @@ public class ResourceParser {
     }
 
 
-    public static String normalizeUrl(String url) {
-        return StringUtils.removeEnd(StringUtils.prependIfMissing(url, "/"), "/");
-    }
+
 }

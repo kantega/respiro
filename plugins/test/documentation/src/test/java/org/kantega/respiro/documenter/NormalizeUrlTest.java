@@ -37,7 +37,7 @@ public class NormalizeUrlTest {
     @Name("A normalized string always start with s slash and never ends with one")
     public static final Property p1 =
       Property.property(randBeginOrEnd,str->{
-          String normalized = ResourceParser.normalizeUrl(str);
+          String normalized = Strings.normalizeUrl(str);
           return Property.prop(StringUtils.startsWith(normalized,"/") && !StringUtils.endsWith(normalized,"/"));
 
       });
