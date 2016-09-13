@@ -68,7 +68,7 @@ public class ResourceParser {
                   new MethodDocumentation(
                     ofType(mDelc.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("path")).headOption().map(a -> rDoc.path + normalizeUrl(a.getMemberValue().toString())).orSome(rDoc.path),
                     ofType(mDelc.getChildrenNodes(), MarkerAnnotationExpr.class).filter(or(hasName("get"), hasName("post"))).headOption().map(a -> a.getName().getName()).orSome("GET"),
-                    ofType(mDelc.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("rolesallowed")).headOption().map(a -> arrayList(a.getMemberValue().toString().split(","))).orSome(nil()),
+                    ofType(mDelc.getChildrenNodes(), SingleMemberAnnotationExpr.class).filter(hasName("rolesallowed")).headOption().map(a -> arrayList(a.getMemberValue().toString().split(","))).orSome(nil()).map(role->StringUtils.remove(role,"\"")),
                     mDelc.getComment() != null ? mDelc.getComment().getContent() : "",
                     iterableList(mDelc.getParameters()).map(Node::toString),
                     nil())) :
