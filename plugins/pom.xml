@@ -53,7 +53,8 @@
         <module>core/jersey-validation</module>
         <module>core/jms-api</module>
         <module>core/activemq-client</module>
-        <module>core/mongodb</module>
+        <module>core/mongodb-api</module>
+        <module>core/mongodb-driver</module>
 
         <!-- UI plugins -->
         <module>core/ui</module>
@@ -71,6 +72,8 @@
         <module>test/test-smtp</module>
         <module>test/test-activemq</module>
         <module>test/documentation</module>
+        <module>test/mongodb-test-modifier</module>
+        <module>test/mongodb-exchanges</module>
     </modules>
 
     <dependencies>

@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package org.kantega.respiro.mongodb;
+package org.kantega.respiro.mongodb.driver;
 
+import org.kantega.respiro.mongodb.MongoDBBuilder;
+import org.kantega.respiro.mongodb.MongoDatabaseProviderModifier;
+import org.kantega.reststop.api.Export;
+import org.kantega.reststop.api.Plugin;
 
-import com.mongodb.client.MongoDatabase;
+import java.util.Collection;
 
-public interface MongoDBBuilder {
+@Plugin
+public class MongoDBPlugin {
 
-    Build mongodatabase(String serverAddress, int port, String databaseName);
+    @Export
+    private final MongoDBBuilder builder;
 
-    interface Build {
-
-        Build auth(String username, String password);
-
-        Build serverAddress(String server, int port);
-
-        Build databaseName(String databaseName);
-
-        MongoDatabase build();
+    public MongoDBPlugin(
+      Collection<MongoDatabaseProviderModifier> modifiers
+    ) {
+        this.builder = new DefaultMongoDBBuilder(modifiers);
     }
 }

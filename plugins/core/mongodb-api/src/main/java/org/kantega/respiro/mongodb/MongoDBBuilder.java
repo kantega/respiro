@@ -16,16 +16,21 @@
 
 package org.kantega.respiro.mongodb;
 
-import org.kantega.reststop.api.Export;
-import org.kantega.reststop.api.Plugin;
 
-@Plugin
-public class MongoDBPlugin {
+import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoDatabase;
 
-    @Export
-    private final MongoDBBuilder builder;
+import java.util.List;
 
-    public MongoDBPlugin() {
-        this.builder = new DefaultMongoDBBuilder();
+public interface MongoDBBuilder {
+
+    Build mongodatabase(List<ServerAddress> addressList);
+
+    interface Build {
+
+        Build auth(String username, String password, String database);
+
+        MongoDatabaseProvider build();
     }
 }

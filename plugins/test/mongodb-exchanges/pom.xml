@@ -25,22 +25,20 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>respiro-mongodb-plugin</artifactId>
+    <artifactId>respiro-mongodb-exchanges-plugin</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.kantega.respiro</groupId>
-            <artifactId>respiro-api</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
+            <artifactId>respiro-mongodb-api</artifactId>
+            <version>1.8-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
-            <version>3.2.2</version>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>1.50.5</version>
         </dependency>
-
     </dependencies>
 
     <build>
