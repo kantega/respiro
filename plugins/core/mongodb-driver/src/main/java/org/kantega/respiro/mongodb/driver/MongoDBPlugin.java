@@ -29,9 +29,7 @@ public class MongoDBPlugin {
     @Export
     private final MongoDBBuilder builder;
 
-    public MongoDBPlugin(
-      Collection<MongoDatabaseProviderModifier> modifiers
-    ) {
+    public MongoDBPlugin(Collection<MongoDatabaseProviderModifier> modifiers) {
         this.builder = new DefaultMongoDBBuilder(modifiers);
     }
 }

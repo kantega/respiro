@@ -17,15 +17,15 @@
 package org.kantega.respiro.mongodb;
 
 
-import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import com.mongodb.client.MongoDatabase;
 
 import java.util.List;
 
 public interface MongoDBBuilder {
 
     Build mongodatabase(List<ServerAddress> addressList);
+
+    Build mongodatabase(String addressList);
 
     interface Build {
 

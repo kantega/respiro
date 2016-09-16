@@ -32,10 +32,7 @@ import java.util.List;
 
 public class DefaultMongoDBBuilder implements MongoDBBuilder {
 
-    final static Logger logger = LoggerFactory.getLogger(DefaultMongoDBBuilder.class);
-
     final Collection<MongoDatabaseProviderModifier> modifiers;
-
 
     public DefaultMongoDBBuilder(Collection<MongoDatabaseProviderModifier> modifiers) {
         this.modifiers = modifiers;
@@ -44,6 +41,21 @@ public class DefaultMongoDBBuilder implements MongoDBBuilder {
     @Override
     public Build mongodatabase(List<ServerAddress> serverAddresses) {
         return new DefaultBuild(serverAddresses);
+    }
+
+    @Override
+    public Build mongodatabase(String addressList) {
+        String[] addresses = addressList.split(",");
+        List<ServerAddress> srvAddresses = new ArrayList<>();
+        for (String a : addresses) {
+            String address[] = a.split(":");
+            if (address.length < 2)
+                throw new RuntimeException(String.format("Server address cannot be split into host and port '%s', a"));
+
+            srvAddresses.add(new ServerAddress(address[0], Integer.valueOf(address[1])));
+        }
+
+        return mongodatabase(srvAddresses);
     }
 
     private class DefaultBuild implements MongoDBBuilder.Build {
@@ -65,9 +77,9 @@ public class DefaultMongoDBBuilder implements MongoDBBuilder {
         @Override
         public MongoDatabaseProvider build() {
             final MongoClient client =
-              credentials.isEmpty()
-              ? new MongoClient(serverAddresses)
-              : new MongoClient(serverAddresses, credentials);
+                    credentials.isEmpty()
+                            ? new MongoClient(serverAddresses)
+                            : new MongoClient(serverAddresses, credentials);
             MongoDatabaseProvider mdp = client::getDatabase;
             MongoDatabaseProvider modified = mdp;
 
