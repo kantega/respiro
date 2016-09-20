@@ -10,7 +10,7 @@
         <version>1.8-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <artifactId>mongodb-test-database-plugin</artifactId>
+    <artifactId>respiro-mongodb-test-plugin</artifactId>
 
     <dependencies>
         <dependency>
