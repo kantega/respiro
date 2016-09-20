@@ -40,6 +40,11 @@ public class Utils {
     public static String getH2Port() {
         return getPort("/h2Port.txt");
     }
+    public static String getFlapdoodlePort() {
+        return getPort("/flapdoodlePort.txt");
+    }
+
+
 
     public static String getPort(String path) {
         try {

@@ -72,6 +72,7 @@
         <module>test/test-smtp</module>
         <module>test/test-activemq</module>
         <module>test/documentation</module>
+        <module>test/mongodb-test-database</module>
         <module>test/mongodb-test-modifier</module>
         <module>test/mongodb-exchanges</module>
     </modules>
