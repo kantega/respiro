@@ -25,8 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -52,12 +51,14 @@ public class DummiesServlet extends HttpServlet {
             if (rule.matches(req)) {
                 resp.setStatus(rule.getResponseCode());
                 resp.setContentType(rule.getContentType());
-                copy(rule.getResponseFile().toPath(), resp.getOutputStream());
+                resp.getOutputStream().write(DummyContentFilter.getFilteredContent(rule.getResponseFile().toPath()).getBytes());
                 return;
             }
         }
         resp.sendError(400, "Found no matching rule for request.");
     }
+
+
 
     public void addRESTEndpoints(File dir, Properties props) throws ParserConfigurationException, SAXException, XPathExpressionException, IOException {
 

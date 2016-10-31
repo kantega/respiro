@@ -36,6 +36,7 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 import static java.lang.Boolean.TRUE;
@@ -43,6 +44,7 @@ import static java.util.Map.Entry;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
 import static javax.xml.ws.handler.MessageContext.WSDL_OPERATION;
 import static javax.xml.xpath.XPathConstants.BOOLEAN;
+import static org.kantega.respiro.dummy.DummyContentFilter.getFilteredContent;
 
 @WebServiceProvider
 @ServiceMode(Service.Mode.MESSAGE)
@@ -71,11 +73,12 @@ public class DummyProvider implements Provider<Source> {
             TransformerFactory.newInstance().newTransformer().transform(request, domResult);
             for (Rule dispatchRule : dispatchRules) {
                 Element documentElement = ((Document) domResult.getNode()).getDocumentElement();
-                if (dispatchRule.matches(operation, documentElement))
+                if (dispatchRule.matches(operation, documentElement)) {
                     return dispatchRule.getResult();
+                }
             }
             throw new WebServiceException("No rules match request");
-        } catch (TransformerException | XPathExpressionException e) {
+        } catch (IOException | TransformerException | XPathExpressionException e) {
             throw new RuntimeException("Failed to transform request", e);
         }
     }
@@ -105,8 +108,8 @@ public class DummyProvider implements Provider<Source> {
 
         }
 
-        public Source getResult() {
-            return new StreamSource(responseFile);
+        public Source getResult() throws IOException {
+            return new StreamSource(new StringReader(getFilteredContent(responseFile.toPath())));
         }
 
         public boolean matches(QName operation, Element documentElement) throws XPathExpressionException {
