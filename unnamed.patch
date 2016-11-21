@@ -1,0 +1,55 @@
+Index: plugins/test/mongodb-test-database/src/main/java/org/kantega/respiro/flapdoodle/FlapdoodlePlugin.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- plugins/test/mongodb-test-database/src/main/java/org/kantega/respiro/flapdoodle/FlapdoodlePlugin.java	(revision d593df1f83ed37712d08ff2e71d26c84d62dc9cd)
++++ plugins/test/mongodb-test-database/src/main/java/org/kantega/respiro/flapdoodle/FlapdoodlePlugin.java	(revision )
+@@ -13,6 +13,7 @@
+ import de.flapdoodle.embed.mongo.distribution.Version;
+ import de.flapdoodle.embed.process.config.IRuntimeConfig;
+ import de.flapdoodle.embed.process.extract.UserTempNaming;
++import de.flapdoodle.embed.process.io.directories.PropertyOrPlatformTempDir;
+ import de.flapdoodle.embed.process.runtime.Network;
+ import org.bson.BSON;
+ import org.bson.BSONObject;
+@@ -25,6 +26,7 @@
+ import java.io.File;
+ import java.io.FileFilter;
+ import java.io.IOException;
++import java.nio.file.Files;
+ 
+ import static java.lang.System.getProperty;
+ import static java.lang.System.setProperty;
+@@ -50,13 +52,30 @@
+         try {
+ 
+             final Command command = Command.MongoD;
++            final PropertyOrPlatformTempDir tempDirFactory = new PropertyOrPlatformTempDir();
+             final IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
+                 .defaults(command)
+                 .artifactStore(new ExtractedArtifactStoreBuilder()
+                     .defaults(command)
++                    .tempDir(tempDirFactory)
+                     .download(new DownloadConfigBuilder()
+                         .defaultsForCommand(command).build())
+-                    .executableNaming(new UserTempNaming()))
++                    .executableNaming(new UserTempNaming() {
++                        @Override
++                        public String nameFor(String prefix, String postfix) {
++                            String name = super.nameFor(prefix, postfix);
++                            try {
++                                // extracted file will not be cleaned up properly when process is killed,
++                                // causing an error the next time you try to run reststop:run.
++                                // this notably happens when starting/stopping reststop:run from IntelliJ IDEA.
++                                // this code will delete any old extracted file before creating a new one.
++                                Files.deleteIfExists(new File(tempDirFactory.asFile(), name).toPath());
++                            } catch (IOException e) {
++                                throw new RuntimeException(e);
++                            }
++                            return name;
++                        }
++                    }))
+                 .build();
+ 
+             final MongodStarter runtime =
