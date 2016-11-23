@@ -1,10 +1,8 @@
 package org.kantega.respiro.flapdoodle;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
 import de.flapdoodle.embed.mongo.Command;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
@@ -13,18 +11,15 @@ import de.flapdoodle.embed.mongo.config.*;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.extract.UserTempNaming;
-import de.flapdoodle.embed.process.runtime.Network;
-import org.bson.BSON;
-import org.bson.BSONObject;
-import org.bson.conversions.Bson;
+import de.flapdoodle.embed.process.io.directories.PropertyOrPlatformTempDir;
 import org.kantega.respiro.api.DataSourceInitializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
@@ -42,21 +37,36 @@ public class FlapdoodlePlugin implements DataSourceInitializer {
 
     private MongodProcess process;
 
-    private MongoClient client;
-
     @Override
     public void initialize() {
 
         try {
 
             final Command command = Command.MongoD;
+            final PropertyOrPlatformTempDir tempDirFactory = new PropertyOrPlatformTempDir();
             final IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
                 .defaults(command)
                 .artifactStore(new ExtractedArtifactStoreBuilder()
                     .defaults(command)
+                    .tempDir(tempDirFactory)
                     .download(new DownloadConfigBuilder()
                         .defaultsForCommand(command).build())
-                    .executableNaming(new UserTempNaming()))
+                    .executableNaming(new UserTempNaming() {
+                        @Override
+                        public String nameFor(String prefix, String postfix) {
+                            String name = super.nameFor(prefix, postfix);
+                            try {
+                                // extracted file will not be cleaned up properly when process is killed,
+                                // causing an error the next time you try to run reststop:run.
+                                // this notably happens when starting/stopping reststop:run from IntelliJ IDEA.
+                                // this code will delete any old extracted file before creating a new one.
+                                Files.deleteIfExists(new File(tempDirFactory.asFile(), name).toPath());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            return name;
+                        }
+                    }))
                 .build();
 
             final MongodStarter runtime =
