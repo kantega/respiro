@@ -24,7 +24,7 @@ import org.kantega.respiro.ui.UiModule;
 import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.annotation.PreDestroy;
 import javax.servlet.Filter;
@@ -58,12 +58,12 @@ public class ExchangesPlugin {
         String respiroDir = respiroPath + "/";
 
         Exchanges exchanges = new Exchanges();
-        filters.add(servletBuilder.redirectServlet("/exchanges", "respiro/#/exchanges"));
-        filters.add(servletBuilder.redirectServlet("/exchanges/", "../respiro/#/exchanges"));
+        filters.add(servletBuilder.redirectFrom("/exchanges").to("respiro/#/exchanges"));
+        filters.add(servletBuilder.redirectFrom("/exchanges/").to("../respiro/#/exchanges"));
 
-        filters.add(servletBuilder.resourceServlet(respiroDir + "partials/exchanges.html", getClass().getResource("/exchanges/list.html")));
-        filters.add(servletBuilder.resourceServlet(respiroDir + "partials/exchanges-details.html", getClass().getResource("/exchanges/details.html")));
-        filters.add(servletBuilder.resourceServlet(respiroDir + "exchanges.js", getClass().getResource("/exchanges/exchanges.js")));
+        filters.add(servletBuilder.resourceServlet(getClass().getResource("/exchanges/list.html"),respiroDir + "partials/exchanges.html"));
+        filters.add(servletBuilder.resourceServlet(getClass().getResource("/exchanges/details.html"), respiroDir + "partials/exchanges-details.html"));
+        filters.add(servletBuilder.resourceServlet(getClass().getResource("/exchanges/exchanges.js"), respiroDir + "exchanges.js"));
 
         exhangesApp = applicationBuilder.application()
           .singleton(new ExchangesResource(exchanges))

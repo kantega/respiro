@@ -19,6 +19,7 @@ package org.kantega.respiro.ui.registry;
 import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.ui.UiModule;
 import org.kantega.reststop.api.*;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
 import javax.ws.rs.core.Application;
@@ -48,8 +49,8 @@ public class RegistryUIPlugin {
 
         String respiroDir = respiroPath + "/";
 
-        js = servletBuilder.resourceServlet(respiroDir +"registry.js", getClass().getResource("/registry/registry.js"));
+        js = servletBuilder.resourceServlet(getClass().getResource("/registry/registry.js"), respiroDir +"registry.js");
 
-        html = servletBuilder.resourceServlet(respiroDir +"partials/registry.html", getClass().getResource("/registry/registry.html"));
+        html = servletBuilder.resourceServlet(getClass().getResource("/registry/registry.html"), respiroDir +"partials/registry.html");
     }
 }

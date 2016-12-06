@@ -21,25 +21,24 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro-plugins</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.9.reststop3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>respiro-activemq-client-plugin</artifactId>
 
     <dependencies>
-
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-api</artifactId>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-jms-api</artifactId>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
-            <version>${project.version}</version>
         </dependency>
 
 

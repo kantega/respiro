@@ -19,6 +19,7 @@ package org.kantega.respiro.ui.plugins;
 import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.ui.UiModule;
 import org.kantega.reststop.api.*;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
 import javax.ws.rs.core.Application;
@@ -46,8 +47,8 @@ public class PluginsUiPlugin {
 
         String respiroDir = respiroPath + "/";
 
-        js = servletBuilder.resourceServlet(respiroDir +"plugins.js", getClass().getResource("/plugins/plugins.js"));
+        js = servletBuilder.resourceServlet( getClass().getResource("/plugins/plugins.js"),respiroDir +"plugins.js");
 
-        html = servletBuilder.resourceServlet(respiroDir +"partials/plugins.html", getClass().getResource("/plugins/plugins.html"));
+        html = servletBuilder.resourceServlet(getClass().getResource("/plugins/plugins.html"), respiroDir +"partials/plugins.html");
     }
 }

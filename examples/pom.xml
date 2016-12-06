@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.9.reststop3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -48,6 +48,12 @@
         <dependency>
             <groupId>org.kantega.reststop</groupId>
             <artifactId>reststop-api</artifactId>
+            <version>${reststop.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kantega.reststop</groupId>
+            <artifactId>reststop-servlet-api</artifactId>
             <version>${reststop.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -108,7 +114,6 @@
                     <configuration>
                         <!-- krever at det finnes en src/config/${applicationName}.conf -->
                         <applicationName>module</applicationName>
-                        <!--<warCoords>org.kantega.respiro:respiro-webapp:war:${project.version}</warCoords>-->
                         <basePlugins>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
@@ -172,11 +177,11 @@
                                 <artifactId>respiro-cxf-metrics-plugin</artifactId>
                                 <version>${project.version}</version>
                             </plugin>
-                            <plugin>
+                            <!--plugin>
                                 <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-cxf-deploy-plugin</artifactId>
                                 <version>${project.version}</version>
-                            </plugin>
+                            </plugin-->
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-message-collector-plugin</artifactId>
@@ -308,6 +313,11 @@
                             <plugin>
                                 <groupId>org.kantega.reststop</groupId>
                                 <artifactId>reststop-metrics-servlets-plugin</artifactId>
+                                <version>${reststop.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.reststop</groupId>
+                                <artifactId>reststop-servlet-deploy-plugin</artifactId>
                                 <version>${reststop.version}</version>
                             </plugin>
                         </basePlugins>

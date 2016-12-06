@@ -22,7 +22,6 @@ import org.kantega.respiro.api.EndpointConfig;
 import javax.wsdl.Definition;
 import javax.wsdl.Service;
 import javax.wsdl.WSDLException;
-import javax.wsdl.factory.WSDLFactory;
 import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.Map;

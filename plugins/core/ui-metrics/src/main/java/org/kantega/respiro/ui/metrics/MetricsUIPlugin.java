@@ -20,7 +20,7 @@ import org.kantega.respiro.ui.UiModule;
 import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
 
@@ -40,8 +40,8 @@ public class MetricsUIPlugin {
 
         String respiroDir = respiroPath + "/";
 
-        js = servletBuilder.resourceServlet(respiroDir +"metrics.js", getClass().getResource("/metrics/metrics.js"));
+        js = servletBuilder.resourceServlet( getClass().getResource("/metrics/metrics.js"), respiroDir +"metrics.js");
 
-        html = servletBuilder.resourceServlet(respiroDir +"partials/metrics.html", getClass().getResource("/metrics/metrics.html"));
+        html = servletBuilder.resourceServlet(getClass().getResource("/metrics/metrics.html"), respiroDir +"partials/metrics.html");
     }
 }

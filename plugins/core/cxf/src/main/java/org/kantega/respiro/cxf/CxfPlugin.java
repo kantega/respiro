@@ -16,12 +16,6 @@
 
 package org.kantega.respiro.cxf;
 
-import org.kantega.respiro.api.EndpointBuilder;
-import org.kantega.respiro.api.EndpointConfig;
-import org.kantega.respiro.api.ServiceBuilder;
-import org.kantega.respiro.cxf.api.EndpointCustomizer;
-import org.kantega.respiro.cxf.api.EndpointDeployer;
-import org.kantega.respiro.cxf.api.ServiceCustomizer;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.annotations.SchemaValidation;
@@ -32,10 +26,16 @@ import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.servlet.CXFNonSpringServlet;
 import org.apache.cxf.wsdl.WSDLManager;
+import org.kantega.respiro.api.EndpointBuilder;
+import org.kantega.respiro.api.EndpointConfig;
+import org.kantega.respiro.api.ServiceBuilder;
+import org.kantega.respiro.cxf.api.EndpointCustomizer;
+import org.kantega.respiro.cxf.api.EndpointDeployer;
+import org.kantega.respiro.cxf.api.ServiceCustomizer;
 import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;

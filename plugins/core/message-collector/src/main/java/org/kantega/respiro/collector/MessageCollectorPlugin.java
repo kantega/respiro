@@ -17,8 +17,8 @@
 package org.kantega.respiro.collector;
 
 import org.kantega.respiro.collector.cxf.MessageCollectorCustomizer;
-import org.kantega.respiro.collector.jaxrs.CollectingFeature;
 import org.kantega.respiro.collector.jaxrs.ClientCollectingFilter;
+import org.kantega.respiro.collector.jaxrs.CollectingFeature;
 import org.kantega.respiro.collector.jdbc.JdbcCollector;
 import org.kantega.respiro.collector.mail.CollectingMailSenderCustomizer;
 import org.kantega.respiro.cxf.api.EndpointCustomizer;
@@ -29,13 +29,12 @@ import org.kantega.respiro.jersey.ClientCustomizer;
 import org.kantega.respiro.mail.MailSenderCustomizer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
 
-import java.util.Collection;
+import static org.kantega.reststop.servlet.api.FilterPhase.PRE_UNMARSHAL;
 
-import static org.kantega.reststop.api.FilterPhase.PRE_UNMARSHAL;
 
 @Plugin
 public class MessageCollectorPlugin {
@@ -73,7 +72,7 @@ public class MessageCollectorPlugin {
 
         dataSourceCustomizer = new JdbcCollector();
 
-        clearingFilter = servletBuilder.filter(new ClearingFilter(), "/*", PRE_UNMARSHAL);
+        clearingFilter = servletBuilder.filter(new ClearingFilter(), PRE_UNMARSHAL, "/*");
 
         mailSenderCustomizer = new CollectingMailSenderCustomizer();
     }

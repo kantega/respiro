@@ -20,9 +20,9 @@ import org.kantega.respiro.api.EndpointBuilder;
 import org.kantega.respiro.api.EndpointConfig;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
 import org.kantega.reststop.classloaderutils.Artifact;
 import org.kantega.reststop.classloaderutils.PluginInfo;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -43,8 +43,8 @@ import java.util.Properties;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
-import static org.kantega.reststop.api.FilterPhase.PRE_AUTHENTICATION;
 import static org.kantega.reststop.classloaderutils.PluginInfo.parse;
+import static org.kantega.reststop.servlet.api.FilterPhase.PRE_AUTHENTICATION;
 
 @Plugin
 public class DummyPlugin {
@@ -82,9 +82,9 @@ public class DummyPlugin {
                         addSOAPEndpoint(servletContext, ecBuilder, dir, props, moduleArtifactId);
                     else if ("REST".equals(style)) {
                         dummies.addRESTEndpoints(dir, props);
-                        if( "NONE".equals(props.getProperty("auth","BASIC")))
+                        if ("NONE".equals(props.getProperty("auth", "BASIC")))
                             openServices.addAll(dummies.getPaths());
-                    }else
+                    } else
                         throw new IllegalArgumentException(format("Unknown style %s. Should be one of REST, SOAP.", style));
 
                 }
@@ -93,7 +93,7 @@ public class DummyPlugin {
             throw new RuntimeException(e);
         }
 
-        this.authFilter = servletBuilder.filter(new DummyAuthFilter(openServices),"/*", PRE_AUTHENTICATION);
+        this.authFilter = servletBuilder.filter(new DummyAuthFilter(openServices), PRE_AUTHENTICATION, "/*");
     }
 
     private String parseModuleArtifactId() {
@@ -113,7 +113,7 @@ public class DummyPlugin {
         String namespace = props.getProperty("namespace");
         String service = props.getProperty("service");
         String port = props.getProperty("port");
-        String auth = props.getProperty("auth","BASIC");
+        String auth = props.getProperty("auth", "BASIC");
 
         String wsdlLocation = props.getProperty("wsdl");
         URL wsdlURL;
@@ -130,14 +130,14 @@ public class DummyPlugin {
 
         DummyProvider provider = new DummyProvider(files);
         endpointConfigs.add(ecBuilder.endpoint(getClass(), provider)
-                .wsdl(wsdlURL)
-                .namespace(namespace)
-                .wsdlService(service)
-                .wsdlPort(port)
-                .path(servicePath).build());
+            .wsdl(wsdlURL)
+            .namespace(namespace)
+            .wsdlService(service)
+            .wsdlPort(port)
+            .path(servicePath).build());
 
-        if("NONE".equals(auth.toUpperCase()))
-            openServices.add("/ws"+servicePath);
+        if ("NONE".equals(auth.toUpperCase()))
+            openServices.add("/ws" + servicePath);
     }
 
     private URL findWsdlInPlugin(ServletContext servletContext, String artifactId, String path) {
