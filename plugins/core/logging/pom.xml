@@ -28,16 +28,16 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-cxf-plugin</artifactId>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-message-collector-plugin</artifactId>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

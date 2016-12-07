@@ -29,9 +29,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-mongodb-api</artifactId>
-            <version>1.9-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
 

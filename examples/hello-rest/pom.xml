@@ -20,7 +20,7 @@
 
     <artifactId>hello-rest</artifactId>
     <parent>
-        <groupId>org.kantega.respiro.examples</groupId>
+        <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro-examples</artifactId>
         <version>1.9.reststop3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -29,15 +29,15 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-validation-api</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-jms-api</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -59,16 +59,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-test-smtp-plugin</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-test-utils</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -88,19 +88,19 @@
                 <configuration>
                     <plugins>
                         <plugin>
-                            <groupId>org.kantega.respiro</groupId>
+                            <groupId>${project.parent.groupId}</groupId>
                             <artifactId>respiro-jms-api</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                         </plugin>
                         <plugin>
-                            <groupId>org.kantega.respiro</groupId>
+                            <groupId>${project.parent.groupId}</groupId>
                             <artifactId>respiro-activemq-client-plugin</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                         </plugin>
                         <plugin>
-                            <groupId>org.kantega.respiro</groupId>
+                            <groupId>${project.parent.groupId}</groupId>
                             <artifactId>respiro-test-activemq-plugin</artifactId>
-                            <version>${project.version}</version>
+                            <version>${project.parent.version}</version>
                         </plugin>
                     </plugins>
                 </configuration>
