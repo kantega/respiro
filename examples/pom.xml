@@ -159,11 +159,6 @@
                             </plugin>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
-                                <artifactId>respiro-jersey-deploy-plugin</artifactId>
-                                <version>${project.version}</version>
-                            </plugin>
-                            <plugin>
-                                <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-jersey-metrics-plugin</artifactId>
                                 <version>${project.version}</version>
                             </plugin>
@@ -177,11 +172,6 @@
                                 <artifactId>respiro-cxf-metrics-plugin</artifactId>
                                 <version>${project.version}</version>
                             </plugin>
-                            <!--plugin>
-                                <groupId>org.kantega.respiro</groupId>
-                                <artifactId>respiro-cxf-deploy-plugin</artifactId>
-                                <version>${project.version}</version>
-                            </plugin-->
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
                                 <artifactId>respiro-message-collector-plugin</artifactId>
@@ -258,11 +248,6 @@
                                         <version>${camel.version}</version>
                                     </dependency>
                                 </dependencies>
-                            </plugin>
-                            <plugin>
-                                <groupId>org.kantega.respiro</groupId>
-                                <artifactId>respiro-camel-deploy-plugin</artifactId>
-                                <version>${project.version}</version>
                             </plugin>
                             <plugin>
                                 <groupId>org.kantega.respiro</groupId>
