@@ -36,7 +36,6 @@
         <module>core/api</module>
         <module>core/validation</module>
         <module>core/cxf</module>
-        <module>core/cxf-deploy</module>
         <module>core/cxf-metrics</module>
         <module>core/security</module>
         <module>core/ldap-password</module>
@@ -46,10 +45,8 @@
         <module>core/mail</module>
         <module>core/executor</module>
         <module>core/camel</module>
-        <module>core/camel-deploy</module>
         <module>core/camel-collect</module>
         <module>core/jersey</module>
-        <module>core/jersey-deploy</module>
         <module>core/jersey-metrics</module>
         <module>core/jersey-validation</module>
         <module>core/jms-api</module>
