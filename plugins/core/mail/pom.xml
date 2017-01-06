@@ -21,16 +21,16 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro-plugins</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.10-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>respiro-mail-plugin</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-api</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

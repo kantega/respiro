@@ -21,8 +21,6 @@ import org.apache.cxf.interceptor.security.AccessDeniedException;
 import org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor;
 import org.apache.cxf.message.Message;
 
-import java.util.logging.Logger;
-
 import static java.util.logging.Logger.getGlobal;
 
 

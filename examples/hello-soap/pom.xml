@@ -20,22 +20,22 @@
 
     <artifactId>hello-soap</artifactId>
     <parent>
-        <groupId>org.kantega.respiro.examples</groupId>
+        <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro-examples</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.10-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <dependencies>
         <dependency>
-            <groupId>org.kantega.respiro.examples</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>hello-wsdl</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro.examples</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>greeting-wsdl</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -50,9 +50,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-exchanges-plugin</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

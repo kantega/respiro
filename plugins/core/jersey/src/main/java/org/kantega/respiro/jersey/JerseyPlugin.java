@@ -24,9 +24,9 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.kantega.reststop.api.Export;
-import org.kantega.reststop.api.FilterPhase;
 import org.kantega.reststop.api.Plugin;
-import org.kantega.reststop.api.ServletBuilder;
+import org.kantega.reststop.servlet.api.FilterPhase;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -69,7 +69,7 @@ public class JerseyPlugin  implements ApplicationDeployer {
         filter = addJerseyFilter(new ReststopApplication(Collections.EMPTY_LIST));
         filter.init(servletBuilder.filterConfig("jersey", new Properties()));
 
-        this.jerseyFilter = servletBuilder.filter(filter, "/*", FilterPhase.USER);
+        this.jerseyFilter = servletBuilder.filter(filter, FilterPhase.USER, "/*");
 
         clientBuilder = new DefaultClientBuilder(clientCustomizers);
     }

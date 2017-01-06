@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro-plugins</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.10-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -30,15 +30,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-camel-plugin</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-message-collector-plugin</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -21,11 +21,10 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.10-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.kantega.respiro.examples</groupId>
     <artifactId>respiro-examples</artifactId>
     <packaging>pom</packaging>
 
@@ -40,9 +39,9 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-api</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -53,14 +52,20 @@
         </dependency>
         <dependency>
             <groupId>org.kantega.reststop</groupId>
+            <artifactId>reststop-servlet-api</artifactId>
+            <version>${reststop.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kantega.reststop</groupId>
             <artifactId>reststop-annotation-processor</artifactId>
             <version>${reststop.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.kantega.respiro</groupId>
+            <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-test-utils</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -108,17 +113,16 @@
                     <configuration>
                         <!-- krever at det finnes en src/config/${applicationName}.conf -->
                         <applicationName>module</applicationName>
-                        <!--<warCoords>org.kantega.respiro:respiro-webapp:war:${project.version}</warCoords>-->
                         <basePlugins>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-api</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-jersey-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                                 <!--
                                      respiro-jersey-plugin by default knows nothing
                                      about bean validation. So injecting respiro-validation api here as a parent
@@ -130,9 +134,9 @@
                                  -->
                                 <dependencies>
                                     <dependency>
-                                        <groupId>org.kantega.respiro</groupId>
+                                        <groupId>${project.parent.groupId}</groupId>
                                         <artifactId>respiro-validation-api</artifactId>
-                                        <version>${project.version}</version>
+                                        <version>${project.parent.version}</version>
                                         <scope>provided</scope>
                                     </dependency>
                                     <dependency>
@@ -153,94 +157,84 @@
                                 </dependencies>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
-                                <artifactId>respiro-jersey-deploy-plugin</artifactId>
-                                <version>${project.version}</version>
-                            </plugin>
-                            <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-jersey-metrics-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-cxf-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-cxf-metrics-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
-                                <artifactId>respiro-cxf-deploy-plugin</artifactId>
-                                <version>${project.version}</version>
-                            </plugin>
-                            <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-message-collector-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-mail-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-logging-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-security-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
                                 <artifactId>respiro-dummy-password-plugin</artifactId>
                                 <groupId>org.kantega.respiro</groupId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-jdbc-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-dummy-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-test-database-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-exchanges-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-executor-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-test-sshd-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-test-smtp-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-camel-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                                 <dependencies>
                                     <dependency>
                                         <groupId>org.apache.camel</groupId>
@@ -255,47 +249,42 @@
                                 </dependencies>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
-                                <artifactId>respiro-camel-deploy-plugin</artifactId>
-                                <version>${project.version}</version>
-                            </plugin>
-                            <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-camel-collect-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-validation-api</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-jersey-validation-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
 
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-ui-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
 
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-ui-metrics-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-ui-registry-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
 
                             <plugin>
-                                <groupId>org.kantega.respiro</groupId>
+                                <groupId>${project.parent.groupId}</groupId>
                                 <artifactId>respiro-ui-plugins-plugin</artifactId>
-                                <version>${project.version}</version>
+                                <version>${project.parent.version}</version>
                             </plugin>
 
 
@@ -308,6 +297,11 @@
                             <plugin>
                                 <groupId>org.kantega.reststop</groupId>
                                 <artifactId>reststop-metrics-servlets-plugin</artifactId>
+                                <version>${reststop.version}</version>
+                            </plugin>
+                            <plugin>
+                                <groupId>org.kantega.reststop</groupId>
+                                <artifactId>reststop-servlet-deploy-plugin</artifactId>
                                 <version>${reststop.version}</version>
                             </plugin>
                         </basePlugins>

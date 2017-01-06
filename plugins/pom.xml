@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.10-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -35,6 +35,7 @@
         <module>core/api</module>
         <module>core/validation</module>
         <module>core/cxf</module>
+        <module>core/cxf-metrics</module>
         <module>core/security</module>
         <module>core/ldap-password</module>
         <module>core/message-collector</module>
@@ -43,12 +44,8 @@
         <module>core/mail</module>
         <module>core/executor</module>
         <module>core/camel</module>
-        <module>core/camel-deploy</module>
         <module>core/camel-collect</module>
-        <module>core/cxf-deploy</module>
-        <module>core/cxf-metrics</module>
         <module>core/jersey</module>
-        <module>core/jersey-deploy</module>
         <module>core/jersey-metrics</module>
         <module>core/jersey-validation</module>
         <module>core/jms-api</module>
@@ -61,8 +58,7 @@
         <module>core/ui-metrics</module>
         <module>core/ui-registry</module>
         <module>core/ui-plugins</module>
-
-
+        
         <!-- Plugins used for integration testing / development -->
         <module>test/exchanges</module>
         <module>test/dummy</module>
@@ -79,8 +75,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.kantega.reststop</groupId>
             <artifactId>reststop-api</artifactId>
+            <version>${reststop.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kantega.reststop</groupId>
+            <artifactId>reststop-servlet-api</artifactId>
             <version>${reststop.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -99,7 +106,7 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
+        <!--pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.kantega.reststop</groupId>
@@ -111,11 +118,12 @@
                     <version>2.17</version>
                 </plugin>
             </plugins>
-        </pluginManagement>
+        </pluginManagement-->
         <plugins>
             <plugin>
                 <groupId>org.kantega.reststop</groupId>
                 <artifactId>reststop-maven-plugin</artifactId>
+                <version>${reststop.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -123,6 +131,10 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.17</version>
             </plugin>
         </plugins>
     </build>

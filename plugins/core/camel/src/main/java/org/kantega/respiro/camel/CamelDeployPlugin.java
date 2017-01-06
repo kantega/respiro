@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.kantega.respiro.cxfdeploy;
+package org.kantega.respiro.camel;
 
-import org.kantega.respiro.api.EndpointConfig;
-import org.kantega.respiro.cxf.api.EndpointDeployer;
+import org.kantega.respiro.camel.CamelRouteDeployer;
+import org.apache.camel.builder.RouteBuilder;
 import org.kantega.reststop.api.Plugin;
 
 import java.util.Collection;
@@ -26,16 +26,11 @@ import java.util.Collection;
  *
  */
 @Plugin
-public class CxfDeployPlugin  {
+public class CamelDeployPlugin {
 
 
-    private final EndpointDeployer endpointDeployer;
-    private final Collection<EndpointConfig> endpointConfigs;
+    public CamelDeployPlugin(Collection<RouteBuilder> routeBuilders, CamelRouteDeployer routeDeployer) {
 
-    public CxfDeployPlugin(EndpointDeployer endpointDeployer, Collection<EndpointConfig> endpointConfigs) {
-        this.endpointDeployer = endpointDeployer;
-        this.endpointConfigs = endpointConfigs;
-        endpointDeployer.deployEndpoints(endpointConfigs);
+        routeDeployer.deploy(routeBuilders);
     }
-
 }

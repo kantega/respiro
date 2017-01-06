@@ -16,13 +16,15 @@
 
 package org.kantega.respiro.security;
 
-import org.kantega.reststop.api.*;
+import org.kantega.reststop.api.Config;
+import org.kantega.reststop.api.Export;
+import org.kantega.reststop.api.Plugin;
+import org.kantega.reststop.servlet.api.ServletBuilder;
 
 import javax.servlet.Filter;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static org.kantega.reststop.api.FilterPhase.AUTHENTICATION;
+import static org.kantega.reststop.servlet.api.FilterPhase.AUTHENTICATION;
 
 
 @Plugin
@@ -40,6 +42,6 @@ public class SecurityPlugin {
         if (passwordCacheValidityMinutes > 0)
             passwordChecker = new CachingPasswordChecker(passwordChecker, passwordCacheValidityMinutes, MINUTES);
 
-        basicAuthFilter = servletBuilder.filter(new BasicAuthenticationFilter(securityRealm, passwordChecker), "/*", AUTHENTICATION);
+        basicAuthFilter = servletBuilder.filter(new BasicAuthenticationFilter(securityRealm, passwordChecker), AUTHENTICATION, "/*");
     }
 }

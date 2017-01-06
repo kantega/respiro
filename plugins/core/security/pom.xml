@@ -21,19 +21,13 @@
     <parent>
         <groupId>org.kantega.respiro</groupId>
         <artifactId>respiro-plugins</artifactId>
-        <version>1.9-SNAPSHOT</version>
+        <version>1.10-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>respiro-security-plugin</artifactId>
 
-    <properties>
-    </properties>
     <dependencies>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
+        
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

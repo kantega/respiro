@@ -16,12 +16,11 @@
 
 package org.kantega.respiro.cxf;
 
-import org.kantega.respiro.api.ServiceBuilder;
-import org.kantega.respiro.cxf.api.ServiceCustomizer;
 import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
+import org.kantega.respiro.api.ServiceBuilder;
+import org.kantega.respiro.cxf.api.ServiceCustomizer;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;

@@ -16,8 +16,8 @@
 
 package org.kantega.respiro.cxf;
 
-import org.kantega.respiro.api.EndpointConfig;
 import org.apache.cxf.endpoint.ServiceContractResolver;
+import org.kantega.respiro.api.EndpointConfig;
 
 import javax.xml.namespace.QName;
 import java.net.URI;
