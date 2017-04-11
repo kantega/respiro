@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.kantega.respiro.api;
+package org.kantega.respiro.mongodb;
 
-public interface DataSourceInitializer {
-
+/**
+ */
+public interface MongoInitializer {
     void initialize();
 }

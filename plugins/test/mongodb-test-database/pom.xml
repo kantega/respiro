@@ -18,6 +18,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>respiro-mongodb-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <version>1.50.5</version>

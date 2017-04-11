@@ -16,7 +16,7 @@
 
 package org.kantega.respiro.test.sshd;
 
-import org.kantega.respiro.api.DataSourceInitializer;
+import org.kantega.respiro.api.Initializer;
 import org.apache.sshd.common.config.keys.KeyUtils;
 import org.apache.sshd.common.config.keys.PublicKeyEntryDecoder;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
@@ -46,14 +46,13 @@ import java.util.Optional;
  */
 
 @Plugin
-public class TestSshdPlugin {
+public class TestSshdPlugin implements Initializer{
 
     private final Optional<SshServer> sshd;
 
 
     @Export
-    final DataSourceInitializer dataSourceInitializer = () -> {
-    };
+    final Initializer initializer = this;
 
     public TestSshdPlugin() throws IOException {
 
@@ -199,6 +198,11 @@ public class TestSshdPlugin {
         if (sshd.isPresent()) {
             sshd.get().stop();
         }
+    }
+
+    @Override
+    public void initialize() {
+        
     }
 
 

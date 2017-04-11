@@ -18,6 +18,7 @@ package org.kantega.respiro.mongodb.driver;
 
 import org.kantega.respiro.mongodb.MongoDBBuilder;
 import org.kantega.respiro.mongodb.MongoDatabaseProviderModifier;
+import org.kantega.respiro.mongodb.MongoInitializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -29,7 +30,10 @@ public class MongoDBPlugin {
     @Export
     private final MongoDBBuilder builder;
 
-    public MongoDBPlugin(Collection<MongoDatabaseProviderModifier> modifiers) {
+    public MongoDBPlugin(Collection<MongoInitializer> initializers,
+                         Collection<MongoDatabaseProviderModifier> modifiers) {
         this.builder = new DefaultMongoDBBuilder(modifiers);
+        
+        initializers.forEach(MongoInitializer::initialize);
     }
 }

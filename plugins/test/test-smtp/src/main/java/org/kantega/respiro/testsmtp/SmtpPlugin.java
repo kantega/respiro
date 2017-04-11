@@ -20,7 +20,7 @@ import com.dumbster.smtp.MailStore;
 import com.dumbster.smtp.ServerOptions;
 import com.dumbster.smtp.SmtpServer;
 import org.kantega.respiro.api.ApplicationBuilder;
-import org.kantega.respiro.api.DataSourceInitializer;
+import org.kantega.respiro.api.Initializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -36,13 +36,16 @@ import java.nio.file.Files;
  *
  */
 @Plugin
-public class SmtpPlugin {
+public class SmtpPlugin implements Initializer {
 
     private final SmtpServer server;
     private final Thread thread;
 
-    @Export final DataSourceInitializer dataSourceInitializer = () -> {};
-    @Export final Application smtpApp;
+    @Export
+    final Application smtpApp;
+    
+    @Export
+    final Initializer initializer = this;
 
     public SmtpPlugin(ApplicationBuilder applicationBuilder) throws NoSuchFieldException, IllegalAccessException, IOException {
 
@@ -60,8 +63,8 @@ public class SmtpPlugin {
         thread = new Thread(server);
         thread.setDaemon(true);
         thread.start();
-        int timeout=1000;
-        while(! server.isReady()) {
+        int timeout = 1000;
+        while (!server.isReady()) {
             try {
                 Thread.sleep(1);
                 timeout--;
@@ -84,7 +87,7 @@ public class SmtpPlugin {
         System.out.println("Started SMTP server on port " + serverSocket);
 
         Files.write(new File(System.getProperty("reststopPluginDir"), "target/test-classes/smtpPort.txt").toPath(),
-                Integer.toString(port).getBytes());
+            Integer.toString(port).getBytes());
         System.setProperty("smtpPort", Integer.toString(port));
 
         smtpApp = applicationBuilder.application().singleton(new SmtpdResource(mailStore)).build();
@@ -95,5 +98,10 @@ public class SmtpPlugin {
     public void stop() throws InterruptedException {
         server.stop();
         thread.join();
+    }
+
+    @Override
+    public void initialize() {
+        
     }
 }

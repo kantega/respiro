@@ -20,7 +20,6 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
-import org.kantega.respiro.api.DataSourceInitializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -33,7 +32,6 @@ import java.util.Collection;
 @Plugin
 public class CamelPlugin implements CamelRouteDeployer {
 
-    private final Collection<DataSourceInitializer> dataSourceInitializers;
     private final Collection<CamelContextCustomizer> camelContextCustomizers;
 
     private CamelContext camelContext;
@@ -44,8 +42,7 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     @Export final CamelRegistry camelRegistry = new SimpleCamelRegistry(simpleRegistry);
 
-    public CamelPlugin(Collection<DataSourceInitializer> dataSourceInitializers, Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
-        this.dataSourceInitializers = dataSourceInitializers;
+    public CamelPlugin(Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
         this.camelContextCustomizers = camelContextCustomizers;
     }
 

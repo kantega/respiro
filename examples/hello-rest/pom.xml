@@ -15,7 +15,8 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hello-rest</artifactId>
@@ -37,6 +38,12 @@
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>respiro-jms-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>respiro-mongodb-api</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -102,6 +109,21 @@
                             <artifactId>respiro-test-activemq-plugin</artifactId>
                             <version>${project.parent.version}</version>
                         </plugin>
+                        <plugin>
+                            <groupId>${project.parent.groupId}</groupId>
+                            <artifactId>respiro-mongodb-api</artifactId>
+                            <version>${project.parent.version}</version>
+                        </plugin>                        
+                        <plugin>
+                            <groupId>${project.parent.groupId}</groupId>
+                            <artifactId>respiro-mongodb-plugin</artifactId>
+                            <version>${project.parent.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>${project.parent.groupId}</groupId>
+                            <artifactId>respiro-mongodb-test-plugin</artifactId>
+                            <version>${project.parent.version}</version>
+                        </plugin>
                     </plugins>
                 </configuration>
             </plugin>
@@ -110,5 +132,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>

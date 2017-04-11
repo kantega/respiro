@@ -16,7 +16,7 @@
 
 package org.kantega.respiro.test.database;
 
-import org.kantega.respiro.api.DataSourceInitializer;
+import org.kantega.respiro.api.Initializer;
 import org.h2.tools.Server;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
@@ -24,9 +24,7 @@ import org.kantega.reststop.api.Plugin;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +38,7 @@ import static java.sql.DriverManager.getConnection;
 import static org.h2.tools.Server.createTcpServer;
 
 @Plugin
-public class TestDatabasePlugin implements DataSourceInitializer {
+public class TestDatabasePlugin implements Initializer {
 
     private final String basedir = getProperty("reststopPluginDir");
     private final Server srv;
@@ -48,7 +46,7 @@ public class TestDatabasePlugin implements DataSourceInitializer {
     List<Connection> connections = new ArrayList<>();
 
     @Export
-    private final DataSourceInitializer initializer = this;
+    private final Initializer initializer = this;
 
     public TestDatabasePlugin() throws SQLException, IOException {
         this.srv = createTcpServer("-tcpPort", "0").start();

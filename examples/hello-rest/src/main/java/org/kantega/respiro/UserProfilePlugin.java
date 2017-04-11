@@ -16,10 +16,12 @@
 
 package org.kantega.respiro;
 
+import com.mongodb.client.MongoDatabase;
 import org.kantega.respiro.api.ApplicationBuilder;
 import org.kantega.respiro.api.DataSourceBuilder;
 import org.kantega.respiro.api.mail.MailConfigBuilder;
 import org.kantega.respiro.api.mail.MailSender;
+import org.kantega.respiro.mongodb.MongoDBBuilder;
 import org.kantega.reststop.api.Config;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
@@ -53,16 +55,27 @@ public class UserProfilePlugin {
                              @Config String smtpFrom,
                              @Config String smtpTo,
                              @Config(defaultValue = "25") int smtpPort,
+                             @Config String mongoDbServers,
+                             @Config String mongoDbDatabase,
+                             @Config String mongoDbUsername,
+                             @Config String mongoDbPassword,
                              ApplicationBuilder builder,
                              DataSourceBuilder dsBuilder,
+                             MongoDBBuilder mongoBuilder,
                              MailConfigBuilder mailConfigBuilder,
                              TopicConnectionFactory connectionFactory) throws JMSException {
-
-        DataSource myDataSource = dsBuilder.datasource(helloDatabaseUrl)
+        
+        // testing dependecy only
+        final MongoDatabase db = mongoBuilder
+            .mongodatabase(mongoDbServers)
+            .auth(mongoDbUsername, mongoDbPassword, mongoDbDatabase)
+            .build().getDatabase(mongoDbDatabase);
+        
+        final DataSource myDataSource = dsBuilder.datasource(helloDatabaseUrl)
                 .username(helloDatabaseUsername).password(helloDatabasePassword).driverClassname(jdbcDriverClass).build();
-        UsersDAO dao = new UsersDAO(myDataSource);
+        final UsersDAO dao = new UsersDAO(myDataSource);
 
-        MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).from(smtpFrom).to(smtpTo).build();
+        final MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).from(smtpFrom).to(smtpTo).build();
         notifier = new TopicNotifier(connectionFactory);
         exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender, notifier)).build();
 

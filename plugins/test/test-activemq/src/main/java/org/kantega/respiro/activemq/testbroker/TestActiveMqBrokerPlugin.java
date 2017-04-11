@@ -17,7 +17,7 @@
 package org.kantega.respiro.activemq.testbroker;
 
 import org.apache.activemq.broker.BrokerService;
-import org.kantega.respiro.api.DataSourceInitializer;
+import org.kantega.respiro.api.Initializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -32,12 +32,14 @@ import static java.nio.file.Files.write;
  *
  */
 @Plugin
-public class TestActiveMqBrokerPlugin implements DataSourceInitializer {
+public class TestActiveMqBrokerPlugin implements Initializer {
 
 
     private final String basedir = getProperty("reststopPluginDir");
 
-    @Export final DataSourceInitializer dataSourceInitializer = this;
+    @Export
+    final Initializer dataSourceInitializer = this;
+    
     private final BrokerService broker;
 
     public TestActiveMqBrokerPlugin() throws Exception {

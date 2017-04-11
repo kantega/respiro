@@ -23,14 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Plugin
-public class MongoDBPlugin {
+public class DroppingMongoDBPlugin {
 
     final static Logger logger =
-      LoggerFactory.getLogger(MongoDBPlugin.class);
+      LoggerFactory.getLogger(DroppingMongoDBPlugin.class);
     @Export
     private final MongoDatabaseProviderModifier modifier;
 
-    public MongoDBPlugin() {
+    public DroppingMongoDBPlugin() {
         this.modifier =
         dbp->{
             logger.warn(" ******** Attention please *********");
