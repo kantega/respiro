@@ -128,7 +128,7 @@ public class DummiesServlet extends HttpServlet {
 
             StringBuilder requestURI = new StringBuilder(req.getRequestURI());
             if( req.getQueryString() != null && req.getQueryString().trim().length() > 0)
-                requestURI.append(req.getQueryString());
+                requestURI.append("?").append(req.getQueryString());
             
             return this.method.equals(req.getMethod()) && this.path.equals(requestURI.toString());
         }
