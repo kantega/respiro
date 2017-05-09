@@ -126,7 +126,11 @@ public class DummiesServlet extends HttpServlet {
 
         public boolean matches(HttpServletRequest req) {
 
-            return this.method.equals(req.getMethod()) && this.path.equals(req.getRequestURI());
+            StringBuilder requestURI = new StringBuilder(req.getRequestURI());
+            if( req.getQueryString() != null && req.getQueryString().trim().length() > 0)
+                requestURI.append(req.getQueryString());
+            
+            return this.method.equals(req.getMethod()) && this.path.equals(requestURI.toString());
         }
     }
 }
