@@ -53,13 +53,16 @@ public class SMTPMailSender implements MailSender {
             addAttachments(mail, msg);
             mail.setSubject(msg.getSubject());
             mail.setMsg(msg.getBody());
-            return mail.send();
+            if (mail.getToAddresses().size() + mail.getCcAddresses().size() + mail.getBccAddresses().size() > 0)
+                return mail.send();
+            else
+                return "Mail not sent due to empty recipiants list.";
         } catch (EmailException | AddressException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void addAttachments(MultiPartEmail mail, Message msg) {
+    private void addAttachments(MultiPartEmail mail, Message msg) {
         for (Attachment attachment : msg.getAttachments()) {
             try {
                 mail.attach(new ByteArrayDataSource(attachment.getContent(), attachment.getMimeType()), attachment.getFileName(), "");
@@ -70,10 +73,11 @@ public class SMTPMailSender implements MailSender {
     }
 
 
-    private static void addAddresses(Collection<InternetAddress> toList, final List<String> addresses) throws AddressException {
+    private void addAddresses(Collection<InternetAddress> toList, final List<String> addresses) throws AddressException {
         for (String address : addresses) {
             for (String mail : address.split(";"))
-                toList.add(new InternetAddress(mail));
+                if (config.isInWhitelist(mail))
+                    toList.add(new InternetAddress(mail));
         }
     }
 

@@ -23,7 +23,6 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.String.valueOf;
@@ -88,8 +87,7 @@ class ServerConfig {
     public void addTo(String email) {
         try {
             for (String mail : email.split(";"))
-                if (canSendTo(mail))
-                    this.to.add(new InternetAddress(mail));
+                this.to.add(new InternetAddress(mail));
         } catch (AddressException e) {
             throw new RuntimeException(e);
         }
@@ -98,8 +96,7 @@ class ServerConfig {
     public void addCc(String email) {
         try {
             for (String mail : email.split(";"))
-                if (canSendTo(mail))
-                    this.cc.add(new InternetAddress(mail));
+                this.cc.add(new InternetAddress(mail));
         } catch (AddressException e) {
             throw new RuntimeException(e);
         }
@@ -108,8 +105,7 @@ class ServerConfig {
     public void addBcc(String email) {
         try {
             for (String mail : email.split(";"))
-                if (canSendTo(mail))
-                    this.bcc.add(new InternetAddress(mail));
+                this.bcc.add(new InternetAddress(mail));
         } catch (AddressException e) {
             throw new RuntimeException(e);
         }
@@ -123,7 +119,7 @@ class ServerConfig {
         }
     }
 
-    private boolean canSendTo(String emailAddress) {
+    public boolean isInWhitelist(String emailAddress) {
         return this.whitelist == null || this.whitelist.contains(emailAddress);
     }
 
