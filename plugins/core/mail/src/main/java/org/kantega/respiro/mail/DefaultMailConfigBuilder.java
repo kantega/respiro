@@ -78,6 +78,12 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
         }
 
         @Override
+        public Build whitelist(String whitelist) {
+            config.whitelist(whitelist);
+            return this;
+        }
+
+        @Override
         public MailSender build() {
             MailSender sender =  new SMTPMailSender(config);
             for(MailSenderCustomizer msc:customizerList){

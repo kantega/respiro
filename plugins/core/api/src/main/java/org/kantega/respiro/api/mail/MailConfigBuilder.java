@@ -34,6 +34,8 @@ public interface MailConfigBuilder {
         Build cc(String email);
 
         Build bcc(String email);
+        
+        Build whitelist(String whitelist);
 
         MailSender build();
 

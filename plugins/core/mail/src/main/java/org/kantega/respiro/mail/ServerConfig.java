@@ -22,6 +22,8 @@ import org.apache.commons.mail.MultiPartEmail;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.String.valueOf;
@@ -36,6 +38,7 @@ class ServerConfig {
     private final List<InternetAddress> to = new ArrayList<>();
     private final List<InternetAddress> cc = new ArrayList<>();
     private final List<InternetAddress> bcc = new ArrayList<>();
+    private List<String> whitelist;
 
     public ServerConfig(String host, int port) {
         this.host = host;
@@ -85,7 +88,8 @@ class ServerConfig {
     public void addTo(String email) {
         try {
             for (String mail : email.split(";"))
-                this.to.add(new InternetAddress(mail));
+                if (canSendTo(mail))
+                    this.to.add(new InternetAddress(mail));
         } catch (AddressException e) {
             throw new RuntimeException(e);
         }
@@ -94,7 +98,8 @@ class ServerConfig {
     public void addCc(String email) {
         try {
             for (String mail : email.split(";"))
-                this.cc.add(new InternetAddress(mail));
+                if (canSendTo(mail))
+                    this.cc.add(new InternetAddress(mail));
         } catch (AddressException e) {
             throw new RuntimeException(e);
         }
@@ -103,11 +108,23 @@ class ServerConfig {
     public void addBcc(String email) {
         try {
             for (String mail : email.split(";"))
-                this.bcc.add(new InternetAddress(mail));
+                if (canSendTo(mail))
+                    this.bcc.add(new InternetAddress(mail));
         } catch (AddressException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void whitelist(String whitelist) {
+        if (!"OFF".equals(whitelist.trim().toUpperCase())) {
+
+            this.whitelist = Arrays.asList(whitelist.split(","));
+        }
+    }
+
+    private boolean canSendTo(String emailAddress) {
+        return this.whitelist == null || this.whitelist.contains(emailAddress);
     }
 
 
