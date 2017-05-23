@@ -82,8 +82,10 @@ public class DummyPlugin {
                         addSOAPEndpoint(servletContext, ecBuilder, dir, props, moduleArtifactId);
                     else if ("REST".equals(style)) {
                         dummies.addRESTEndpoints(dir, props);
-                        if ("NONE".equals(props.getProperty("auth", "BASIC")))
-                            openServices.addAll(dummies.getPaths());
+                        if ("NONE".equals(props.getProperty("auth", "BASIC"))) {
+                            for (String path : dummies.getPaths())
+                                openServices.add(path.split("\\?")[0]);
+                        }
                     } else
                         throw new IllegalArgumentException(format("Unknown style %s. Should be one of REST, SOAP.", style));
 
