@@ -17,6 +17,7 @@
 package org.kantega.respiro.dummy;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.servlet.ServletException;
@@ -25,15 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
-import static java.nio.file.Files.copy;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
+import static org.kantega.respiro.dummy.DummyContentFilter.getFilteredContent;
 
 public class DummiesServlet extends HttpServlet {
 
@@ -51,7 +51,10 @@ public class DummiesServlet extends HttpServlet {
             if (rule.matches(req)) {
                 resp.setStatus(rule.getResponseCode());
                 resp.setContentType(rule.getContentType());
-                resp.getOutputStream().write(DummyContentFilter.getFilteredContent(rule.getResponseFile().toPath()).getBytes());
+                for(String header : rule.getResponseHeaders().keySet())
+                    resp.setHeader(header, getFilteredContent(rule.getResponseHeaders().get(header)));
+                
+                resp.getOutputStream().write(getFilteredContent(rule.getResponseFile().toPath()).getBytes());
                 return;
             }
         }
@@ -76,18 +79,26 @@ public class DummiesServlet extends HttpServlet {
         private final String contentType;
         private final int responseCode;
         private final File responseFile;
+        private final Map<String, String> responseHeaders = new HashMap<>();
 
         public Rule(File ruleFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-            Document doc = newInstance().newDocumentBuilder().parse(ruleFile);
+            final Document doc = newInstance().newDocumentBuilder().parse(ruleFile);
             path = doc.getDocumentElement().getElementsByTagName("path").item(0).getTextContent();
             method = doc.getDocumentElement().getElementsByTagName("method").item(0).getTextContent();
             contentType = doc.getDocumentElement().getElementsByTagName("content-type").item(0).getTextContent();
             responseCode = parseInt(doc.getDocumentElement().getElementsByTagName("response-code").item(0).getTextContent());
 
-            String responseFileName = ruleFile.getName().substring(0, ruleFile.getName().indexOf("-rule.xml")) + "-response." + mapSuffix(contentType);
+            final String responseFileName = ruleFile.getName().substring(0, ruleFile.getName().indexOf("-rule.xml")) + "-response." + mapSuffix(contentType);
             responseFile = new File(ruleFile.getParentFile(), responseFileName);
 
+            final NodeList headers = doc.getDocumentElement().getElementsByTagName("response-headers");
+            for( int i = 0; i <headers.getLength(); i++ ) 
+                responseHeaders.put(headers.item(i).getFirstChild().getNextSibling().getNodeName(), headers.item(i).getTextContent());
 
+        }
+
+        public Map<String, String> getResponseHeaders() {
+            return responseHeaders;
         }
 
         public String getPath() {

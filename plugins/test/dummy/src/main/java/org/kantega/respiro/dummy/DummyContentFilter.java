@@ -9,14 +9,14 @@ import java.nio.file.Path;
 class DummyContentFilter {
     static String getFilteredContent(Path responseFile) throws IOException {
 
-        String responseContent = new String(Files.readAllBytes(responseFile));
+        return getFilteredContent(new String(Files.readAllBytes(responseFile)));
+    }
 
-
-        for(String name : System.getProperties().stringPropertyNames()) {
-            String replace=System.getProperty(name);
-            responseContent = responseContent.replaceAll("\\$\\{"+name+"\\}", replace);
+    static String getFilteredContent(String responseContent) {
+        for (String name : System.getProperties().stringPropertyNames()) {
+            String replace = System.getProperty(name);
+            responseContent = responseContent.replaceAll("\\$\\{" + name + "\\}", replace);
         }
-
         return responseContent;
     }
 }
