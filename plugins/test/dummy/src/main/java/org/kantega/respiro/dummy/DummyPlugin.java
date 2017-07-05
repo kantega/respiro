@@ -61,10 +61,14 @@ public class DummyPlugin {
     private final Filter authFilter;
 
 
-    public DummyPlugin(ServletContext servletContext, EndpointBuilder ecBuilder, ServletBuilder servletBuilder) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+    public DummyPlugin(
+        ServletContext servletContext, 
+        EndpointBuilder ecBuilder, 
+        ServletBuilder servletBuilder) 
+        throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
 
-
-        DummiesServlet dummies = new DummiesServlet();
+        
+        final DummiesServlet dummies = new DummiesServlet();
         this.dummiesServlet = servletBuilder.servlet(dummies, "/dummies/*");
 
         String moduleArtifactId = parseModuleArtifactId();

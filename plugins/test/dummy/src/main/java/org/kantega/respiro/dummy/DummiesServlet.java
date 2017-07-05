@@ -28,8 +28,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.Integer.parseInt;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
@@ -37,7 +39,9 @@ import static org.kantega.respiro.dummy.DummyContentFilter.getFilteredContent;
 
 public class DummiesServlet extends HttpServlet {
 
-    private List<Rule> rules = new ArrayList<>();
+    private final List<Rule> invocations = new ArrayList<>();
+
+    private final List<Rule> rules = new ArrayList<>();
 
     public List<String> getPaths() {
 
@@ -47,13 +51,24 @@ public class DummiesServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        if (req.getRequestURI().equals("/dummies/invocations")) {
+            if(req.getMethod().equals("GET"))
+                createInvocationsResponse(req, resp);
+            else if(req.getMethod().equals("DELETE"))
+                invocations.clear();
+            else
+                resp.sendError(405, "Method " + req.getMethod() + " not supported on " + req.getRequestURI());
+            return;
+        }
+
         for (Rule rule : rules) {
             if (rule.matches(req)) {
+                invocations.add(rule);
                 resp.setStatus(rule.getResponseCode());
                 resp.setContentType(rule.getContentType());
-                for(String header : rule.getResponseHeaders().keySet())
+                for (String header : rule.getResponseHeaders().keySet())
                     resp.setHeader(header, getFilteredContent(rule.getResponseHeaders().get(header)));
-                
+
                 resp.getOutputStream().write(getFilteredContent(rule.getResponseFile().toPath()).getBytes());
                 return;
             }
@@ -61,6 +76,18 @@ public class DummiesServlet extends HttpServlet {
         resp.sendError(400, "Found no matching rule for request.");
     }
 
+    private void createInvocationsResponse(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Stream<Rule> invStream = invocations.stream();
+        if (req.getParameter("method") != null)
+            invStream = invStream.filter(r -> r.getMethod().equals(req.getParameter("method")));
+        if (req.getParameter("status") != null)
+            invStream = invStream.filter(r -> r.getResponseCode() == Integer.parseInt(req.getParameter("status")));
+
+        String response = "["+invStream.map(this::toJson).collect(Collectors.joining(","))+"]";
+        resp.setContentType("application/json");
+        resp.getOutputStream().write(response.getBytes());
+    }
 
 
     public void addRESTEndpoints(File dir, Properties props) throws ParserConfigurationException, SAXException, XPathExpressionException, IOException {
@@ -72,6 +99,13 @@ public class DummiesServlet extends HttpServlet {
 
     }
 
+    private String toJson(Rule r) {
+
+        return String.format("{\"method\":\"%s\",\"uri\":\"%s\",\"contentType\":\"%s\",\"status\":%d}",
+            r.getMethod(), r.getPath(), r.getContentType(), r.getResponseCode());
+        
+    }
+    
     class Rule {
 
         private final String path;
@@ -92,7 +126,7 @@ public class DummiesServlet extends HttpServlet {
             responseFile = new File(ruleFile.getParentFile(), responseFileName);
 
             final NodeList headers = doc.getDocumentElement().getElementsByTagName("response-headers");
-            for( int i = 0; i <headers.getLength(); i++ ) 
+            for (int i = 0; i < headers.getLength(); i++)
                 responseHeaders.put(headers.item(i).getFirstChild().getNextSibling().getNodeName(), headers.item(i).getTextContent());
 
         }
@@ -138,9 +172,9 @@ public class DummiesServlet extends HttpServlet {
         public boolean matches(HttpServletRequest req) {
 
             StringBuilder requestURI = new StringBuilder(req.getRequestURI());
-            if( req.getQueryString() != null && req.getQueryString().trim().length() > 0)
+            if (req.getQueryString() != null && req.getQueryString().trim().length() > 0)
                 requestURI.append("?").append(req.getQueryString());
-            
+
             return this.method.equals(req.getMethod()) && this.path.equals(requestURI.toString());
         }
     }
