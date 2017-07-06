@@ -2,6 +2,11 @@
 Modular, developer-friendly integration platform
 
 # Release notes
+## Respiro 2.4
+* Added simple invocation tracing to dummy plugin (REST).  
+  * Tracing can be queried using `GET /dummies/invocations`
+  * Tracing can be reset using `DELETE /dummies/invocations`
+
 ## Respiro 2.3
 * Bugfix in dummy plugin. When a rule is defined to match a url containing query parameters(Respiro 2.2), it would not match uri pattern when resource was declared auth=NONE.
 * Supporting response-headers returned from dummy plugin (REST). Declare `response-headers` as element, containing wanted response as nodes:
