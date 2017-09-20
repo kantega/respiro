@@ -19,9 +19,6 @@ package org.kantega.respiro.mail;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,9 +31,6 @@ class ServerConfig {
     private boolean ssl;
     private String username;
     private String password;
-    private final List<InternetAddress> to = new ArrayList<>();
-    private final List<InternetAddress> cc = new ArrayList<>();
-    private final List<InternetAddress> bcc = new ArrayList<>();
     private List<String> whitelist;
 
     public ServerConfig(String host, int port) {
@@ -56,12 +50,6 @@ class ServerConfig {
             mail.setAuthentication(username, password);
 
         try {
-            if (!to.isEmpty())
-                mail.setTo(to);
-            if (!cc.isEmpty())
-                mail.setCc(cc);
-            if (!bcc.isEmpty())
-                mail.setBcc(bcc);
             if (fromMail != null)
                 mail.setFrom(fromMail);
         } catch (EmailException e) {
@@ -82,34 +70,6 @@ class ServerConfig {
 
     public void setFrom(String fromMail) {
         this.fromMail = fromMail;
-    }
-
-    public void addTo(String email) {
-        try {
-            for (String mail : email.split(";"))
-                this.to.add(new InternetAddress(mail));
-        } catch (AddressException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void addCc(String email) {
-        try {
-            for (String mail : email.split(";"))
-                this.cc.add(new InternetAddress(mail));
-        } catch (AddressException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void addBcc(String email) {
-        try {
-            for (String mail : email.split(";"))
-                this.bcc.add(new InternetAddress(mail));
-        } catch (AddressException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     public void whitelist(String whitelist) {

@@ -53,7 +53,6 @@ public class UserProfilePlugin {
                              @Config String helloDatabaseUrl,
                              @Config String smtpAddress,
                              @Config String smtpFrom,
-                             @Config String smtpTo,
                              @Config(defaultValue = "25") int smtpPort,
                              @Config String mongoDbServers,
                              @Config String mongoDbDatabase,
@@ -75,9 +74,9 @@ public class UserProfilePlugin {
                 .username(helloDatabaseUsername).password(helloDatabasePassword).driverClassname(jdbcDriverClass).build();
         final UsersDAO dao = new UsersDAO(myDataSource);
 
-        final MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).from(smtpFrom).to(smtpTo).build();
+        final MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).build();
         notifier = new TopicNotifier(connectionFactory);
-        exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender, notifier)).build();
+        exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender, smtpFrom, notifier)).build();
 
     }
 

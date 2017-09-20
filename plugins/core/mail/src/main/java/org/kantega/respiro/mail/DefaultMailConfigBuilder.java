@@ -60,24 +60,6 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
         }
 
         @Override
-        public Build to(String email) {
-            config.addTo(email);
-            return this;
-        }
-
-        @Override
-        public Build cc(String email) {
-            config.addCc(email);
-            return this;
-        }
-
-        @Override
-        public Build bcc(String email) {
-            config.addBcc(email);
-            return this;
-        }
-
-        @Override
         public Build whitelist(String whitelist) {
             config.whitelist(whitelist);
             return this;

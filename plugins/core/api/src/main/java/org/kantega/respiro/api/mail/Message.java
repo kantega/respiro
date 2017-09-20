@@ -22,6 +22,7 @@ import java.util.List;
 
 public class Message {
 
+    private final String from;
     private final List<String> to = new ArrayList<>();
     private final List<String> cc = new ArrayList<>();
     private final List<String> bcc = new ArrayList<>();
@@ -31,7 +32,8 @@ public class Message {
     private final String subject;
     private Charset charset = Charset.defaultCharset();
 
-    public Message(String subject) {
+    public Message(String from, String subject) {
+        this.from = from;
         this.subject = subject;
     }
 
@@ -69,6 +71,9 @@ public class Message {
         return this;
     }
 
+    public String getFrom() {
+        return from;
+    }
 
     public List<String> getTo() {
         return to;

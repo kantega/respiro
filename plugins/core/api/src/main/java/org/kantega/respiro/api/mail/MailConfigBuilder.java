@@ -28,12 +28,6 @@ public interface MailConfigBuilder {
         Build auth(String username, String password);
 
         Build from(String email);
-
-        Build to(String email);
-
-        Build cc(String email);
-
-        Build bcc(String email);
         
         Build whitelist(String whitelist);
 
