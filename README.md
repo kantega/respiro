@@ -2,6 +2,11 @@
 Modular, developer-friendly integration platform
 
 # Release notes
+## Respiro 2.5
+* Changed mail configuration and smtp implementation. 
+  * Removed recipient fields as those should be assigned to the message. 
+  * Added possibility to override sender on outgoing messages.
+
 ## Respiro 2.4
 * Added simple invocation tracing to dummy plugin (REST).  
   * Tracing can be queried using `GET /dummies/invocations`
