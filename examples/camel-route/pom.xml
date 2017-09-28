@@ -27,10 +27,6 @@
 
     <artifactId>camel-route</artifactId>
 
-    <properties>
-        <camel.version>2.16.0</camel.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>

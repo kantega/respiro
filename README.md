@@ -2,6 +2,11 @@
 Modular, developer-friendly integration platform
 
 # Release notes
+## Respiro 2.6
+* Updated third-party libraries:
+  * [Camel 1.19.3](http://camel.apache.org/camel-2193-release.html)
+  * 
+
 ## Respiro 2.5
 * Changed mail configuration and smtp implementation. 
   * Removed recipient fields as those should be assigned to the message. 
