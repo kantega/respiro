@@ -35,13 +35,11 @@ public class UserProfileResource {
 
     private final UsersDAO dao;
     private final MailSender email;
-    private final String emailFrom;
     private final TopicNotifier notifier;
 
-    public UserProfileResource(UsersDAO dao, MailSender email, String emailFrom, TopicNotifier notifier) {
+    public UserProfileResource(UsersDAO dao, MailSender email, TopicNotifier notifier) {
         this.dao = dao;
         this.email = email;
-        this.emailFrom = emailFrom;
         this.notifier = notifier;
     }
 
@@ -58,7 +56,7 @@ public class UserProfileResource {
         prof.setFullName(fullName);
 
         email.send(
-                new Message(emailFrom, String.format("User %s looked up by %s", prof.getFullName(), securityContext.getUserPrincipal().getName()))
+                new Message(String.format("User %s looked up by %s", prof.getFullName(), securityContext.getUserPrincipal().getName()))
                         .body("User lookup for user " + prof.getFullName())
                         .to(prof.getUsername() + "@example.ru"));
 

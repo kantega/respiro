@@ -22,7 +22,10 @@ import java.util.List;
 
 public class Message {
 
-    private final String from;
+    /**
+     * Override if this message is from a different address.
+     */
+    private String from = null; 
     private final List<String> to = new ArrayList<>();
     private final List<String> cc = new ArrayList<>();
     private final List<String> bcc = new ArrayList<>();
@@ -32,8 +35,7 @@ public class Message {
     private final String subject;
     private Charset charset = Charset.defaultCharset();
 
-    public Message(String from, String subject) {
-        this.from = from;
+    public Message(String subject) {
         this.subject = subject;
     }
 
@@ -49,6 +51,11 @@ public class Message {
 
     public Message bcc(String address) {
         bcc.add(address);
+        return this;
+    }
+    
+    public Message from(String from) {
+        this.from = from;
         return this;
     }
 

@@ -74,9 +74,9 @@ public class UserProfilePlugin {
                 .username(helloDatabaseUsername).password(helloDatabasePassword).driverClassname(jdbcDriverClass).build();
         final UsersDAO dao = new UsersDAO(myDataSource);
 
-        final MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).build();
+        final MailSender sender = mailConfigBuilder.server(smtpAddress,smtpPort).from(smtpFrom).build();
         notifier = new TopicNotifier(connectionFactory);
-        exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender, smtpFrom, notifier)).build();
+        exampleApplication = builder.application().singleton(new UserProfileResource(dao, sender, notifier)).build();
 
     }
 
