@@ -5,7 +5,7 @@ Modular, developer-friendly integration platform
 ## Respiro 2.6
 * Updated third-party libraries:
   * [Camel 1.19.3](http://camel.apache.org/camel-2193-release.html)
-  * 
+  * [Reststop 3.3](https://github.com/kantega/reststop/wiki/ReleaseNotes)
 
 ## Respiro 2.5
 * Changed mail configuration and smtp implementation. 
