@@ -19,15 +19,13 @@ package org.kantega.respiro.api.mail;
 public interface MailConfigBuilder {
 
 
-    Build server(String hostname, int port);
+    Build server(String hostname, int port, String from);
 
     interface Build {
 
         Build useSsl(boolean ssl);
 
         Build auth(String username, String password);
-
-        Build from(String email);
         
         Build whitelist(String whitelist);
 

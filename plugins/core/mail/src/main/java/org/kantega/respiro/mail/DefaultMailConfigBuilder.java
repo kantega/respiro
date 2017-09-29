@@ -30,15 +30,16 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
     }
 
     @Override
-    public Build server(String hostname, int port) {
-        return new Builder(hostname, port);
+    public Build server(String hostname, int port, String from) {
+        return new Builder(hostname, port, from);
     }
 
     class Builder implements Build {
         final ServerConfig config;
 
-        public Builder(String host, int port) {
+        public Builder(String host, int port, String from) {
             config = new ServerConfig(host, port);
+            config.setFrom(from);
         }
 
         @Override
@@ -54,12 +55,6 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
         }
 
         @Override
-        public Build from(String email) {
-            config.setFrom(email);
-            return this;
-        }
-
-        @Override
         public Build whitelist(String whitelist) {
             config.whitelist(whitelist);
             return this;
@@ -67,8 +62,8 @@ public class DefaultMailConfigBuilder implements MailConfigBuilder {
 
         @Override
         public MailSender build() {
-            MailSender sender =  new SMTPMailSender(config);
-            for(MailSenderCustomizer msc:customizerList){
+            MailSender sender = new SMTPMailSender(config);
+            for (MailSenderCustomizer msc : customizerList) {
                 sender = msc.wrapMailSender(sender);
             }
             return sender;
