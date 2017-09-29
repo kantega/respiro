@@ -10,6 +10,8 @@ Modular, developer-friendly integration platform
   * [jackson-databind 2.9.1](https://github.com/FasterXML/jackson-databind)
   * [h2database 1.4.196](http://www.h2database.com/html/changelog.html)
   * [hikaryCP 2.7.1](https://github.com/brettwooldridge/HikariCP/wiki)
+  * validation-api 2.0.0.Final
+  * [hibernate-validator 6.0.2.Final](http://hibernate.org/validator/documentation/)
 
 ## Respiro 2.5
 * Changed mail configuration and smtp implementation. 
