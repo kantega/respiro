@@ -4,8 +4,10 @@ Modular, developer-friendly integration platform
 # Release notes
 ## Respiro 2.6
 * Updated third-party libraries:
-  * [Camel 1.19.3](http://camel.apache.org/camel-2193-release.html)
-  * [Reststop 3.3](https://github.com/kantega/reststop/wiki/ReleaseNotes)
+  * [camel 1.19.3](http://camel.apache.org/camel-2193-release.html)
+  * [reststop 3.3](https://github.com/kantega/reststop/wiki/ReleaseNotes)
+  * [jersey 2.25.1](https://jersey.github.io/release-notes/2.25.1.html) 
+  * [jackson-databind 2.9.1](https://github.com/FasterXML/jackson-databind)
 
 ## Respiro 2.5
 * Changed mail configuration and smtp implementation. 
