@@ -8,6 +8,8 @@ Modular, developer-friendly integration platform
   * [reststop 3.3](https://github.com/kantega/reststop/wiki/ReleaseNotes)
   * [jersey 2.25.1](https://jersey.github.io/release-notes/2.25.1.html) 
   * [jackson-databind 2.9.1](https://github.com/FasterXML/jackson-databind)
+  * [h2database 1.4.196](http://www.h2database.com/html/changelog.html)
+  * [hikaryCP 2.7.1](https://github.com/brettwooldridge/HikariCP/wiki)
 
 ## Respiro 2.5
 * Changed mail configuration and smtp implementation. 
