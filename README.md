@@ -2,6 +2,10 @@
 Modular, developer-friendly integration platform
 
 # Release notes
+
+## Respiro 2.7
+* [Reststop 3.5](https://github.com/kantega/reststop/wiki/ReleaseNotes)
+
 ## Respiro 2.6 & 2.6.1
 * Sender address is optional on smtp messages. Should be overridden by server config if not present.
 * Updated third-party libraries:
