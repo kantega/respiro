@@ -3,6 +3,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.8
+* [Apache cxf 3.2.0](http://cxf.apache.org/download.html)
+
 ## Respiro 2.7
 * [Reststop 3.5](https://github.com/kantega/reststop/wiki/ReleaseNotes)
 
