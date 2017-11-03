@@ -25,10 +25,10 @@ import org.kantega.respiro.cxf.api.ServiceCustomizer;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebServiceClient;
+import javax.xml.ws.handler.Handler;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Thread.currentThread;
 import static javax.xml.ws.BindingProvider.*;
@@ -58,6 +58,7 @@ class DefaultServiceBuilder implements ServiceBuilder {
         private String endpointAddress;
         private long connectionTimeoutMs = 15_000;
         private long receiveTimeoutMs = 60_000;
+        private List<Handler> handlerChain = null;
 
 
         public Build(Class<? extends Service> service, Class<P> port) {
@@ -96,6 +97,16 @@ class DefaultServiceBuilder implements ServiceBuilder {
         }
 
         @Override
+        public ServiceBuilder.Build<P> addHandler(Handler handler) {
+            
+            if( handlerChain == null)
+                handlerChain = new ArrayList<>();
+            
+            handlerChain.add(handler);
+            return this;
+        }
+
+        @Override
         public P build() {
 
             ClassLoader current = currentThread().getContextClassLoader();
@@ -113,6 +124,8 @@ class DefaultServiceBuilder implements ServiceBuilder {
                 configureEndpointAddress(rc);
                 configureTimeouts(port);
 
+                configureHandlerChain(prov);
+                
                 applyPluginConfiguration(prov);
                 return port;
 
@@ -123,6 +136,13 @@ class DefaultServiceBuilder implements ServiceBuilder {
             }
         }
 
+        private void configureHandlerChain(BindingProvider port) {
+            if(this.handlerChain != null) {
+                final List<Handler> handlerChain = port.getBinding().getHandlerChain();
+                handlerChain.addAll(this.handlerChain);
+            }
+        }
+        
         private void applyPluginConfiguration(BindingProvider port) {
             for (ServiceCustomizer customizer : serviceCustomizers) {
                 customizer.customizeService(port);

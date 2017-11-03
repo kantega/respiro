@@ -17,6 +17,7 @@
 package org.kantega.respiro.api;
 
 import javax.xml.ws.Service;
+import javax.xml.ws.handler.Handler;
 
 public interface ServiceBuilder {
     <P> Build<P> service(Class<? extends Service> service, Class<P> port);
@@ -31,6 +32,8 @@ public interface ServiceBuilder {
         Build<P> receiveTimeoutMs(long timeoutMs);
 
         Build<P> connectTimeoutMs(long timeoutMs);
+        
+        Build<P> addHandler(Handler handler);
 
         P build();
     }
