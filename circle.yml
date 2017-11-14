@@ -1,0 +1,6 @@
+# If your build needs more advanced behavior, see detailed Circle CI instructions:
+# https://circleci.com/docs/1.0/language-java/
+
+test:
+  post:
+    - bash <(curl -s https://copilot.blackducksoftware.com/ci/circle/scripts/upload)
