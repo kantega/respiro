@@ -1,5 +1,6 @@
-# If your build needs more advanced behavior, see detailed Circle CI instructions:
-# https://circleci.com/docs/1.0/language-java/
+dependencies:
+ override: 
+  - mvn install -DskipTests   
 
 test:
   post:
