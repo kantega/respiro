@@ -1,5 +1,6 @@
 # Respiro
 Modular, developer-friendly integration platform
+[![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/helaar/respiro/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/helaar/respiro/branches/master)
 
 # Release notes
 
