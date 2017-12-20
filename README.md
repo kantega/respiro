@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 # Release notes
 
 ## Respiro 2.8
+* Removed body filtering in response from dummy plugin as it messes up character encoding
+
+## Respiro 2.8
 * [Apache cxf 3.2.0](http://cxf.apache.org/download.html)
 * Added jax-ws client-side Handler support to cxf-plugin 
 

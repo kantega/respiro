@@ -109,7 +109,7 @@ public class DummyProvider implements Provider<Source> {
         }
 
         public Source getResult() throws IOException {
-            return new StreamSource(new StringReader(getFilteredContent(responseFile.toPath())));
+            return new StreamSource(responseFile);
         }
 
         public boolean matches(QName operation, Element documentElement) throws XPathExpressionException {

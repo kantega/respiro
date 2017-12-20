@@ -29,6 +29,7 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -69,7 +70,7 @@ public class DummiesServlet extends HttpServlet {
                 for (String header : rule.getResponseHeaders().keySet())
                     resp.setHeader(header, getFilteredContent(rule.getResponseHeaders().get(header)));
 
-                resp.getOutputStream().write(getFilteredContent(rule.getResponseFile().toPath()).getBytes());
+                resp.getOutputStream().write(Files.readAllBytes(rule.getResponseFile().toPath()));
                 return;
             }
         }
