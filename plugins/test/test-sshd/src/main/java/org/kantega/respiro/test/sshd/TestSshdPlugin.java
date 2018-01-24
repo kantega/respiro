@@ -16,7 +16,6 @@
 
 package org.kantega.respiro.test.sshd;
 
-import org.kantega.respiro.api.Initializer;
 import org.apache.sshd.common.config.keys.KeyUtils;
 import org.apache.sshd.common.config.keys.PublicKeyEntryDecoder;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
@@ -24,9 +23,10 @@ import org.apache.sshd.server.Command;
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.ExitCallback;
 import org.apache.sshd.server.SshServer;
-import org.apache.sshd.server.command.UnknownCommand;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
+import org.apache.sshd.server.scp.UnknownCommand;
 import org.apache.sshd.server.subsystem.sftp.SftpSubsystemFactory;
+import org.kantega.respiro.api.Initializer;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
 
@@ -83,6 +83,7 @@ public class TestSshdPlugin implements Initializer{
 
             copySshdFilesToContentDirectory(sourceFiles.toPath(), contentDir.toPath());
 
+
             sshd.setCommandFactory(command -> {
                 if ("resetfiles".equals(command)) {
                     return new ResetDataCommand(sourceFiles.toPath(), contentDir.toPath());
@@ -90,7 +91,7 @@ public class TestSshdPlugin implements Initializer{
                 return new UnknownCommand(command);
             });
 
-            sshd.setFileSystemFactory(new VirtualFileSystemFactory(contentDir.getAbsolutePath()));
+            sshd.setFileSystemFactory(new VirtualFileSystemFactory(contentDir.toPath()));
 
             SimpleGeneratorHostKeyProvider keyProvider = new SimpleGeneratorHostKeyProvider(new File(homeDir, "hostkey.ser"));
             sshd.setKeyPairProvider(keyProvider);
@@ -113,13 +114,13 @@ public class TestSshdPlugin implements Initializer{
 
         Files.walkFileTree(dest, new SimpleFileVisitor<Path>() {
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                 file.toFile().delete();
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
                 dir.toFile().delete();
                 return FileVisitResult.CONTINUE;
             }
@@ -142,7 +143,7 @@ public class TestSshdPlugin implements Initializer{
             }
 
             @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                 Path relativize = sshdFiles.relativize(dir);
 
                 Path dst = dest.resolve(relativize);
