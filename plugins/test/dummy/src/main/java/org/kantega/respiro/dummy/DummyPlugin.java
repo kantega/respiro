@@ -62,12 +62,12 @@ public class DummyPlugin {
 
 
     public DummyPlugin(
-        ServletContext servletContext, 
-        EndpointBuilder ecBuilder, 
-        ServletBuilder servletBuilder) 
+        ServletContext servletContext,
+        EndpointBuilder ecBuilder,
+        ServletBuilder servletBuilder)
         throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
 
-        
+
         final DummiesServlet dummies = new DummiesServlet();
         this.dummiesServlet = servletBuilder.servlet(dummies, "/dummies/*");
 
@@ -82,7 +82,10 @@ public class DummyPlugin {
                     Properties props = new Properties();
                     props.load(new FileInputStream(new File(dir, DUMMY_PROPS)));
                     String style = props.getProperty("style", "SOAP").toUpperCase();
-                    if ("SOAP".equals(style))
+                    if ("ROUTER".equals(style)) {
+                        dummies.addSOAPHeaderRoutingTable(new File(dir, "routing.properties"));
+                        openServices.add("/dummies/router");
+                    } else if ("SOAP".equals(style))
                         addSOAPEndpoint(servletContext, ecBuilder, dir, props, moduleArtifactId);
                     else if ("REST".equals(style)) {
                         dummies.addRESTEndpoints(dir, props);
@@ -91,7 +94,7 @@ public class DummyPlugin {
                                 openServices.add(path.split("\\?")[0]);
                         }
                     } else
-                        throw new IllegalArgumentException(format("Unknown style %s. Should be one of REST, SOAP.", style));
+                        throw new IllegalArgumentException(format("Unknown style %s. Should be one of REST, SOAP, ROUTER.", style));
 
                 }
             }
@@ -101,6 +104,7 @@ public class DummyPlugin {
 
         this.authFilter = servletBuilder.filter(new DummyAuthFilter(openServices), PRE_AUTHENTICATION, "/*");
     }
+
 
     private String parseModuleArtifactId() {
         File pomXml = new File(getProperty("reststopPluginDir"), "pom.xml");

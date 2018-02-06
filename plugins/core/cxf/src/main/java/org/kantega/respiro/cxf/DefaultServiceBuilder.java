@@ -165,6 +165,8 @@ class DefaultServiceBuilder implements ServiceBuilder {
             HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
             httpClientPolicy.setConnectionTimeout(connectionTimeoutMs);
             httpClientPolicy.setReceiveTimeout(receiveTimeoutMs);
+            httpClientPolicy.setAutoRedirect(true);
+            httpClientPolicy.setAllowChunking(true);
             conduit.setClient(httpClientPolicy);
         }
 

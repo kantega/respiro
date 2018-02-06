@@ -85,7 +85,7 @@
         <validation.impl.version>6.0.2.Final</validation.impl.version>
 
         <camel.version>2.19.4</camel.version>
-        <activemq.version>5.12.2</activemq.version>
+        <activemq.version>5.15.2</activemq.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <h2database.version>1.4.196</h2database.version>
     </properties>

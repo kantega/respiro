@@ -27,14 +27,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.String.format;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
 import static org.kantega.respiro.dummy.DummyContentFilter.getFilteredContent;
 
@@ -43,6 +45,8 @@ public class DummiesServlet extends HttpServlet {
     private final List<Rule> invocations = new ArrayList<>();
 
     private final List<Rule> rules = new ArrayList<>();
+    
+    private final Map<String, String> routingTable = new HashMap<>();
 
     public List<String> getPaths() {
 
@@ -59,6 +63,19 @@ public class DummiesServlet extends HttpServlet {
                 invocations.clear();
             else
                 resp.sendError(405, "Method " + req.getMethod() + " not supported on " + req.getRequestURI());
+            return;
+        }
+        
+        if(req.getRequestURI().equals("/dummies/router")){
+            
+            final String soapAction = req.getHeader("SOAPAction");
+            final Optional<String> redirect = getRouteRedirect(soapAction);
+            if( redirect.isPresent())
+                
+                resp.sendRedirect(format("http://localhost:%s%s",System.getProperty("reststopPort"),redirect.get()));
+            else
+                resp.sendError(400, "Found no matching route for SOAPAction header "+ soapAction);
+            
             return;
         }
 
@@ -99,14 +116,21 @@ public class DummiesServlet extends HttpServlet {
         }
 
     }
+    
+    public void addSOAPHeaderRoutingTable(File routingTable) throws IOException {
+        final Properties p = new Properties();
+        p.load(new FileInputStream(routingTable));
+        for (final String name: p.stringPropertyNames())
+            this.routingTable.put(name, p.getProperty(name));
+    }
 
     private String toJson(Rule r) {
 
-        return String.format("{\"method\":\"%s\",\"uri\":\"%s\",\"contentType\":\"%s\",\"status\":%d}",
+        return format("{\"method\":\"%s\",\"uri\":\"%s\",\"contentType\":\"%s\",\"status\":%d}",
             r.getMethod(), r.getPath(), r.getContentType(), r.getResponseCode());
         
     }
-    
+
     class Rule {
 
         private final String path;
@@ -178,5 +202,15 @@ public class DummiesServlet extends HttpServlet {
 
             return this.method.equals(req.getMethod()) && this.path.equals(requestURI.toString());
         }
+    }
+
+    public Optional<String> getRouteRedirect(String soapAction) {
+
+        
+        if( soapAction == null) return Optional.empty();
+
+        return routingTable.keySet().stream()
+            .filter(s -> soapAction.matches(s))
+            .map(routingTable::get).findFirst();
     }
 }
