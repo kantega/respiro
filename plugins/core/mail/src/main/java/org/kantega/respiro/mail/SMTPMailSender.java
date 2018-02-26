@@ -88,7 +88,7 @@ public class SMTPMailSender implements MailSender {
 
     private void addMailBody(MultiPartEmail mail, Message msg) throws EmailException {
         if (msg.isHtml()) {
-            String body = msg.getBody();
+            String body = msg.getHtmlBody();
             String plainTextBody = msg.getPlainTextBody();
             ((HtmlEmail) mail).setHtmlMsg(body)
                     .setTextMsg(plainTextBody.isEmpty() ? body : plainTextBody);
