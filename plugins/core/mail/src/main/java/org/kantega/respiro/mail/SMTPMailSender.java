@@ -17,6 +17,7 @@
 package org.kantega.respiro.mail;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.kantega.respiro.api.mail.Attachment;
 import org.kantega.respiro.api.mail.MailSender;
@@ -43,7 +44,7 @@ public class SMTPMailSender implements MailSender {
         // See: http://stackoverflow.com/questions/21856211/javax-activation-unsupporteddatatypeexception-no-object-dch-for-mime-type-multi
         currentThread().setContextClassLoader(getClass().getClassLoader());
 
-        MultiPartEmail mail = config.newMail();
+        MultiPartEmail mail = config.newMail(msg.isHtml());
 
         try {
             mail.setCharset(msg.getCharset().name());
@@ -56,10 +57,15 @@ public class SMTPMailSender implements MailSender {
             
             mail.setSubject(msg.getSubject());
             mail.setMsg(msg.getBody());
+            String plainTextBody = msg.getPlainTextBody();
+            if (msg.isHtml() && !plainTextBody.isEmpty()) {
+                ((HtmlEmail) mail).setTextMsg(plainTextBody);
+            }
+
             if (mail.getToAddresses().size() + mail.getCcAddresses().size() + mail.getBccAddresses().size() > 0)
                 return mail.send();
             else
-                return "Mail not sent due to empty recipiants list.";
+                return "Mail not sent due to empty recipients list.";
         } catch (EmailException | AddressException e) {
             throw new RuntimeException(e);
         }

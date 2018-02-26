@@ -35,6 +35,9 @@ public class Message {
     private final String subject;
     private Charset charset = Charset.defaultCharset();
 
+    private StringBuilder plainTextBody;
+    private boolean html = false;
+
     public Message(String subject) {
         this.subject = subject;
     }
@@ -78,6 +81,26 @@ public class Message {
         return this;
     }
 
+    public Message html(boolean html) {
+        this.html = html;
+        return this;
+    }
+
+    /**
+     * Only relevant if html is set to {@code true}, the plain text body
+     * of the message is used as the alternative text content for clients
+     * not supporting the HTML mime type.
+     * <p>
+     * If unset the regular body will be used.
+     */
+    public Message plainTextBody(String bodyPart) {
+        if (plainTextBody == null) {
+            plainTextBody = new StringBuilder();
+        }
+        plainTextBody.append(body);
+        return this;
+    }
+
     public String getFrom() {
         return from;
     }
@@ -108,5 +131,17 @@ public class Message {
 
     public Charset getCharset() {
         return charset;
+    }
+
+    public boolean isHtml() {
+        return html;
+    }
+
+    public String getPlainTextBody() {
+        if (plainTextBody != null) {
+            return plainTextBody.toString();
+        }
+
+        return "";
     }
 }
