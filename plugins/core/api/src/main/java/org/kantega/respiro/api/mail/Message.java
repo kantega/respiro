@@ -97,7 +97,7 @@ public class Message {
         if (plainTextBody == null) {
             plainTextBody = new StringBuilder();
         }
-        plainTextBody.append(body);
+        plainTextBody.append(bodyPart);
         return this;
     }
 
