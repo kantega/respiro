@@ -56,11 +56,7 @@ public class SMTPMailSender implements MailSender {
                 mail.setFrom(msg.getFrom());
             
             mail.setSubject(msg.getSubject());
-            mail.setMsg(msg.getBody());
-            String plainTextBody = msg.getPlainTextBody();
-            if (msg.isHtml() && !plainTextBody.isEmpty()) {
-                ((HtmlEmail) mail).setTextMsg(plainTextBody);
-            }
+            addMailBody(mail, msg);
 
             if (mail.getToAddresses().size() + mail.getCcAddresses().size() + mail.getBccAddresses().size() > 0)
                 return mail.send();
@@ -87,6 +83,17 @@ public class SMTPMailSender implements MailSender {
             for (String mail : address.split(";"))
                 if (config.isInWhitelist(mail))
                     toList.add(new InternetAddress(mail));
+        }
+    }
+
+    private void addMailBody(MultiPartEmail mail, Message msg) throws EmailException {
+        if (msg.isHtml()) {
+            String body = msg.getBody();
+            String plainTextBody = msg.getPlainTextBody();
+            ((HtmlEmail) mail).setHtmlMsg(body)
+                    .setTextMsg(plainTextBody.isEmpty() ? body : plainTextBody);
+        } else {
+            mail.setMsg(msg.getBody());
         }
     }
 
