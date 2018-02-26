@@ -22,6 +22,9 @@ import java.util.List;
 
 public class Message {
 
+    public static final String HTML_MESSAGE_BEGIN = "<html><body>";
+    public static final String HTML_MESSAGE_END = "</html></body>";
+
     /**
      * Override if this message is from a different address.
      */
@@ -62,6 +65,13 @@ public class Message {
         return this;
     }
 
+    /**
+     * NOTE: If the {@code html} flag is set html and body-tags might be omitted, since{@link #getHtmlBody()} adds
+     * these in if the message does not start with {@code "<html>"} or {@code "<!DOCTYPE"}
+     * <p>
+     * This is for convenient usage of adding html parts, making this method more intuitive in use
+     * and correctly named.
+     */
     public Message body(String bodyPart) {
         body.append(bodyPart);
         return this;
@@ -127,6 +137,26 @@ public class Message {
 
     public String getBody() {
         return body.toString();
+    }
+
+    /**
+     * If the {@code html} flag is set and the concatenated body
+     * parts are not recognized as html (not starting with "{@code <html>}" or "{@code <!DOCTYPE}"),
+     * this method will return the concatenated body parts wrapped in html and body tags:
+     * <p>
+     * {@code
+     * <html><body>${the concatenated body parts}</body></html>
+     * }
+     *
+     *
+     * If the {@code html} flag is not set this method returns the same as {@link #getBody()}
+     */
+    public String getHtmlBody() {
+        String str = getBody();
+        if (isHtml() && !str.startsWith("<html>") && !str.startsWith("<!DOCTYPE")) {
+            str = HTML_MESSAGE_BEGIN + str + HTML_MESSAGE_END;
+        }
+        return str;
     }
 
     public Charset getCharset() {
