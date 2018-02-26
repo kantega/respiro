@@ -17,6 +17,7 @@
 package org.kantega.respiro.mail;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 
 import java.util.Arrays;
@@ -39,7 +40,12 @@ class ServerConfig {
     }
 
     public MultiPartEmail newMail() {
-        MultiPartEmail mail = new MultiPartEmail();
+        return newMail(false);
+    }
+
+    /** @return a {@link HtmlEmail} object if {@code html} is true */
+    public MultiPartEmail newMail(boolean html) {
+        MultiPartEmail mail = html ? new HtmlEmail() : new MultiPartEmail();
 
         mail.setHostName(host);
         if (!ssl)

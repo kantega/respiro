@@ -57,7 +57,9 @@ public class UserProfileResource {
 
         email.send(
                 new Message(String.format("User %s looked up by %s", prof.getFullName(), securityContext.getUserPrincipal().getName()))
-                        .body("User lookup for user " + prof.getFullName())
+                        .html(true)
+                        .body("<ul><li>User lookup for user " + prof.getFullName() + "</ul></li>")
+                        .plainTextBody("User lookup for user " + prof.getFullName())
                         .to(prof.getUsername() + "@example.ru"));
 
         notifier.notifyLookup(prof, securityContext.getUserPrincipal().getName());

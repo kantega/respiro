@@ -17,6 +17,7 @@
 package org.kantega.respiro.mail;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.kantega.respiro.api.mail.Attachment;
 import org.kantega.respiro.api.mail.MailSender;
@@ -43,7 +44,7 @@ public class SMTPMailSender implements MailSender {
         // See: http://stackoverflow.com/questions/21856211/javax-activation-unsupporteddatatypeexception-no-object-dch-for-mime-type-multi
         currentThread().setContextClassLoader(getClass().getClassLoader());
 
-        MultiPartEmail mail = config.newMail();
+        MultiPartEmail mail = config.newMail(msg.isHtml());
 
         try {
             mail.setCharset(msg.getCharset().name());
@@ -55,11 +56,12 @@ public class SMTPMailSender implements MailSender {
                 mail.setFrom(msg.getFrom());
             
             mail.setSubject(msg.getSubject());
-            mail.setMsg(msg.getBody());
+            addMailBody(mail, msg);
+
             if (mail.getToAddresses().size() + mail.getCcAddresses().size() + mail.getBccAddresses().size() > 0)
                 return mail.send();
             else
-                return "Mail not sent due to empty recipiants list.";
+                return "Mail not sent due to empty recipients list.";
         } catch (EmailException | AddressException e) {
             throw new RuntimeException(e);
         }
@@ -81,6 +83,17 @@ public class SMTPMailSender implements MailSender {
             for (String mail : address.split(";"))
                 if (config.isInWhitelist(mail))
                     toList.add(new InternetAddress(mail));
+        }
+    }
+
+    private void addMailBody(MultiPartEmail mail, Message msg) throws EmailException {
+        if (msg.isHtml()) {
+            String body = msg.getHtmlBody();
+            String plainTextBody = msg.getPlainTextBody();
+            ((HtmlEmail) mail).setHtmlMsg(body)
+                    .setTextMsg(plainTextBody.isEmpty() ? body : plainTextBody);
+        } else {
+            mail.setMsg(msg.getBody());
         }
     }
 
