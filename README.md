@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.12
+* Added support for HTML MIME type in SMTPMailSender (respiro-mail plugin)
+
 ## Respiro 2.11
 * [camel 1.19.4](http://camel.apache.org/camel-2194-release.html)
 * [Apache cxf 3.2.1](http://cxf.apache.org/download.html)
