@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.13
+* Added support for REST dummies returning text/html
+
 ## Respiro 2.12
 * Added support for HTML MIME type in SMTPMailSender (respiro-mail plugin)
 

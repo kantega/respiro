@@ -189,6 +189,8 @@ public class DummiesServlet extends HttpServlet {
                     return "xml";
                 else if ("text/plain".equals(content))
                     return "txt";
+                else if ("text/html".equals(content))
+                    return "html";
             }
             throw new IllegalArgumentException("Unsupported content type: " + contentType);
 
