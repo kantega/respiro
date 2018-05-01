@@ -34,9 +34,9 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     private final Collection<CamelContextCustomizer> camelContextCustomizers;
 
-    private CamelContext camelContext;
-
     private SimpleRegistry simpleRegistry = new SimpleRegistry();
+
+    @Export final private CamelContext camelContext = new DefaultCamelContext(simpleRegistry);
 
     @Export final CamelRouteDeployer camelRouteDeployer = this;
 
@@ -49,7 +49,6 @@ public class CamelPlugin implements CamelRouteDeployer {
     @Override
     public void deploy(Collection<RouteBuilder> routeBuilders) {
         try {
-            camelContext = new DefaultCamelContext(simpleRegistry);
 
             camelContextCustomizers.forEach(c -> c.customize(camelContext));
 
