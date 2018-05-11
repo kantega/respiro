@@ -5,7 +5,7 @@ Modular, developer-friendly integration platform
 # Release notes
 
 ## Respiro 2.14
-* Exporting CamelContext from Camel plugin
+* 
 
 ## Respiro 2.13
 * Added support for REST dummies returning text/html
