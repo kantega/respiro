@@ -5,7 +5,12 @@ Modular, developer-friendly integration platform
 # Release notes
 
 ## Respiro 2.14
-* 
+* [Jackson Databind 2.9.5](https://github.com/FasterXML/jackson-databind)
+* [Reststop 3.9](https://github.com/kantega/reststop/wiki/ReleaseNotes)
+* validation-api 2.0.1.Final
+* [hibernate-validator 6.0.10.Final](http://hibernate.org/validator/documentation/) 
+* [jersey 2.27](https://jersey.github.io/release-notes/2.27.html) 
+* javax.ws.rs-api 2.1
 
 ## Respiro 2.13
 * Added support for REST dummies returning text/html
