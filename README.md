@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.15
+* [ActiveMQ 5.15.4](http://activemq.apache.org/activemq-5154-release.html)
+
 ## Respiro 2.14
 * [Jackson Databind 2.9.5](https://github.com/FasterXML/jackson-databind)
 * [Reststop 3.9](https://github.com/kantega/reststop/wiki/ReleaseNotes)
