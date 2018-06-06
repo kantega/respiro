@@ -6,7 +6,7 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.15
 * [ActiveMQ 5.15.4](http://activemq.apache.org/activemq-5154-release.html)
-* Excluded dependencies to jackson-databind from jersey plugin
+* Excluded dependencies to jackson-databind libraries from jersey plugin
 
 ## Respiro 2.14
 * [Jackson Databind 2.9.5](https://github.com/FasterXML/jackson-databind)
