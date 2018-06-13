@@ -24,6 +24,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.mongodb.client.model.CreateCollectionOptions;
+import com.mongodb.client.model.CreateViewOptions;
+import com.mongodb.session.ClientSession;
 import de.flapdoodle.embed.mongo.runtime.Mongod;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -31,6 +33,8 @@ import org.bson.conversions.Bson;
 import org.kantega.respiro.mongodb.MongoDatabaseProviderModifier;
 import org.kantega.reststop.api.Export;
 import org.kantega.reststop.api.Plugin;
+
+import java.util.List;
 
 @Plugin
 public class MongoDBExchangesPlugin {
@@ -41,20 +45,22 @@ public class MongoDBExchangesPlugin {
 
     public MongoDBExchangesPlugin() {
         modifier =
-          mdbp -> {
-              return dbname -> {
-                  MongoDatabase db =
-                    mdbp.getDatabase(dbname);
+            mdbp -> {
+                return dbname -> {
+                    MongoDatabase db =
+                        mdbp.getDatabase(dbname);
 
-                  return new MongoDbWrapper(db);
-              };
-          };
+                    return new MongoDbWrapper(db);
+                };
+            };
     }
 
     static class MongoDbWrapper implements MongoDatabase {
         final MongoDatabase wrapped;
 
-        MongoDbWrapper(MongoDatabase wrapped) {this.wrapped = wrapped;}
+        MongoDbWrapper(MongoDatabase wrapped) {
+            this.wrapped = wrapped;
+        }
 
 
         @Override
@@ -99,69 +105,145 @@ public class MongoDBExchangesPlugin {
 
         @Override
         public MongoDatabase withReadConcern(ReadConcern readConcern) {
-            return null;
+            return wrapped.withReadConcern(readConcern);
         }
 
         @Override
         public MongoCollection<Document> getCollection(String collectionName) {
-            return null;
+            return wrapped.getCollection(collectionName);
         }
 
         @Override
         public <TDocument> MongoCollection<TDocument> getCollection(
-          String collectionName, Class<TDocument> tDocumentClass) {
-            return null;
+            String collectionName, Class<TDocument> tDocumentClass) {
+            return wrapped.getCollection(collectionName,tDocumentClass);
         }
 
         @Override
         public Document runCommand(Bson command) {
-            return null;
+            return wrapped.runCommand(command);
         }
 
         @Override
         public Document runCommand(Bson command, ReadPreference readPreference) {
-            return null;
+            return runCommand(command, readPreference);
         }
 
         @Override
         public <TResult> TResult runCommand(Bson command, Class<TResult> tResultClass) {
-            return null;
+            return wrapped.runCommand(command,tResultClass);
         }
 
         @Override
         public <TResult> TResult runCommand(Bson command, ReadPreference readPreference, Class<TResult> tResultClass) {
-            return null;
+            return wrapped.runCommand(command,readPreference,tResultClass);
+        }
+
+        @Override
+        public Document runCommand(ClientSession clientSession, Bson bson) {
+            return wrapped.runCommand(clientSession, bson);
+        }
+
+        @Override
+        public Document runCommand(ClientSession clientSession, Bson bson, ReadPreference readPreference) {
+            return wrapped.runCommand(clientSession, bson, readPreference);
+        }
+
+        @Override
+        public <TResult> TResult runCommand(ClientSession clientSession, Bson bson, Class<TResult> aClass) {
+            return wrapped.runCommand(clientSession, bson, aClass);
+        }
+
+        @Override
+        public <TResult> TResult runCommand(ClientSession clientSession, Bson bson, ReadPreference readPreference, Class<TResult> aClass) {
+            return wrapped.runCommand(clientSession, bson, readPreference, aClass);
         }
 
         @Override
         public void drop() {
+            wrapped.drop();
+        }
 
+        @Override
+        public void drop(ClientSession clientSession) {
+            wrapped.drop(clientSession);
         }
 
         @Override
         public MongoIterable<String> listCollectionNames() {
-            return null;
+            return wrapped.listCollectionNames();
         }
 
         @Override
         public ListCollectionsIterable<Document> listCollections() {
-            return null;
+            return wrapped.listCollections();
         }
 
         @Override
         public <TResult> ListCollectionsIterable<TResult> listCollections(Class<TResult> tResultClass) {
-            return null;
+            return wrapped.listCollections(tResultClass);
+        }
+
+        @Override
+        public MongoIterable<String> listCollectionNames(ClientSession clientSession) {
+            return wrapped.listCollectionNames(clientSession);
+        }
+
+        @Override
+        public ListCollectionsIterable<Document> listCollections(ClientSession clientSession) {
+            return wrapped.listCollections(clientSession);
+        }
+
+        @Override
+        public <TResult> ListCollectionsIterable<TResult> listCollections(ClientSession clientSession, Class<TResult> aClass) {
+            return wrapped.listCollections(clientSession,aClass);
         }
 
         @Override
         public void createCollection(String collectionName) {
-
+            wrapped.createCollection(collectionName);
         }
 
         @Override
         public void createCollection(
-          String collectionName, CreateCollectionOptions createCollectionOptions) {
+            String collectionName, CreateCollectionOptions createCollectionOptions) {
+            wrapped.createCollection(collectionName,createCollectionOptions);
 
+        }
+
+        @Override
+        public void createCollection(ClientSession clientSession, String s) {
+
+            wrapped.createCollection(clientSession,s);
+        }
+
+        @Override
+        public void createCollection(ClientSession clientSession, String s, CreateCollectionOptions createCollectionOptions) {
+
+            wrapped.createCollection(clientSession,s,createCollectionOptions);
+        }
+
+        @Override
+        public void createView(String s, String s1, List<? extends Bson> list) {
+
+            wrapped.createView(s,s1,list);
+        }
+
+        @Override
+        public void createView(String s, String s1, List<? extends Bson> list, CreateViewOptions createViewOptions) {
+            wrapped.createView(s,s1,list,createViewOptions);
+        }
+
+        @Override
+        public void createView(ClientSession clientSession, String s, String s1, List<? extends Bson> list) {
+
+            wrapped.createView(clientSession,s,s1,list);
+        }
+
+        @Override
+        public void createView(ClientSession clientSession, String s, String s1, List<? extends Bson> list, CreateViewOptions createViewOptions) {
+
+            wrapped.createView(clientSession, s, s1, list,createViewOptions);
         }
     }
 

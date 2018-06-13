@@ -4,6 +4,10 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.16
+* [MongoDB Driver v 3.6.4](http://mongodb.github.io/mongo-java-driver/3.6/)
+* [Flapdoodle v 2.0.1](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo/blob/master/Changelog.md)
+
 ## Respiro 2.15
 * [ActiveMQ 5.15.4](http://activemq.apache.org/activemq-5154-release.html)
 * Excluded dependencies to jackson-databind libraries from jersey plugin

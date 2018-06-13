@@ -83,7 +83,7 @@ public class FlapdoodlePlugin implements Initializer {
 
                 final IMongodConfig mongodConfig =
                     new MongodConfigBuilder()
-                        .version(Version.Main.PRODUCTION)
+                        .version(Version.Main.DEVELOPMENT )
                         .build();
 
                 final MongodExecutable mongodExecutable =
