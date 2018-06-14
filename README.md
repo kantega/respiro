@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.17
+* [Google Guava 2.25.1](https://github.com/google/guava/releases/tag/v25.1)
+
 ## Respiro 2.16
 * [MongoDB Driver v 3.6.4](http://mongodb.github.io/mongo-java-driver/3.6/)
 * [Flapdoodle v 2.0.1](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo/blob/master/Changelog.md)
