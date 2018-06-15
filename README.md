@@ -6,6 +6,7 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.17.2
 * [Google Guava 2.25.1](https://github.com/google/guava/releases/tag/v25.1)
+
 (Respiro 2.17 & 2.17.1 failed release on oss.sonatype.org)
 
 ## Respiro 2.16
