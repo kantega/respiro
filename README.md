@@ -4,8 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
-## Respiro 2.17
+## Respiro 2.17.2
 * [Google Guava 2.25.1](https://github.com/google/guava/releases/tag/v25.1)
+(Respiro 2.17 & 2.17.1 failed release on oss.sonatype.org)
 
 ## Respiro 2.16
 * [MongoDB Driver v 3.6.4](http://mongodb.github.io/mongo-java-driver/3.6/)
