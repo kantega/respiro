@@ -30,6 +30,8 @@ public interface DataSourceBuilder {
         Build driverClassname(String driver);
 
         Build maxAge(long maxAge) ;
+        
+        Build maxPoolSize(int maxPoolSize);
 
         DataSource build();
     }

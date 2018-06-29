@@ -4,6 +4,10 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.18
+* Added configuration parameter for maxPoolSize in DataSourceBuilder 
+* [hikaryCP 3.2.0](https://github.com/brettwooldridge/HikariCP/wiki)
+
 ## Respiro 2.17.2
 * [Google Guava 2.25.1](https://github.com/google/guava/releases/tag/v25.1)
 

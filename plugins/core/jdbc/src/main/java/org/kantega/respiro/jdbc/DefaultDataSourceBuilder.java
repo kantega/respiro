@@ -49,10 +49,12 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         private String password;
         private String driverClassname;
         private long maxAge;
+        private int poolSize;
 
         public DefaultBuild(String url, long defaultMaxAge) {
             this.url = url;
             this.maxAge = defaultMaxAge;
+            this.poolSize = 3;
         }
 
         @Override
@@ -80,6 +82,12 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
         }
 
         @Override
+        public Build maxPoolSize(int maxPoolSize) {
+            this.poolSize = maxPoolSize;
+            return this;
+        }
+
+        @Override
         public DataSource build() {
 
             HikariConfig config = new HikariConfig();
@@ -96,7 +104,7 @@ public class DefaultDataSourceBuilder implements DataSourceBuilder {
             }else{
                 logger.info("Using jdbc built-in isValid() test");
             }
-            config.setMaximumPoolSize(3);
+            config.setMaximumPoolSize(poolSize);
             DataSource dataSource = new HikariDataSource(config);
 
             for (DataSourceCustomizer customizer : dataSourceCustomizers) {
