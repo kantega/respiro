@@ -64,8 +64,7 @@ public class DummyPlugin {
     public DummyPlugin(
         ServletContext servletContext,
         EndpointBuilder ecBuilder,
-        ServletBuilder servletBuilder)
-        throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+        ServletBuilder servletBuilder) {
 
 
         final DummiesServlet dummies = new DummiesServlet();
