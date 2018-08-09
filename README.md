@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.19
+* [Reststop 3.10](https://github.com/kantega/reststop/wiki/ReleaseNotes)
+
 ## Respiro 2.18
 * Added configuration parameter for maxPoolSize in DataSourceBuilder 
 * [hikaryCP 3.2.0](https://github.com/brettwooldridge/HikariCP/wiki)
