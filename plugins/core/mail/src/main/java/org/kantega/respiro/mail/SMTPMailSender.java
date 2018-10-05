@@ -51,9 +51,12 @@ public class SMTPMailSender implements MailSender {
             addAddresses(mail.getToAddresses(), msg.getTo());
             addAddresses(mail.getCcAddresses(), msg.getCc());
             addAddresses(mail.getBccAddresses(), msg.getBcc());
+            addAddresses(mail.getReplyToAddresses(), msg.getReplyTo());
             addAttachments(mail, msg);
-            if (msg.getFrom() != null)
+            if (msg.getFrom() != null) {
                 mail.setFrom(msg.getFrom());
+            }
+            
             
             mail.setSubject(msg.getSubject());
             addMailBody(mail, msg);

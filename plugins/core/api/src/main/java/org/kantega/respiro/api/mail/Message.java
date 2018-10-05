@@ -28,10 +28,11 @@ public class Message {
     /**
      * Override if this message is from a different address.
      */
-    private String from = null; 
+    private String from = null;
     private final List<String> to = new ArrayList<>();
     private final List<String> cc = new ArrayList<>();
     private final List<String> bcc = new ArrayList<>();
+    private final List<String> replyTo = new ArrayList<>();
     private final List<Attachment> attachments = new ArrayList<>();
 
     private final StringBuilder body = new StringBuilder();
@@ -59,9 +60,14 @@ public class Message {
         bcc.add(address);
         return this;
     }
-    
+
     public Message from(String from) {
         this.from = from;
+        return this;
+    }
+
+    public Message replyTo(String replyTo) {
+        this.replyTo.add(replyTo);
         return this;
     }
 
@@ -77,7 +83,7 @@ public class Message {
         return this;
     }
 
-    public Message charset(Charset charset){
+    public Message charset(Charset charset) {
         this.charset = charset;
         return this;
     }
@@ -115,6 +121,10 @@ public class Message {
         return from;
     }
 
+    public List<String> getReplyTo() {
+        return replyTo;
+    }
+
     public List<String> getTo() {
         return to;
     }
@@ -147,8 +157,8 @@ public class Message {
      * {@code
      * <html><body>${the concatenated body parts}</body></html>
      * }
-     *
-     *
+     * <p>
+     * <p>
      * If the {@code html} flag is not set this method returns the same as {@link #getBody()}
      */
     public String getHtmlBody() {

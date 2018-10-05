@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.20
+* Added `replyTo`-support to mail-plugin
+
 ## Respiro 2.19
 * Bugfix in dummy rest services.
 * [Reststop 3.10](https://github.com/kantega/reststop/wiki/ReleaseNotes)
