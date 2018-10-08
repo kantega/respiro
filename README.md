@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.21
+* Logging `replyTo` when collecting data from mail sender.
+
 ## Respiro 2.20
 * Added `replyTo`-support to mail-plugin
 * [Flapdoodle 2.1.1](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo/blob/master/Changelog.md)
