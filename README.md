@@ -6,6 +6,7 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.20
 * Added `replyTo`-support to mail-plugin
+* [Flapdoodle 2.1.1](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo/blob/master/Changelog.md)
 
 ## Respiro 2.19
 * Bugfix in dummy rest services.
