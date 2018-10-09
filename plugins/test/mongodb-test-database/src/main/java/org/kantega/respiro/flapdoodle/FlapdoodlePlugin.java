@@ -8,6 +8,7 @@ import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.*;
+import de.flapdoodle.embed.mongo.distribution.IFeatureAwareVersion;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.extract.UserTempNaming;
@@ -81,9 +82,12 @@ public class FlapdoodlePlugin implements Initializer {
                 final MongodStarter runtime =
                     MongodStarter.getInstance(runtimeConfig);
 
+                final IFeatureAwareVersion version = System.getProperty("os.name").startsWith("Windows") ?
+                    Version.Main.DEVELOPMENT : Version.Main.PRODUCTION;
+                
                 final IMongodConfig mongodConfig =
                     new MongodConfigBuilder()
-                        .version(Version.Main.DEVELOPMENT )
+                        .version( version)
                         .build();
 
                 final MongodExecutable mongodExecutable =
