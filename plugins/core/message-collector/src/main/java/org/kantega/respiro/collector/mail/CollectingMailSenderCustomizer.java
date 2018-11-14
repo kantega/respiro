@@ -35,7 +35,7 @@ public class CollectingMailSenderCustomizer implements MailSenderCustomizer {
             headers.put("To", msg.getTo());
             headers.put("Cc", msg.getCc());
             headers.put("Bcc", msg.getBcc());
-            headers.put("ReplyTo", msg.getReplyTo());
+            headers.put("Reply-To", msg.getReplyTo());
             headers.put("# attachments", singletonList(valueOf(msg.getAttachments().size())));
             headers.put("Subject", singletonList(msg.getSubject()));
 

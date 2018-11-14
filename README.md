@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.21
+* Correct header attribute name `Reply-To` in Mail sender customizer.
+
 ## Respiro 2.20.1
 * Logging `replyTo` when collecting data from mail sender.
 * Temporary fix for flapdoodle [Issue 232](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo/issues/232): 
