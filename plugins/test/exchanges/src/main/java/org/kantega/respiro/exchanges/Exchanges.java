@@ -32,8 +32,10 @@ public class Exchanges {
     private Deque<ExchangeInfo> exchangeLog = new ConcurrentLinkedDeque<>();
 
     private static Exchanges instance;
+    private final int size;
 
-    public Exchanges() {
+    public Exchanges(int size) {
+        this.size = size;
         instance = this;
     }
 
@@ -42,7 +44,7 @@ public class Exchanges {
     }
 
     public void addExchange(ExchangeInfo message) {
-        while(exchangeLog.size() >= 50) {
+        while(exchangeLog.size() >= size) {
             exchangeLog.removeLast();
         }
         exchangeLog.addFirst(message);

@@ -52,12 +52,13 @@ public class ExchangesPlugin {
 
     public ExchangesPlugin(
       @Config(defaultValue = "/respiro") String respiroPath,
+      @Config(defaultValue = "50") int respiroExchangesSize,
       ServletBuilder servletBuilder,
       ApplicationBuilder applicationBuilder) {
 
         String respiroDir = respiroPath + "/";
 
-        Exchanges exchanges = new Exchanges();
+        Exchanges exchanges = new Exchanges(respiroExchangesSize);
         filters.add(servletBuilder.redirectFrom("/exchanges").to("respiro/#/exchanges"));
         filters.add(servletBuilder.redirectFrom("/exchanges/").to("../respiro/#/exchanges"));
 
