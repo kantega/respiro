@@ -7,6 +7,8 @@ Modular, developer-friendly integration platform
 ## Respiro 2.21
 * Correct header attribute name `Reply-To` in Mail sender customizer.
 * New parameter `respiroExchangesSize` limits size of exchanges collection.
+* [Apache cxf 3.2.7](http://cxf.apache.org/download.html)
+* Transitive dependency to Apache commons-compress updated to 2.18 (flapdoodle 2.1.1) 
 
 ## Respiro 2.20.1
 * Logging `replyTo` when collecting data from mail sender.
