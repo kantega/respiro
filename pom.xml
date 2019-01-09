@@ -78,7 +78,7 @@
     </modules>
 
     <properties>
-        <reststop.version>3.10</reststop.version>
+        <reststop.version>3.11.2</reststop.version>
         <jersey.version>2.27</jersey.version>
         <jackson.version>2.9.5</jackson.version>
         <cxf.version>3.2.7</cxf.version>

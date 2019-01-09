@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.22
+* [Reststop 3.11.2](https://github.com/kantega/reststop/wiki/ReleaseNotes) 
+
 ## Respiro 2.21
 * Correct header attribute name `Reply-To` in Mail sender customizer.
 * New parameter `respiroExchangesSize` limits size of exchanges collection.
