@@ -16,19 +16,22 @@
 
 package org.kantega.respiro.mail;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.MultiPartEmail;
 import org.kantega.respiro.api.mail.Attachment;
 import org.kantega.respiro.api.mail.MailSender;
 import org.kantega.respiro.api.mail.Message;
+import org.simplejavamail.email.AttachmentResource;
+import org.simplejavamail.email.EmailBuilder;
+import org.simplejavamail.email.EmailPopulatingBuilder;
+import org.simplejavamail.email.Recipient;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.util.ByteArrayDataSource;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static java.lang.String.format;
 import static java.lang.Thread.currentThread;
 
 public class SMTPMailSender implements MailSender {
@@ -44,60 +47,49 @@ public class SMTPMailSender implements MailSender {
         // See: http://stackoverflow.com/questions/21856211/javax-activation-unsupporteddatatypeexception-no-object-dch-for-mime-type-multi
         currentThread().setContextClassLoader(getClass().getClassLoader());
 
-        MultiPartEmail mail = config.newMail(msg.isHtml());
+        EmailPopulatingBuilder builder = EmailBuilder.startingBlank()
+            .withSubject(msg.getSubject())
+            .from(firstNotEmpty(msg.getFrom(), config.getFrom()))
+            .to(whitelisted(msg.getTo()))
+            .cc(whitelisted(msg.getCc()))
+            .bcc(whitelisted(msg.getBcc()))
+            .withReplyTo(msg.getReplyTo())
+            .withAttachments(mapAttachemtns(msg.getAttachments()));
 
-        try {
-            mail.setCharset(msg.getCharset().name());
-            addAddresses(mail.getToAddresses(), msg.getTo());
-            addAddresses(mail.getCcAddresses(), msg.getCc());
-            addAddresses(mail.getBccAddresses(), msg.getBcc());
-            addAddresses(mail.getReplyToAddresses(), msg.getReplyTo());
-            addAttachments(mail, msg);
-            if (msg.getFrom() != null) {
-                mail.setFrom(msg.getFrom());
-            }
-            
-            
-            mail.setSubject(msg.getSubject());
-            addMailBody(mail, msg);
+        if (msg.isHtml())
+            builder = builder.appendTextHTML(msg.getHtmlBody());
+        else
+            builder = builder.appendText(msg.getPlainTextBody());
 
-            if (mail.getToAddresses().size() + mail.getCcAddresses().size() + mail.getBccAddresses().size() > 0)
-                return mail.send();
-            else
-                return "Mail not sent due to empty recipients list.";
-        } catch (EmailException | AddressException e) {
-            throw new RuntimeException(e);
-        }
+
+        if (!builder.getRecipients().isEmpty()) {
+            // send
+            this.config.smtp().sendMail(builder.buildEmail());
+
+            return format("Message to %s sent", builder.getRecipients().toString());
+        } else
+            return "Mail not sent due to empty recipients list.";
+
     }
 
-    private void addAttachments(MultiPartEmail mail, Message msg) {
-        for (Attachment attachment : msg.getAttachments()) {
-            try {
-                mail.attach(new ByteArrayDataSource(attachment.getContent(), attachment.getMimeType()), attachment.getFileName(), "");
-            } catch (EmailException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private Collection<Recipient> whitelisted(final List<String> addresses) {
+        return addresses.stream()
+            .map(a -> a.split(";"))
+            .flatMap(Arrays::stream)
+            .filter(config::isInWhitelist)
+            .map(adr -> new Recipient(null, adr, null))
+            .collect(Collectors.toList());
     }
 
-
-    private void addAddresses(Collection<InternetAddress> toList, final List<String> addresses) throws AddressException {
-        for (String address : addresses) {
-            for (String mail : address.split(";"))
-                if (config.isInWhitelist(mail))
-                    toList.add(new InternetAddress(mail));
-        }
+    private List<AttachmentResource> mapAttachemtns(final List<Attachment> attachments) {
+        return attachments.stream().map(a -> new AttachmentResource(
+            a.getFileName(), new ByteArrayDataSource(a.getContent(), a.getMimeType()) 
+        )).collect(Collectors.toList());
     }
 
-    private void addMailBody(MultiPartEmail mail, Message msg) throws EmailException {
-        if (msg.isHtml()) {
-            String body = msg.getHtmlBody();
-            String plainTextBody = msg.getPlainTextBody();
-            ((HtmlEmail) mail).setHtmlMsg(body)
-                    .setTextMsg(plainTextBody.isEmpty() ? body : plainTextBody);
-        } else {
-            mail.setMsg(msg.getBody());
-        }
+    private String firstNotEmpty(String... possbleEmpty) {
+        return Stream.of(possbleEmpty).filter(str -> str != null && str.trim().length() > 0).findFirst().orElse(null);
     }
+
 
 }

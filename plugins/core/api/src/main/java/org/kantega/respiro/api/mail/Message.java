@@ -32,7 +32,7 @@ public class Message {
     private final List<String> to = new ArrayList<>();
     private final List<String> cc = new ArrayList<>();
     private final List<String> bcc = new ArrayList<>();
-    private final List<String> replyTo = new ArrayList<>();
+    private String replyTo;
     private final List<Attachment> attachments = new ArrayList<>();
 
     private final StringBuilder body = new StringBuilder();
@@ -67,7 +67,7 @@ public class Message {
     }
 
     public Message replyTo(String replyTo) {
-        this.replyTo.add(replyTo);
+        this.replyTo = replyTo;
         return this;
     }
 
@@ -121,7 +121,7 @@ public class Message {
         return from;
     }
 
-    public List<String> getReplyTo() {
+    public String getReplyTo() {
         return replyTo;
     }
 
@@ -169,9 +169,6 @@ public class Message {
         return str;
     }
 
-    public Charset getCharset() {
-        return charset;
-    }
 
     public boolean isHtml() {
         return html;
