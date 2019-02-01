@@ -16,14 +16,12 @@
 
 package org.kantega.respiro.mail;
 
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.MultiPartEmail;
+import org.simplejavamail.mailer.Mailer;
+import org.simplejavamail.mailer.MailerBuilder;
+import org.simplejavamail.mailer.config.TransportStrategy;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static java.lang.String.valueOf;
 
 class ServerConfig {
     private final String host;
@@ -39,31 +37,6 @@ class ServerConfig {
         this.port = port;
     }
 
-    public MultiPartEmail newMail() {
-        return newMail(false);
-    }
-
-    /** @return a {@link HtmlEmail} object if {@code html} is true */
-    public MultiPartEmail newMail(boolean html) {
-        MultiPartEmail mail = html ? new HtmlEmail() : new MultiPartEmail();
-
-        mail.setHostName(host);
-        if (!ssl)
-            mail.setSmtpPort(port);
-        else
-            mail.setSslSmtpPort(valueOf(port));
-        if (username != null && password != null)
-            mail.setAuthentication(username, password);
-
-        try {
-            if (fromMail != null)
-                mail.setFrom(fromMail);
-        } catch (EmailException e) {
-            throw new RuntimeException(e);
-        }
-
-        return mail;
-    }
 
     public void useSsl(boolean ssl) {
         this.ssl = ssl;
@@ -78,6 +51,8 @@ class ServerConfig {
         this.fromMail = fromMail;
     }
 
+    public String getFrom() { return this.fromMail; }
+
     public void whitelist(String whitelist) {
         if (!"OFF".equals(whitelist.trim().toUpperCase())) {
 
@@ -90,4 +65,11 @@ class ServerConfig {
     }
 
 
+    public Mailer smtp() {
+        final MailerBuilder.MailerRegularBuilder builder = MailerBuilder.withSMTPServer(host, port, username, password);
+        if( ssl )
+            builder.withTransportStrategy(TransportStrategy.SMTP_TLS);
+        
+        return builder.buildMailer();
+    }
 }
