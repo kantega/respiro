@@ -5,12 +5,12 @@ Modular, developer-friendly integration platform
 # Release notes
 
 ## Respiro 2.23
-* Reimplemented email support using simple-java-mail instead of apache-commons leads to minor api changes:
-  * `replyTo` is now limited to one address. Multiple replyTo-addresses is no longer supported.
-  * `charset` seems to have been linked to the apache-commons implementation and is thereby removed. 
 
 ## Respiro 2.22
 * [Reststop 3.11.2](https://github.com/kantega/reststop/wiki/ReleaseNotes) 
+* Reimplemented email support using simple-java-mail instead of apache-commons leads to minor api changes:
+  * `replyTo` is now limited to one address. Multiple replyTo-addresses is no longer supported.
+  * `charset` seems to have been linked to the apache-commons implementation and is thereby removed. 
 
 ## Respiro 2.21
 * Correct header attribute name `Reply-To` in Mail sender customizer.
