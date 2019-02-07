@@ -62,7 +62,7 @@ public class UserProfilePlugin {
                              DataSourceBuilder dsBuilder,
                              MongoDBBuilder mongoBuilder,
                              MailConfigBuilder mailConfigBuilder,
-                             TopicConnectionFactory connectionFactory) throws JMSException {
+                             TopicConnectionFactory connectionFactory) {
         
         // testing dependecy only
         final MongoDatabase db = mongoBuilder

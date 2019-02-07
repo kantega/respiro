@@ -6,6 +6,7 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.23
 * [Jackson Databind 2.9.8](https://github.com/FasterXML/jackson-databind)
+* Bugfix on simple-java-mail to allow sender addresses on format `name <email@somewhere.com>`
 
 ## Respiro 2.22
 * [Reststop 3.11.2](https://github.com/kantega/reststop/wiki/ReleaseNotes) 

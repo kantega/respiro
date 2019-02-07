@@ -60,7 +60,7 @@ public class UserProfileResource {
                         .html(true)
                         .body("<ul><li>User lookup for user " + prof.getFullName() + "</ul></li>")
                         .plainTextBody("User lookup for user " + prof.getFullName())
-                        .to(prof.getUsername() + "@example.ru"));
+                        .to("Someuser<"+prof.getUsername() + "@example.ru>"));
 
         notifier.notifyLookup(prof, securityContext.getUserPrincipal().getName());
 
