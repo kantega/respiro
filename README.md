@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.24
+* [ActiveMQ versjon 5.15.8](http://activemq.apache.org/activemq-5158-release.html)
+
 ## Respiro 2.23
 * [Jackson Databind 2.9.8](https://github.com/FasterXML/jackson-databind)
 * Bugfix on simple-java-mail to allow sender addresses on format `name <email@somewhere.com>`
