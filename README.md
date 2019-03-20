@@ -6,6 +6,8 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.24
 * [ActiveMQ versjon 5.15.8](http://activemq.apache.org/activemq-5158-release.html)
+* [Camel version 2.19.5](http://camel.apache.org/camel-2195-release.html)
+* Added camel-jms, camel-spring and camel-ftp dependency to camel-plugin
 
 ## Respiro 2.23
 * [Jackson Databind 2.9.8](https://github.com/FasterXML/jackson-databind)
