@@ -85,10 +85,14 @@ public class FlapdoodlePlugin implements Initializer {
                 final IFeatureAwareVersion version = System.getProperty("os.name").startsWith("Windows") ?
                     Version.Main.DEVELOPMENT : Version.Main.PRODUCTION;
                 
-                final IMongodConfig mongodConfig =
-                    new MongodConfigBuilder()
-                        .version( version)
-                        .build();
+                final MongodConfigBuilder flapBuilder =new MongodConfigBuilder()
+                    .version( version);
+                
+                if( System.getProperty("flapdoodleStartPort") != null)
+                    flapBuilder.net(new Net(Integer.parseInt(System.getProperty("flapdoodleStartPort")), false));
+                
+                final IMongodConfig mongodConfig = flapBuilder.build();
+                
 
                 final MongodExecutable mongodExecutable =
                     runtime.prepare(mongodConfig);

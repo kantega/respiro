@@ -8,6 +8,7 @@ Modular, developer-friendly integration platform
 * [ActiveMQ versjon 5.15.8](http://activemq.apache.org/activemq-5158-release.html)
 * [Camel version 2.19.5](http://camel.apache.org/camel-2195-release.html)
 * Added camel-jms, camel-spring and camel-ftp dependency to camel-plugin
+* Added system property `flapdoodleStartPort` to mongodb-test-plugin to allow flapdoodle start on fixed port.
 
 ## Respiro 2.23
 * [Jackson Databind 2.9.8](https://github.com/FasterXML/jackson-databind)
