@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.25
+* Added kerberos authentication support. See `respiro-kerberos-plugin` for more.
+
 ## Respiro 2.24
 * [ActiveMQ versjon 5.15.8](http://activemq.apache.org/activemq-5158-release.html)
 * [Camel version 2.19.5](http://camel.apache.org/camel-2195-release.html)

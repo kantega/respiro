@@ -52,6 +52,7 @@
         <module>core/activemq-client</module>
         <module>core/mongodb-api</module>
         <module>core/mongodb-driver</module>
+        <module>core/kerberos</module>
 
         <!-- UI plugins -->
         <module>core/ui</module>
