@@ -1,7 +1,5 @@
-package org.kantega.respiro.documenter;
-
 /*
- * Copyright 2015 Kantega AS
+ * Copyright 2019 Kantega AS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +13,8 @@ package org.kantega.respiro.documenter;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package org.kantega.respiro.documenter;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
