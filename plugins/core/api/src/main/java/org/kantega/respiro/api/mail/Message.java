@@ -23,7 +23,7 @@ import java.util.List;
 public class Message {
 
     public static final String HTML_MESSAGE_BEGIN = "<html><body>";
-    public static final String HTML_MESSAGE_END = "</html></body>";
+    public static final String HTML_MESSAGE_END = "</body></html>";
 
     /**
      * Override if this message is from a different address.

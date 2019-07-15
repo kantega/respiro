@@ -6,6 +6,7 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.25
 * Added kerberos authentication support. See `respiro-kerberos-plugin` for more.
+* Bugfix in html-formatted mail messages. Reordered `/body` and `/html` closing tags.  
 
 ## Respiro 2.24
 * [ActiveMQ versjon 5.15.8](http://activemq.apache.org/activemq-5158-release.html)
