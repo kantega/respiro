@@ -6,11 +6,13 @@ Modular, developer-friendly integration platform
 
 ## Respiro 2.25
 * Added kerberos authentication support. See `respiro-kerberos-plugin` for more.
-* Bugfix in html-formatted mail messages. Reordered `/body` and `/html` closing tags.  
+* Bugfix in html-formatted mail messages. Reordered `/body` and `/html` closing tags.
+* [ActiveMQ 5.15.9](http://activemq.apache.org/activemq-5159-release.html)
+* [Camel version 2.24.1](http://camel.apache.org/camel-2195-release.html)  
 
 ## Respiro 2.24
 * [ActiveMQ versjon 5.15.8](http://activemq.apache.org/activemq-5158-release.html)
-* [Camel version 2.19.5](http://camel.apache.org/camel-2195-release.html)
+* [Camel version 2.19.5](http://camel.apache.org/camel-2241-release.html)
 * Added camel-jms, camel-spring and camel-ftp dependency to camel-plugin
 * Added system property `flapdoodleStartPort` to mongodb-test-plugin to allow flapdoodle start on fixed port.
 
