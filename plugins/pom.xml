@@ -48,12 +48,10 @@
         <module>core/jersey</module>
         <module>core/jersey-metrics</module>
         <module>core/jersey-validation</module>
-        <module>core/jms-api</module>
-        <module>core/activemq-client</module>
         <module>core/mongodb-api</module>
         <module>core/mongodb-driver</module>
         <module>core/kerberos</module>
-
+       
         <!-- UI plugins -->
         <module>core/ui</module>
         <module>core/ui-metrics</module>
@@ -67,7 +65,6 @@
         <module>test/test-database</module>
         <module>test/test-sshd</module>
         <module>test/test-smtp</module>
-        <module>test/test-activemq</module>
         <module>test/documentation</module>
         <module>test/mongodb-test-database</module>
         <module>test/mongodb-test-modifier</module>

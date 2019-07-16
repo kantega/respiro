@@ -35,12 +35,10 @@ public class UserProfileResource {
 
     private final UsersDAO dao;
     private final MailSender email;
-    private final TopicNotifier notifier;
 
-    public UserProfileResource(UsersDAO dao, MailSender email, TopicNotifier notifier) {
+    public UserProfileResource(UsersDAO dao, MailSender email) {
         this.dao = dao;
         this.email = email;
-        this.notifier = notifier;
     }
 
 
@@ -61,9 +59,6 @@ public class UserProfileResource {
                         .body("<ul><li>User lookup for user " + prof.getFullName() + "</ul></li>")
                         .plainTextBody("User lookup for user " + prof.getFullName())
                         .to("Someuser<"+prof.getUsername() + "@example.ru>"));
-
-        notifier.notifyLookup(prof, securityContext.getUserPrincipal().getName());
-
 
         return prof;
     }

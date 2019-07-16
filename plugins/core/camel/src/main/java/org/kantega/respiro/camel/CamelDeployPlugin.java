@@ -16,7 +16,6 @@
 
 package org.kantega.respiro.camel;
 
-import org.kantega.respiro.camel.CamelRouteDeployer;
 import org.apache.camel.builder.RouteBuilder;
 import org.kantega.reststop.api.Plugin;
 
