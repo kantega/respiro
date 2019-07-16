@@ -8,7 +8,7 @@ Modular, developer-friendly integration platform
 * Added kerberos authentication support. See `respiro-kerberos-plugin` for more.
 * Bugfix in html-formatted mail messages. Reordered `/body` and `/html` closing tags.
 * [ActiveMQ 5.15.9](http://activemq.apache.org/activemq-5159-release.html)
-* [Camel version 2.24.1](http://camel.apache.org/camel-2241-release.html)  
+* [Camel version 2.23.2](http://camel.apache.org/camel-2232-release.html)  
 * [Jackson Databind 2.9.9.1](https://github.com/FasterXML/jackson-databind)
 * Removed JMS/ActiveMQ plugins. Use Camel JMS/ActiveMQ support instead!
 
