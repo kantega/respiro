@@ -25,6 +25,8 @@ import org.kantega.reststop.api.Plugin;
 
 import javax.annotation.PreDestroy;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -38,9 +40,11 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     private SimpleRegistry simpleRegistry = new SimpleRegistry();
 
-    @Export final CamelRouteDeployer camelRouteDeployer = this;
+    @Export
+    final CamelRouteDeployer camelRouteDeployer = this;
 
-    @Export final CamelRegistry camelRegistry = new SimpleCamelRegistry(simpleRegistry);
+    @Export
+    final CamelRegistry camelRegistry = new SimpleCamelRegistry(simpleRegistry);
 
     public CamelPlugin(Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
         this.camelContextCustomizers = camelContextCustomizers;
@@ -50,12 +54,15 @@ public class CamelPlugin implements CamelRouteDeployer {
     public void deploy(Collection<RouteBuilder> routeBuilders) {
         try {
             camelContext = new DefaultCamelContext(simpleRegistry);
+            final CamelPluginClassloader cpc = new CamelPluginClassloader();
 
             camelContextCustomizers.forEach(c -> c.customize(camelContext));
 
             for (RouteBuilder routeBuilder : routeBuilders) {
                 camelContext.addRoutes(routeBuilder);
+                cpc.register(routeBuilder.getClass().getClassLoader());
             }
+            camelContext.setApplicationContextClassLoader(cpc);
             camelContext.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -83,6 +90,31 @@ public class CamelPlugin implements CamelRouteDeployer {
         @Override
         public void remove(String name) {
             simpleRegistry.remove(name);
+        }
+    }
+
+    private static class CamelPluginClassloader extends ClassLoader {
+
+        private final Set<ClassLoader> classloaders = new HashSet<>();
+
+        public CamelPluginClassloader() {
+            super(CamelPlugin.class.getClassLoader());
+        }
+
+        public void register(ClassLoader loader) {
+            classloaders.add(loader);
+        }
+
+        @Override
+        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            for( ClassLoader c : classloaders) {
+                final Class<?> cls = c.loadClass(name);
+                if( cls != null)
+                    return cls;
+            }
+            
+            return super.loadClass(name, resolve);
+                
         }
     }
 }
