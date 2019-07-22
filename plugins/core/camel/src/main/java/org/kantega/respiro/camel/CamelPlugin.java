@@ -25,8 +25,9 @@ import org.kantega.reststop.api.Plugin;
 
 import javax.annotation.PreDestroy;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -36,9 +37,10 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     private final Collection<CamelContextCustomizer> camelContextCustomizers;
 
-    private CamelContext camelContext;
 
-    private SimpleRegistry simpleRegistry = new SimpleRegistry();
+    private final SimpleRegistry simpleRegistry = new SimpleRegistry();
+
+    private final ContextRegistry contexts;
 
     @Export
     final CamelRouteDeployer camelRouteDeployer = this;
@@ -48,30 +50,26 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     public CamelPlugin(Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
         this.camelContextCustomizers = camelContextCustomizers;
+        contexts = new ContextRegistry(simpleRegistry);
     }
 
     @Override
     public void deploy(Collection<RouteBuilder> routeBuilders) {
         try {
-            camelContext = new DefaultCamelContext(simpleRegistry);
-            final CamelPluginClassloader cpc = new CamelPluginClassloader();
 
-            camelContextCustomizers.forEach(c -> c.customize(camelContext));
 
             for (RouteBuilder routeBuilder : routeBuilders) {
-                camelContext.addRoutes(routeBuilder);
-                cpc.register(routeBuilder.getClass().getClassLoader());
+                contexts.register(routeBuilder, camelContextCustomizers);
             }
-            camelContext.setApplicationContextClassLoader(cpc);
-            camelContext.start();
+            contexts.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @PreDestroy
-    public void stop() throws Exception {
-        camelContext.stop();
+    public void stop() {
+        contexts.stop();
 
     }
 
@@ -93,28 +91,51 @@ public class CamelPlugin implements CamelRouteDeployer {
         }
     }
 
-    private static class CamelPluginClassloader extends ClassLoader {
+    private static class ContextRegistry {
+        private final Map<ClassLoader, CamelContext> contextMap = new HashMap<>();
+        final private SimpleRegistry simpleRegistry;
 
-        private final Set<ClassLoader> classloaders = new HashSet<>();
-
-        public CamelPluginClassloader() {
-            super(CamelPlugin.class.getClassLoader());
+        private ContextRegistry(SimpleRegistry simpleRegistry) {
+            this.simpleRegistry = simpleRegistry;
         }
 
-        public void register(ClassLoader loader) {
-            classloaders.add(loader);
+        public void register(RouteBuilder route, Collection<CamelContextCustomizer> camelContextCustomizers) throws Exception {
+
+
+            Optional.ofNullable(contextMap.get(route.getClass().getClassLoader()))
+                .orElseGet(() -> {
+                    
+                    final CamelContext newCc = new DefaultCamelContext(simpleRegistry);
+                    newCc.setApplicationContextClassLoader(route.getClass().getClassLoader());
+                    camelContextCustomizers.forEach(cust -> cust.customize(newCc));
+                    contextMap.put(route.getClass().getClassLoader(), newCc);
+
+                    return newCc;
+                }).addRoutes(route);
+
+
+
         }
 
-        @Override
-        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-            for( ClassLoader c : classloaders) {
-                final Class<?> cls = c.loadClass(name);
-                if( cls != null)
-                    return cls;
-            }
-            
-            return super.loadClass(name, resolve);
-                
+
+        public void start() {
+            contextMap.values().forEach(c -> {
+                try {
+                    c.start();
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to start context", e);
+                }
+            });
+        }
+
+        public void stop() {
+            contextMap.values().forEach(c -> {
+                try {
+                    c.stop();
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to start context", e);
+                }
+            });
         }
     }
 }

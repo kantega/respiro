@@ -4,6 +4,9 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.26
+* More of a permanent fix for camel classloader-problem.
+
 ## Respiro 2.25
 * Added kerberos authentication support. See `respiro-kerberos-plugin` for more.
 * Bugfix in html-formatted mail messages. Reordered `/body` and `/html` closing tags.
