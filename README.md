@@ -4,6 +4,10 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.27
+* Added shutdown-hook to camelContextCustomizer in `camel-plugin`. Allows ActiveMQ-brokers created by customizer to 
+  shutdown gracefully when container shutdown. 
+
 ## Respiro 2.26
 * More of a permanent fix for camel classloader-problem.
 

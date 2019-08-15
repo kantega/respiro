@@ -69,6 +69,7 @@ public class CamelPlugin implements CamelRouteDeployer {
 
     @PreDestroy
     public void stop() {
+        camelContextCustomizers.forEach(CamelContextCustomizer::shutdown);
         contexts.stop();
 
     }

@@ -23,4 +23,6 @@ import org.apache.camel.CamelContext;
  */
 public interface CamelContextCustomizer {
     void customize(CamelContext camelContext);
+    
+    default void shutdown()  {}
 }
