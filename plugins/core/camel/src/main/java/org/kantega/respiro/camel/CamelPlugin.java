@@ -134,7 +134,7 @@ public class CamelPlugin implements CamelRouteDeployer {
                 try {
                     c.stop();
                 } catch (Exception e) {
-                    throw new RuntimeException("Failed to start context", e);
+                    throw new RuntimeException("Failed to stop context", e);
                 }
             });
         }
