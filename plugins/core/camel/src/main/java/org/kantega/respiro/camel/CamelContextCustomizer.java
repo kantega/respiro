@@ -23,6 +23,12 @@ import org.apache.camel.CamelContext;
  */
 public interface CamelContextCustomizer {
     void customize(CamelContext camelContext);
-    
-    default void shutdown()  {}
+
+    /**
+     * Notify the customizer that the camel contexts are about to be shutdown so they can gracefully shudown or 
+     * manage resources that are to be stopped.
+     * 
+     * The default is that this is not necessary to manage by any customizer. 
+     */
+    default void beforeShutdown()  {}
 }
