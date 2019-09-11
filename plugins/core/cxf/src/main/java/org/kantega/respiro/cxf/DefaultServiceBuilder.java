@@ -16,19 +16,33 @@
 
 package org.kantega.respiro.cxf;
 
-import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.kantega.respiro.api.ServiceBuilder;
 import org.kantega.respiro.cxf.api.ServiceCustomizer;
 
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebServiceClient;
 import javax.xml.ws.handler.Handler;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import static java.lang.Thread.currentThread;
 import static javax.xml.ws.BindingProvider.*;
@@ -59,6 +73,9 @@ class DefaultServiceBuilder implements ServiceBuilder {
         private long connectionTimeoutMs = 15_000;
         private long receiveTimeoutMs = 60_000;
         private List<Handler> handlerChain = null;
+        private KeyManager[] keyManagers;
+        private TrustManager[] trustManagers;
+        private String clientCertAlias;
 
 
         public Build(Class<? extends Service> service, Class<P> port) {
@@ -98,11 +115,48 @@ class DefaultServiceBuilder implements ServiceBuilder {
 
         @Override
         public ServiceBuilder.Build<P> addHandler(Handler handler) {
-            
-            if( handlerChain == null)
+
+            if (handlerChain == null)
                 handlerChain = new ArrayList<>();
-            
+
             handlerChain.add(handler);
+            return this;
+        }
+
+
+        @Override
+        public ServiceBuilder.Build<P> certAlias(String alias) {
+            clientCertAlias = alias;
+            return this;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> keystore(KeyStoreType type, String keystorePath, String keystorePassword) {
+
+            try {
+                final KeyStore store = KeyStore.getInstance(type.name());
+                store.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+                final KeyManagerFactory factory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+                factory.init(store, keystorePassword.toCharArray());
+                this.keyManagers = factory.getKeyManagers();
+
+            } catch (NoSuchAlgorithmException | KeyStoreException | UnrecoverableKeyException | IOException | CertificateException e) {
+                throw new RuntimeException(e);
+            }
+            return this;
+        }
+
+        @Override
+        public ServiceBuilder.Build<P> truststore(KeyStoreType type, String keystorePath, String keystorePassword) {
+            try {
+                final KeyStore store = KeyStore.getInstance(type.name());
+                store.load(new FileInputStream(keystorePath), keystorePassword.toCharArray());
+                final TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                factory.init(store);
+                this.trustManagers = factory.getTrustManagers();
+            } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException e) {
+                throw new RuntimeException(e);
+            }
             return this;
         }
 
@@ -112,20 +166,23 @@ class DefaultServiceBuilder implements ServiceBuilder {
             ClassLoader current = currentThread().getContextClassLoader();
             try {
                 currentThread().setContextClassLoader(getClass().getClassLoader());
-                String wsdlLocation = findWsdlLocation(serviceClass);
-                URL wsdlURL = serviceClass.getClassLoader().getResource(wsdlLocation);
-                Service srv = serviceClass.getConstructor(URL.class).newInstance(wsdlURL);
-                P port = srv.getPort(portClass);
+                final String wsdlLocation = findWsdlLocation(serviceClass);
+                final URL wsdlURL = serviceClass.getClassLoader().getResource(wsdlLocation);
+                final Service srv = serviceClass.getConstructor(URL.class).newInstance(wsdlURL);
+                final P port = srv.getPort(portClass);
 
-                BindingProvider prov = (BindingProvider) port;
-                Map<String, Object> rc = prov.getRequestContext();
+                final BindingProvider prov = (BindingProvider) port;
+                final Map<String, Object> rc = prov.getRequestContext();
+                final HTTPConduit conduit = (HTTPConduit) getClient(port).getConduit();
+
 
                 configureAuthentication(rc);
                 configureEndpointAddress(rc);
-                configureTimeouts(port);
+                configureTimeouts(conduit);
+                configureTLS(conduit);
 
                 configureHandlerChain(prov);
-                
+
                 applyPluginConfiguration(prov);
                 return port;
 
@@ -136,13 +193,30 @@ class DefaultServiceBuilder implements ServiceBuilder {
             }
         }
 
+        private void configureTLS(HTTPConduit conduit) {
+            if (trustManagers == null && keyManagers == null)
+                return;
+
+
+            final TLSClientParameters tlsClientParameters = new TLSClientParameters();
+            if (trustManagers != null) 
+                tlsClientParameters.setTrustManagers(trustManagers);
+
+            if (keyManagers != null)
+                tlsClientParameters.setKeyManagers(keyManagers);
+
+            tlsClientParameters.setCertAlias(clientCertAlias);
+            
+            conduit.setTlsClientParameters(tlsClientParameters);
+        }
+
         private void configureHandlerChain(BindingProvider port) {
-            if(this.handlerChain != null) {
+            if (this.handlerChain != null) {
                 final List<Handler> handlerChain = port.getBinding().getHandlerChain();
                 handlerChain.addAll(this.handlerChain);
             }
         }
-        
+
         private void applyPluginConfiguration(BindingProvider port) {
             for (ServiceCustomizer customizer : serviceCustomizers) {
                 customizer.customizeService(port);
@@ -158,9 +232,7 @@ class DefaultServiceBuilder implements ServiceBuilder {
             rc.put(PASSWORD_PROPERTY, password);
         }
 
-        private void configureTimeouts(P port) {
-            Client client = getClient(port);
-            HTTPConduit conduit = (HTTPConduit) client.getConduit();
+        private void configureTimeouts(HTTPConduit conduit) {
 
             HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
             httpClientPolicy.setConnectionTimeout(connectionTimeoutMs);

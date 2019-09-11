@@ -20,9 +20,13 @@ import javax.xml.ws.Service;
 import javax.xml.ws.handler.Handler;
 
 public interface ServiceBuilder {
+    
+    
     <P> Build<P> service(Class<? extends Service> service, Class<P> port);
 
     interface Build<P> {
+        enum KeyStoreType {JKS, PKCS11, PKCS12, BKS}
+        
         Build<P> username(String username);
 
         Build<P> password(String password);
@@ -34,6 +38,10 @@ public interface ServiceBuilder {
         Build<P> connectTimeoutMs(long timeoutMs);
         
         Build<P> addHandler(Handler handler);
+        
+        Build<P> keystore(KeyStoreType type, String keystorePath, String keystorePassword );
+        Build<P> truststore(KeyStoreType type, String keystorePath, String keystorePassword );
+        Build<P> certAlias(String alias);
 
         P build();
     }
