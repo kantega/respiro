@@ -19,13 +19,9 @@ package org.kantega.respiro.mongodb.driver;
 import com.mongodb.ReadConcern;
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
-import com.mongodb.client.ListCollectionsIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
+import com.mongodb.client.*;
 import com.mongodb.client.model.CreateCollectionOptions;
 import com.mongodb.client.model.CreateViewOptions;
-import com.mongodb.session.ClientSession;
 import de.flapdoodle.embed.mongo.runtime.Mongod;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -62,6 +58,59 @@ public class MongoDBExchangesPlugin {
             this.wrapped = wrapped;
         }
 
+        @Override
+        public ChangeStreamIterable<Document> watch() { return wrapped.watch(); }
+
+        @Override
+        public <TResult>  ChangeStreamIterable<TResult> watch(Class<TResult> tResultClass) {
+            return wrapped.watch(tResultClass );
+        }
+
+        @Override
+        public ChangeStreamIterable<Document> watch(List<? extends Bson> list) { return wrapped.watch(list); }
+
+        @Override
+        public <TResult> ChangeStreamIterable<TResult> watch(List<? extends Bson> bson, Class<TResult> tResultClass) {
+            return wrapped.watch(bson, tResultClass);
+        }
+
+        @Override
+        public ChangeStreamIterable<Document> watch(ClientSession clientSession) { return wrapped.watch(clientSession); }
+
+        @Override
+        public <TResult> ChangeStreamIterable<TResult> watch(ClientSession clientSession, Class<TResult> tResultClass) {
+            return wrapped.watch(clientSession, tResultClass);
+        }
+
+        @Override
+        public ChangeStreamIterable<Document> watch(ClientSession clientSession, List<? extends Bson> list) {
+            return wrapped.watch(clientSession, list);
+        }
+
+        @Override
+        public <TResult> ChangeStreamIterable<TResult> watch(ClientSession clientSession, List<? extends Bson> list, Class<TResult> tResultClass) {
+            return wrapped.watch(clientSession, list, tResultClass);
+        }
+
+        @Override
+        public AggregateIterable<Document> aggregate(List<? extends Bson> list) {
+            return wrapped.aggregate(list);
+        }
+
+        @Override
+        public <TResult> AggregateIterable<TResult> aggregate(List<? extends Bson> list, Class<TResult> tResultClass) {
+            return wrapped.aggregate(list, tResultClass);
+        }
+
+        @Override
+        public AggregateIterable<Document> aggregate(ClientSession clientSession, List<? extends Bson> list) {
+            return wrapped.aggregate(clientSession, list);
+        }
+
+        @Override
+        public <TResult> AggregateIterable<TResult> aggregate(ClientSession clientSession, List<? extends Bson> list, Class<TResult> tResultClass) {
+            return wrapped.aggregate(clientSession, list, tResultClass);
+        }
 
         @Override
         public String getName() {
@@ -208,24 +257,20 @@ public class MongoDBExchangesPlugin {
         public void createCollection(
             String collectionName, CreateCollectionOptions createCollectionOptions) {
             wrapped.createCollection(collectionName,createCollectionOptions);
-
         }
 
         @Override
         public void createCollection(ClientSession clientSession, String s) {
-
             wrapped.createCollection(clientSession,s);
         }
 
         @Override
         public void createCollection(ClientSession clientSession, String s, CreateCollectionOptions createCollectionOptions) {
-
             wrapped.createCollection(clientSession,s,createCollectionOptions);
         }
 
         @Override
         public void createView(String s, String s1, List<? extends Bson> list) {
-
             wrapped.createView(s,s1,list);
         }
 
@@ -236,16 +281,12 @@ public class MongoDBExchangesPlugin {
 
         @Override
         public void createView(ClientSession clientSession, String s, String s1, List<? extends Bson> list) {
-
             wrapped.createView(clientSession,s,s1,list);
         }
 
         @Override
         public void createView(ClientSession clientSession, String s, String s1, List<? extends Bson> list, CreateViewOptions createViewOptions) {
-
             wrapped.createView(clientSession, s, s1, list,createViewOptions);
         }
     }
-
-
 }

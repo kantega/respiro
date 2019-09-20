@@ -90,7 +90,7 @@
         <activemq.version>5.15.9</activemq.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <h2database.version>1.4.196</h2database.version>
-        <mongodb-driver.version>3.6.4</mongodb-driver.version>
+        <mongodb-driver.version>3.11.0</mongodb-driver.version>
     </properties>
 
     <dependencies>
