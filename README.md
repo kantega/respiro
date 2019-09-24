@@ -7,8 +7,9 @@ Modular, developer-friendly integration platform
 ## Respiro 2.27
 * Added shutdown-hook to camelContextCustomizer in `camel-plugin`. Allows anything created by customizer to 
   shutdown gracefully when container shutdown. 
-* TLS support addet to `cxf-plugin`.
+* TLS support added to `cxf-plugin`.
 * MongoDB driver updated from version 3.6.4 to 3.11.0.
+* [Flapdoodle 2.2.0](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo/blob/master/Changelog.md)
 
 ## Respiro 2.26
 * More of a permanent fix for camel classloader-problem.
