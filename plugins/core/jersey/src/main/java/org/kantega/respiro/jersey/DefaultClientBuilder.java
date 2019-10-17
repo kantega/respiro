@@ -72,70 +72,42 @@ public class DefaultClientBuilder implements RestClientBuilder {
         @Override
         public Build sslAuth(String keystorePath, String keystorePassword ) {
             // https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#SSLContext
-            SSLContext sslCtx = null;
             try {
-                sslCtx = SSLContext.getInstance("TLS");
+                KeyManager mykm[] = new KeyManager[]{new MyX509KeyManager(keystorePath, keystorePassword.toCharArray())};
 
-                TrustManager mytm[] = null;
-                KeyManager mykm[] = null;
-                mykm = new KeyManager[]{new MyX509KeyManager(keystorePath, keystorePassword.toCharArray())};
-
-                mytm = new TrustManager[]{new X509TrustManager() {
+                TrustManager mytm[] = new TrustManager[]{new X509TrustManager() {
                     public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
                     public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
                     public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }}};
 
+                SSLContext sslCtx = SSLContext.getInstance("TLS");
                 sslCtx.init(mykm, mytm, new java.security.SecureRandom());
-
                 this.sslContext = sslCtx;
-
-                //this.sslConfiguration = ClientBuilder.newBuilder()
-                //    .sslContext(sslCtx)
-                //    .hostnameVerifier(getHostnameVerifier()).();
-
             } catch (NoSuchAlgorithmException | KeyManagementException e) {
                 throw new RuntimeException(e);
             }
             return this;
         }
 
-        /**
-        public Build sslAuth22(String keystorePath, String keystorePassword ) {
+        @Override
+        public Build sslAuth22(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword) {
             // https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#SSLContext
-            SSLContext sslCtx = null;
-            try {
-                KeyStore keyStore = KeyStore.getInstance("PKCS12");
-                keyStore.load(null, null);
 
-                ClientConfig config = new ClientConfig();
+            SslConfigurator sslConfig = SslConfigurator.newInstance().securityProtocol("TLS");
 
-                SslConfigurator sslConfig = SslConfigurator.newInstance()
-                    .keyStoreFile(keystorePath)
+            if (keystorePath != null) {
+                sslConfig = sslConfig.keyStoreFile(keystorePath)
                     .keyStorePassword(keystorePassword)
-                    .keyStoreType("PKCS12")
-                    //.keyStore(keyStore)
-                    //.trustStoreFile(TRUSTORE_CLIENT_FILE)
-                    //.trustStorePassword(TRUSTSTORE_CLIENT_PWD)
-                    .securityProtocol("TLS");
-
-                final SSLContext sslContext = sslConfig.createSSLContext();
-
-                Client client = ClientBuilder
-                    .newBuilder().hostnameVerifier(getHostnameVerifier())
-                    .sslContext(sslContext)
-                    .build();
-
-
-
-
-
-            } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | IOException | CertificateException e) {
-                throw new RuntimeException(e);
+                    .keyStoreType("PKCS12");
             }
+            if (truststorePath != null) {
+                sslConfig = sslConfig.trustStoreFile(truststorePath)
+                    .trustStorePassword(truststorePassword);
+            }
+
+            this.sslContext = sslConfig.createSSLContext();
             return this;
         }
-*/
-
 
 
         @Override
@@ -146,33 +118,22 @@ public class DefaultClientBuilder implements RestClientBuilder {
                 cc.register(basicAuth);
             }
 
-            Client sslClient = null;
-            if (sslContext != null) {
-
-                sslClient = ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier(getHostnameVerifier()).build();                //.register(basicAuth)
-
-            }
-
             for (ClientCustomizer clientCustomizer : clientCustomizers) {
                 clientCustomizer.customize(cc);
             }
             ClassLoader contextClassloader = currentThread().getContextClassLoader();
             try {
                 currentThread().setContextClassLoader(getClass().getClassLoader());
-                if (sslContext != null)
-                    return sslClient;
-                else
-                    return newClient(cc);
+                ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(cc);
+
+                if (sslContext != null) {
+                    clientBuilder = clientBuilder.sslContext(sslContext).hostnameVerifier(getHostnameVerifier());
+                }
+                return clientBuilder.build();
             } finally {
                 currentThread().setContextClassLoader(contextClassloader);
-
             }
-
-
-
         }
-
-
 
         private HostnameVerifier getHostnameVerifier() {
             return new HostnameVerifier() {
@@ -187,11 +148,6 @@ public class DefaultClientBuilder implements RestClientBuilder {
 
     static class MyX509KeyManager implements X509KeyManager {
 
-        /*
-         * The default PKIX X509KeyManager.  We'll delegate
-         * decisions to it, and fall back to the logic in this class if the
-         * default X509KeyManager doesn't trust it.
-         */
         X509KeyManager pkixKeyManager;
 
         MyX509KeyManager(String keyStore, char[] password)  {
@@ -200,7 +156,6 @@ public class DefaultClientBuilder implements RestClientBuilder {
 
         MyX509KeyManager(File keyStore, char[] password) {
             // create a "default" JSSE X509KeyManager.
-
             try{
                 KeyStore ks = KeyStore.getInstance("JKS");
                 ks.load(new FileInputStream(keyStore), password);
@@ -222,15 +177,8 @@ public class DefaultClientBuilder implements RestClientBuilder {
                     }
                 }
             } catch (Exception e) {
-                throw new RuntimeException("Couldn't initialize");
+                throw new RuntimeException("Couldn't initialize key manager", e);
             }
-
-
-            /*
-             * Find some other way to initialize, or else we have to fail the
-             * constructor.
-             */
-            throw new RuntimeException("Couldn't initialize");
         }
 
         public PrivateKey getPrivateKey(String arg0) {
@@ -256,6 +204,6 @@ public class DefaultClientBuilder implements RestClientBuilder {
         public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
             return pkixKeyManager.chooseServerAlias(arg0, arg1, arg2);
         }
-    } // end class MyX509KeyManager
 
+    }
 }

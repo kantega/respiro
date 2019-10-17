@@ -28,6 +28,8 @@ public interface RestClientBuilder {
 
         Build sslAuth(String keystorePath, String keystorePassword);
 
+        Build sslAuth22(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword);
+
         Client build();
     }
 }
