@@ -26,9 +26,7 @@ public interface RestClientBuilder {
 
         Build basicAuth(String username, String password);
 
-        Build sslAuth(String keystorePath, String keystorePassword);
-
-        Build sslAuth22(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword);
+        Build sslClientAuth(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword);
 
         Client build();
     }
