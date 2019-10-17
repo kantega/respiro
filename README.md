@@ -4,6 +4,10 @@ Modular, developer-friendly integration platform
 
 # Release notes
 
+## Respiro 2.28
+* Added support for two-way SSL with client certificate on REST Client Builder.
+* Updated dependency versions for jersey, jackson, cxf, validation
+
 ## Respiro 2.27
 * Added shutdown-hook to camelContextCustomizer in `camel-plugin`. Allows anything created by customizer to 
   shutdown gracefully when container shutdown. 
