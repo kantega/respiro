@@ -16,25 +16,23 @@
 
 package org.kantega.respiro.jersey;
 
+import org.glassfish.jersey.SslConfigurator;
 import org.kantega.respiro.api.RestClientBuilder;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
+import javax.net.ssl.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Feature;
 import java.util.Collection;
 
 import static java.lang.Thread.currentThread;
-import static javax.ws.rs.client.ClientBuilder.newClient;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.basic;
-import static org.kantega.respiro.api.RestClientBuilder.Build;
 
 public class DefaultClientBuilder implements RestClientBuilder {
     private final Collection<ClientCustomizer> clientCustomizers;
 
     public DefaultClientBuilder(Collection<ClientCustomizer> clientCustomizers) {
-
         this.clientCustomizers = clientCustomizers;
     }
 
@@ -46,6 +44,7 @@ public class DefaultClientBuilder implements RestClientBuilder {
     class Build implements RestClientBuilder.Build {
 
         private Feature basicAuth;
+        private SSLContext sslContext;
 
         @Override
         public Build basicAuth(String username, String password) {
@@ -54,11 +53,35 @@ public class DefaultClientBuilder implements RestClientBuilder {
         }
 
         @Override
+        public Build sslClientAuth(String keystorePath, String keystorePassword, String truststorePath, String truststorePassword) {
+
+            if ((keystorePath == null) && (truststorePath == null)) {
+                return this;
+            }
+
+            SslConfigurator sslConfig = SslConfigurator.newInstance().securityProtocol("TLS");
+            if (keystorePath != null) {
+                sslConfig = sslConfig
+                    .keyStoreFile(keystorePath)
+                    .keyStorePassword(keystorePassword)
+                    .keyStoreType("PKCS12");
+            }
+            if (truststorePath != null) {
+                sslConfig = sslConfig
+                    .trustStoreFile(truststorePath)
+                    .trustStorePassword(truststorePassword);
+            }
+            this.sslContext = sslConfig.createSSLContext();
+            return this;
+        }
+
+        @Override
         public Client build() {
             ClientConfig cc = new ClientConfig();
 
-            if (basicAuth != null)
+            if (basicAuth != null) {
                 cc.register(basicAuth);
+            }
 
             for (ClientCustomizer clientCustomizer : clientCustomizers) {
                 clientCustomizer.customize(cc);
@@ -66,12 +89,25 @@ public class DefaultClientBuilder implements RestClientBuilder {
             ClassLoader contextClassloader = currentThread().getContextClassLoader();
             try {
                 currentThread().setContextClassLoader(getClass().getClassLoader());
-                return newClient(cc);
+                ClientBuilder clientBuilder = ClientBuilder.newBuilder().withConfig(cc);
+
+                if (sslContext != null) {
+                    clientBuilder = clientBuilder.sslContext(sslContext).hostnameVerifier(getHostnameVerifier());
+                }
+                return clientBuilder.build();
             } finally {
                 currentThread().setContextClassLoader(contextClassloader);
-
             }
         }
-    }
 
+        private HostnameVerifier getHostnameVerifier() {
+            return new HostnameVerifier() {
+
+                @Override
+                public boolean verify(String hostname, javax.net.ssl.SSLSession sslSession) {
+                    return true;
+                }
+            };
+        }
+    }
 }
