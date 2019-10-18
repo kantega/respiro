@@ -50,7 +50,7 @@ public class DefaultMongoDBBuilder implements MongoDBBuilder {
         for (String a : addresses) {
             String address[] = a.split(":");
             if (address.length < 2)
-                throw new RuntimeException(String.format("Server address cannot be split into host and port '%s', a"));
+                throw new RuntimeException(String.format("Server address cannot be split into host and port '%s'", a));
 
             srvAddresses.add(new ServerAddress(address[0], Integer.valueOf(address[1])));
         }
